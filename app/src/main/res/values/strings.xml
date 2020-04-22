@@ -1,3 +1,29 @@
 <resources>
     <string name="app_name">EventAppProd</string>
+
+    //String Array Containing Event Names (Inject MySQL somehow)
+    <string-array name="eventNames_feed">
+        <item>Revelle</item>
+        <item>Muir</item>
+        <item>Thurgood Marshall</item>
+        <item>Warren</item>
+        <item>ERC</item>
+        <item>Sixth</item>
+        <item>Cute Dog</item>
+        <item>Just testing</item>
+
+    </string-array>
+
+    //String Array Containing Event Descriptions (Inject MySQL somehow)
+    <string-array name="eventNames_description">
+        <item>Welcome to Revhell! </item>
+        <item>Welcome to John Muir Collage!</item>
+        <item>Welcome to ThurBAD Marshall!</item>
+        <item>Welcome to 90% of UCSD!</item>
+        <item>Welcome to Epic RC!</item>
+        <item>Welcome to unnamed college!</item>
+        <item>This is a cute dog!</item>
+        <item>Please work!</item>
+
+    </string-array>
 </resources>
