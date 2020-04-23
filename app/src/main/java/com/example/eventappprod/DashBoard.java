@@ -27,10 +27,10 @@ public class DashBoard extends AppCompatActivity {
         setContentView(R.layout.activity_dash_board);
 
         //Logic for displaying the event-feed
+        //Thus, somehow inject database informaiton into these arrays?
         recyclerView = findViewById(R.id.recyclerView);
         eventNames = getResources().getStringArray(R.array.eventNames_feed);
         eventDescriptions = getResources().getStringArray(R.array.eventNames_description);
-
         MyAdapter myAdapter = new MyAdapter(this, eventNames, eventDescriptions, images);
         recyclerView.setAdapter(myAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
