@@ -9,7 +9,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EventActivity" android:parentActivityName=".DashBoard" android:label="Details"/>
+        <activity android:name=".ArchivedEventsActivity"  android:label="Return to Profile"
+            android:parentActivityName=".Profile"></activity>
+        <activity
+            android:name=".PreviousEventsActivity"
+            android:label="Return to Profile"
+            android:parentActivityName=".Profile" />
+        <activity
+            android:name=".FriendsListActivity"
+            android:label="Return to Profile"
+            android:parentActivityName=".Profile" />
+        <activity
+            android:name=".EventActivity"
+            android:label="Return to Dashboard"
+            android:parentActivityName=".DashBoard" />
         <activity android:name=".Search" />
         <activity android:name=".DashBoard" />
         <activity android:name=".Profile">
