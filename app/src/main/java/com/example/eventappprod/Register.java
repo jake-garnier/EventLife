@@ -68,7 +68,6 @@ public class Register extends AppCompatActivity {
                 String domain = email .substring(email .indexOf("@") + 1);
                 if (domain.equals("ucsd.edu") == false) {
                     mEmail.setError("Email is invalid. Using ucsd email");
-                    mEmail.setText("");
                     mPassword.setText("");
                     confirmPassword.setText("");
                     return;
