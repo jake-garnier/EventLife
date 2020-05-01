@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,8 +14,18 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.common.util.ArrayUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+//USING EXAMPLE ADAPTER NOW
+
+
 //This is part of the Event Feed
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
+public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> implements Filterable {
 
     //All this information is passed through the adapter and loaded into the arrays
     //Data1 = Names
@@ -23,13 +35,27 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     int images[];
     Context context;
 
+    //Copy of above structures for search feature
+    private ArrayList<String> copyData1, copyData2;
+    private ArrayList<Integer> copyImages;
+
+
     public MyAdapter(Context ct, String eventNames[], String eventDescriptions[], int img[]){
         context = ct;
         data1 = eventNames;
         data2 = eventDescriptions;
         images = img;
 
+        copyData1 = new ArrayList<String>();
+        copyData2 = new ArrayList<String>();
+        copyImages = new ArrayList<Integer>();
+
+        Collections.addAll(copyData1, eventNames);
+        Collections.addAll(copyData2, eventDescriptions);
+        for(int i : img) copyImages.add(i);
+
     }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -57,8 +83,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                 context.startActivity(intent);
             }
         });
-
-
     }
 
     @Override
@@ -66,6 +90,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     public int getItemCount() {
         return images.length;
     }
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -83,4 +108,44 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             mainLayout = itemView.findViewById(R.id.mainLayout);
         }
     }
+
+    @Override
+    public Filter getFilter() {
+        return exampleFilter;
+    }
+
+    private Filter exampleFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<String> filteredData1 = new ArrayList<>();
+            List<String> filteredData2 = new ArrayList<>();
+            List<Integer> filteredImages = new ArrayList<>();
+
+            if(charSequence == null || charSequence.length() == 0){
+                filteredData1.addAll(copyData1);
+                filteredData2.addAll(copyData2);
+                for(int i : copyImages) filteredImages.add(i);
+            } else{
+                String filterPattern = charSequence.toString().toLowerCase().trim();
+
+                for(int i = 0; i < copyData1.size(); i++){
+                    String item = copyData1.get(i);
+                    if(item.toLowerCase().contains(filterPattern)){
+                        filteredData1.add(item);
+                        filteredData2.add(copyData2.get(i));
+                        filteredImages.add(copyImages.get(i));
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredData1;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+
+        }
+    };
 }
