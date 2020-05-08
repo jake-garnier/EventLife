@@ -1,5 +1,7 @@
 package com.example.eventappprod;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.lang.reflect.Array;
@@ -19,11 +22,13 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     private ArrayList<ExampleItem> mExampleList;
     //Copy of mExampleList used for filtering
     private ArrayList<ExampleItem> exampleListFull;
+    Context context;
 
     public static class ExampleViewHolder extends RecyclerView.ViewHolder{
         public ImageView mImageView;
         public TextView mTextView1;
         public TextView mTextView2;
+        public ConstraintLayout mainLayout;
 
         public ExampleViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -31,10 +36,12 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             mImageView = itemView.findViewById(R.id.myImageView);
             mTextView1 = itemView.findViewById(R.id.event_names_txt);
             mTextView2 = itemView.findViewById(R.id.event_desc_txt);
+            mainLayout = itemView.findViewById(R.id.mainLayout);
         }
     }
 
-    public ExampleAdapter(ArrayList<ExampleItem> exampleList){
+    public ExampleAdapter(Context ct, ArrayList<ExampleItem> exampleList){
+        context = ct;
         mExampleList = exampleList;
         //Deep copy of mExampleList;
         exampleListFull = new ArrayList<>(exampleList);
@@ -50,12 +57,26 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ExampleViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ExampleViewHolder holder, final int position) {
         ExampleItem currItem = mExampleList.get(position);
 
         holder.mImageView.setImageResource(currItem.getImageResource());
         holder.mTextView1.setText(currItem.getText1());
         holder.mTextView2.setText(currItem.getText2());
+
+        //This is what allows each card to be clicked and load up a new activity containing the information that goes with that card
+        holder.mainLayout.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view){
+
+                Intent intent = new Intent(context, EventActivity.class);
+                //Extras are what we are passing from the adapter --> EventActivity (the event page)
+                //Inside EventActivity we will use these intents to pull information
+                intent.putExtra("data1", mExampleList.get(position).getText1());
+                intent.putExtra("data2", mExampleList.get(position).getText2());
+                intent.putExtra("images", mExampleList.get(position).getImageResource());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
