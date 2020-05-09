@@ -82,7 +82,7 @@ public class Login extends AppCompatActivity {
                         if(task.isSuccessful()){
                             if (fAuth.getCurrentUser().isEmailVerified())  {
                                 Toast.makeText(Login.this, "Logged in Successfully", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(getApplicationContext(), Profile.class));
+                                startActivity(new Intent(getApplicationContext(), DashBoard.class));
                             }
                             else {
                                 Toast.makeText(Login.this, "Please Verify your email address",Toast.LENGTH_LONG).show();
