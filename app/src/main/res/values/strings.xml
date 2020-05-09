@@ -3,6 +3,7 @@
 
     //String Array Containing Event Names (Inject MySQL somehow)
     <string-array name="eventNames_feed">
+        <item></item>
         <item>Revelle</item>
         <item>Muir</item>
         <item>Thurgood Marshall</item>
@@ -16,6 +17,7 @@
 
     //String Array Containing Event Descriptions (Inject MySQL somehow)
     <string-array name="eventNames_description">
+        <item></item>
         <item>Welcome to Revhell! </item>
         <item>Welcome to John Muir Collage!</item>
         <item>Welcome to ThurBAD Marshall!</item>

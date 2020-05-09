@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -29,6 +30,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         public TextView mTextView1;
         public TextView mTextView2;
         public ConstraintLayout mainLayout;
+        public Button createEvent;
 
         public ExampleViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -37,6 +39,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             mTextView1 = itemView.findViewById(R.id.event_names_txt);
             mTextView2 = itemView.findViewById(R.id.event_desc_txt);
             mainLayout = itemView.findViewById(R.id.mainLayout);
+            createEvent = (Button) itemView.findViewById(R.id.create);
         }
     }
 
@@ -51,32 +54,65 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     @Override
     //Creates the View holder from our my_row layout
     public ExampleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_row, parent, false);
-        ExampleViewHolder evh = new ExampleViewHolder(v);
-        return evh;
+        // The view type 0 is always the create event button card
+        if(viewType == 0) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View v = inflater.inflate(R.layout.my_button_row, parent, false);
+            ExampleViewHolder evh = new ExampleViewHolder(v);
+            return evh;
+            // The view type 1 is the regular event card type
+        } else {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_row, parent, false);
+            ExampleViewHolder evh = new ExampleViewHolder(v);
+            return evh;
+        }
     }
 
     @Override
     public void onBindViewHolder(@NonNull ExampleViewHolder holder, final int position) {
-        ExampleItem currItem = mExampleList.get(position);
 
-        holder.mImageView.setImageResource(currItem.getImageResource());
-        holder.mTextView1.setText(currItem.getText1());
-        holder.mTextView2.setText(currItem.getText2());
+            //The first card is always the create event button
+            if(position == 0) {
+                holder.createEvent.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(context, CreateEventActivity.class);
+                        context.startActivity(intent);
+                    }
+                });
+            } else {
 
-        //This is what allows each card to be clicked and load up a new activity containing the information that goes with that card
-        holder.mainLayout.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view){
+                ExampleItem currItem = mExampleList.get(position);
 
-                Intent intent = new Intent(context, EventActivity.class);
-                //Extras are what we are passing from the adapter --> EventActivity (the event page)
-                //Inside EventActivity we will use these intents to pull information
-                intent.putExtra("data1", mExampleList.get(position).getText1());
-                intent.putExtra("data2", mExampleList.get(position).getText2());
-                intent.putExtra("images", mExampleList.get(position).getImageResource());
-                context.startActivity(intent);
+                holder.mImageView.setImageResource(currItem.getImageResource());
+                holder.mTextView1.setText(currItem.getText1());
+                holder.mTextView2.setText(currItem.getText2());
+
+                //This is what allows each card to be clicked and load up a new activity containing the information that goes with that card
+                holder.mainLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Intent intent = new Intent(context, EventActivity.class);
+                        //Extras are what we are passing from the adapter --> EventActivity (the event page)
+                        //Inside EventActivity we will use these intents to pull information
+                        intent.putExtra("data1", mExampleList.get(position).getText1());
+                        intent.putExtra("data2", mExampleList.get(position).getText2());
+                        intent.putExtra("images", mExampleList.get(position).getImageResource());
+                        context.startActivity(intent);
+                    }
+                });
             }
-        });
+    }
+
+    @Override
+    public int getItemViewType (int position) {
+        // The first card is always the
+        if(position == 0) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
 
     @Override
@@ -101,10 +137,16 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                 String filterPattern = charSequence.toString().toLowerCase().trim();
 
                 //Searches for query in text1 and text2
-                for(ExampleItem item : exampleListFull){
-                    if(item.getText1().toLowerCase().contains(filterPattern) || item.getText2().toLowerCase().contains(filterPattern)){
+                int i = 0;
+                for(ExampleItem item : exampleListFull) {
+                    if (i == 0) { // The item is the button and always should be added
                         filteredList.add(item);
+                    } else {
+                        if (item.getText1().toLowerCase().contains(filterPattern) || item.getText2().toLowerCase().contains(filterPattern)) {
+                            filteredList.add(item);
+                        }
                     }
+                    i++;
                 }
             }
             FilterResults results = new FilterResults();

@@ -23,7 +23,7 @@ public class DashBoard extends AppCompatActivity {
     //Event Feed String Arrays
     String eventNames[];
     String eventDescriptions[];
-    int images[] = {R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
+    int images[] = {R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
 
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
