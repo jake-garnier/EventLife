@@ -113,16 +113,16 @@ public class CreateEventPage2 extends AppCompatActivity {
         String eventname = page1.Name.getText().toString();
         String day = page1.Day.getText().toString();
         String location = page1.Location.getText().toString();
-        String starttime = page1.StartTime.getText().toString();
+        String Starttime = page1.StartTime.getText().toString();
         String endtime = page1.EndTime.getText().toString();
         String tag = page1.Tag.getText().toString();
         String description = Description.getText().toString();
 
         if (!TextUtils.isEmpty(eventname) && !TextUtils.isEmpty(day) && !TextUtils.isEmpty(location) &&
-                !TextUtils.isEmpty(starttime) && !TextUtils.isEmpty(endtime) && !TextUtils.isEmpty(tag)
+                !TextUtils.isEmpty(Starttime) && !TextUtils.isEmpty(endtime) && !TextUtils.isEmpty(tag)
                 && !TextUtils.isEmpty(description) && !TextUtils.isEmpty(tag)) {
             String id = ref.push().getKey();
-            Event event = new Event(id, eventname, day, location, starttime, endtime, tag, description);
+            Event event = new Event(id, eventname, day, location, Starttime, endtime, tag, description);
             //Event event = new Event(id, eventname, day, location, starttime, endtime, tag);
             ref.child(id).setValue(event);
 
