@@ -123,7 +123,6 @@ public class CreateEventPage2 extends AppCompatActivity {
                 && !TextUtils.isEmpty(description) && !TextUtils.isEmpty(tag)) {
             String id = ref.push().getKey();
             Event event = new Event(id, eventname, day, location, Starttime, endtime, tag, description);
-            //Event event = new Event(id, eventname, day, location, starttime, endtime, tag);
             ref.child(id).setValue(event);
 
             //page1.Name.setText("");
