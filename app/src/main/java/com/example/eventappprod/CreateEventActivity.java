@@ -32,7 +32,7 @@ public class CreateEventActivity extends AppCompatActivity {
         //Description = (EditText) findViewById(R.id.Description);
         Tag = (EditText) findViewById(R.id.Tag);
         //Create = (Button) findViewById(R.id.btnNext);
-        Next = (Button) findViewById(R.id.btnNext);
+        Next = (Button) findViewById(R.id.btnPrevious);
         Cancel = (Button) findViewById(R.id.btnCancel);
         ref= database.getInstance().getReference("EVENT");
 
@@ -40,7 +40,7 @@ public class CreateEventActivity extends AppCompatActivity {
         Next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), DashBoard.class));
+                startActivity(new Intent(getApplicationContext(), CreateEventPage2.class));
             }
         });
 
@@ -51,9 +51,6 @@ public class CreateEventActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), DashBoard.class));
             }
         });
-
-
-
 
     }
 }
