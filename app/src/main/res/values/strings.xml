@@ -28,4 +28,17 @@
         <item>Please work!</item>
 
     </string-array>
+
+    //String Array Containing Friend Names (Inject MySQL somehow)
+    <string-array name="friendNames_feed">
+        <item>Jake</item>
+        <item>Vincent</item>
+        <item>Aaron</item>
+        <item>Doug</item>
+        <item>Doug2</item>
+        <item>Jesus</item>
+        <item>Patrick</item>
+        <item>SpongeBab</item>
+
+    </string-array>
 </resources>
