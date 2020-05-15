@@ -8,15 +8,16 @@ public class Event {
     private String StartTime;
     private String EndTime;
     private String Tag;
-
-    //private String Image;
     private String Description;
-
-
-
+    private String Image;
 
     public Event() {
 
+    }
+
+    public Event(String id, String des){
+        ID=id;
+        Description =des;
     }
 
     public Event(String id,String name, String date, String loca, String stime, String etime, String tag, String des) {
@@ -79,6 +80,13 @@ public class Event {
     }
     public void setDescription(String d){
         Description =d;
+    }
+
+    public String getImage(){
+        return Image;
+    }
+    public void setImage(String i){
+        Image = i;
     }
 
 }

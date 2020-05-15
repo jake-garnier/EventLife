@@ -4,9 +4,10 @@ public class User {
     private String UserName;
     private String Email;
     private String Password;
-    //private String Image;
+    private String Image;
     private String College;
     private String Group;
+
 
 
     public User(String name, String email, String pass) {
