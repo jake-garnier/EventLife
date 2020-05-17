@@ -24,6 +24,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     //Copy of mExampleList used for filtering
     private ArrayList<ExampleItem> exampleListFull;
     Context context;
+    private String cardType;
 
     public static class ExampleViewHolder extends RecyclerView.ViewHolder{
         public ImageView mImageView;
@@ -43,26 +44,32 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         }
     }
 
-    public ExampleAdapter(Context ct, ArrayList<ExampleItem> exampleList){
+    public ExampleAdapter(Context ct, ArrayList<ExampleItem> exampleList, String type){
         context = ct;
         mExampleList = exampleList;
         //Deep copy of mExampleList;
         exampleListFull = new ArrayList<>(exampleList);
+        cardType = type;
     }
 
     @NonNull
     @Override
     //Creates the View holder from our my_row layout
     public ExampleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // The view type 0 is always the create event button card
+        // The view type 0 is the create event button card type
         if(viewType == 0) {
             LayoutInflater inflater = LayoutInflater.from(context);
             View v = inflater.inflate(R.layout.my_button_row, parent, false);
             ExampleViewHolder evh = new ExampleViewHolder(v);
             return evh;
             // The view type 1 is the regular event card type
-        } else {
+        } else if(viewType == 1) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_row, parent, false);
+            ExampleViewHolder evh = new ExampleViewHolder(v);
+            return evh;
+            // Thw view type 2 is for the friend card type
+        } else {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_friend_row, parent, false);
             ExampleViewHolder evh = new ExampleViewHolder(v);
             return evh;
         }
@@ -72,7 +79,8 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     public void onBindViewHolder(@NonNull ExampleViewHolder holder, final int position) {
 
             //The first card is always the create event button
-            if(position == 0) {
+            if(getItemViewType(position) == 0) {
+
                 holder.createEvent.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -80,7 +88,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                         context.startActivity(intent);
                     }
                 });
-            } else {
+            } else if(getItemViewType(position) == 1){
 
                 ExampleItem currItem = mExampleList.get(position);
 
@@ -102,17 +110,25 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                         context.startActivity(intent);
                     }
                 });
+            } else {
+                ExampleItem currItem = mExampleList.get(position);
+
+                holder.mImageView.setImageResource(currItem.getImageResource());
+                holder.mTextView1.setText(currItem.getText1());
             }
     }
 
     @Override
     public int getItemViewType (int position) {
         // The first card is always the
-        if(position == 0) {
+        if(position == 0 && this.cardType.equals("event")) {
             return 0;
-        } else {
+        } else if(this.cardType.equals("event")){
             return 1;
+        } else if(this.cardType.equals("friend")) {
+            return 2;
         }
+        return 1;
     }
 
     @Override
