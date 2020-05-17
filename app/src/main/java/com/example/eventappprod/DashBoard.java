@@ -1,9 +1,11 @@
+
 package com.example.eventappprod;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,8 +14,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -24,28 +32,34 @@ public class DashBoard extends AppCompatActivity {
     String eventNames[];
     String eventDescriptions[];
     int images[] = {R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
-
+    //String images[];
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
     private ExampleAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-
+    FirebaseDatabase database;
+    DatabaseReference ref;
+    ArrayList<String> evenList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
 
+        ref = database.getInstance().getReference("EVENT");
+
+
+
         //Logic for displaying the event-feed
         //Thus, somehow inject database information into these arrays?
         eventNames = getResources().getStringArray(R.array.eventNames_feed);
         eventDescriptions = getResources().getStringArray(R.array.eventNames_description);
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
-        for(int i = 0; i < eventNames.length; i++){
+        for (int i = 0; i < eventNames.length; i++) {
             exampleList.add(new ExampleItem(images[i], eventNames[i], eventDescriptions[i]));
         }
 
-        mRecyclerView =  findViewById(R.id.recyclerView);
+        mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mAdapter = new ExampleAdapter(this, exampleList);
@@ -67,13 +81,13 @@ public class DashBoard extends AppCompatActivity {
                         return true;
                     case R.id.profile:
                         startActivity(new Intent(getApplicationContext()
-                                ,Profile.class));
-                        overridePendingTransition(0,0);
+                                , Profile.class));
+                        overridePendingTransition(0, 0);
                         return true;
                     case R.id.search:
                         startActivity(new Intent(getApplicationContext()
-                                ,Search.class));
-                        overridePendingTransition(0,0);
+                                , Search.class));
+                        overridePendingTransition(0, 0);
                         return true;
                 }
                 return false;
@@ -105,4 +119,6 @@ public class DashBoard extends AppCompatActivity {
         });
         return true;
     }
+
+
 }

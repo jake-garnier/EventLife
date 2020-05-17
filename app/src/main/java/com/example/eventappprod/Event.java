@@ -10,7 +10,6 @@ public class Event {
     private String Tag;
     private String Description;
     private String Image;
-
     public Event() {
 
     }
