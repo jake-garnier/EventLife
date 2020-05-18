@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,7 +33,7 @@ public class DashBoard extends AppCompatActivity {
     //Event Feed String Arrays
     String eventNames[];
     String eventDescriptions[];
-    int images[] = {R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
+    int images[] = {R.drawable.revelle, R.drawable.event1, R.drawable.event2, R.drawable.event3, R.drawable.event4, R.drawable.event5, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
     //String images[];
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
@@ -47,7 +49,6 @@ public class DashBoard extends AppCompatActivity {
         setContentView(R.layout.activity_dash_board);
 
         ref = database.getInstance().getReference("EVENT");
-
 
 
         //Logic for displaying the event-feed
@@ -69,7 +70,22 @@ public class DashBoard extends AppCompatActivity {
         //Initialize and assign variable
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        //Set profile as selected
+        // The navigation text/symbols will change color when you are on that page
+        bottomNavigationView.setSelectedItemId(R.id.dashboard);
+        int[] colors = new int[] {
+                Color.LTGRAY,
+                Color.WHITE,
+        };
+
+        int [][] states = new int [][]{
+                new int[] { android.R.attr.state_enabled, -android.R.attr.state_checked},
+                new int[] {android.R.attr.state_enabled, android.R.attr.state_checked}
+        };
+
+        bottomNavigationView.setItemTextColor(new ColorStateList(states, colors));
+        bottomNavigationView.setItemIconTintList(new ColorStateList(states, colors));
+
+        //Set dashboard as selected
         bottomNavigationView.setSelectedItemId(R.id.dashboard);
 
         //Perform ItemSelectedListener

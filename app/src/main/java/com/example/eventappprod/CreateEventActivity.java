@@ -13,7 +13,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 
 public class CreateEventActivity extends AppCompatActivity {
-    EditText Name, Location, StartTime, EndTime, Day, Tag;
+    EditText Name, Location, StartTime, EndTime, Date, Tag;
     Button Cancel;
     Button Next;
 
@@ -30,10 +30,10 @@ public class CreateEventActivity extends AppCompatActivity {
         //
         Name = (EditText) findViewById(R.id.Description);
         Location = (EditText) findViewById(R.id.Location);
-        Day = (EditText) findViewById(R.id.Day);
+        Date = (EditText) findViewById(R.id.Date);
         StartTime = (EditText) findViewById(R.id.StartTime);
         EndTime = (EditText) findViewById(R.id.EndTime);
-        Tag = (EditText) findViewById(R.id.Tag);
+//        Tag = (EditText) findViewById(R.id.Tag);
         Next = (Button) findViewById(R.id.btnPrevious);
         Cancel = (Button) findViewById(R.id.btnCancel);
 
@@ -52,10 +52,10 @@ public class CreateEventActivity extends AppCompatActivity {
                 Intent intent = new Intent(CreateEventActivity.this, CreateEventPage2.class);
                 intent.putExtra("iName", Name.getText().toString());
                 intent.putExtra("iLocation", Location.getText().toString());
-                intent.putExtra("iDay", Day.getText().toString());
+                intent.putExtra("iDay", Date.getText().toString());
                 intent.putExtra("iStartTime", StartTime.getText().toString());
                 intent.putExtra("iEndTime", EndTime.getText().toString());
-                intent.putExtra("iTag", Tag.getText().toString());
+//                intent.putExtra("iTag", Tag.getText().toString());
 
                 // go to CreateEventPage2
                 startActivity(intent);

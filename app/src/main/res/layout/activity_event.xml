@@ -4,193 +4,191 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/darkrose"
     android:orientation="vertical"
     tools:context=".EventActivity">
 
-    <ImageView
-        android:id="@+id/event_picture"
-        android:layout_width="408dp"
-        android:layout_height="119dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/date_time"
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/eventFormMapView"
+        android:layout_width="268dp"
+        android:layout_height="177dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="345dp"
+        android:layout_marginEnd="50dp"
+        android:apiKey="AIzaSyCPC0s4rwW6Nr4hFsmPE_ToQRRI0OVU1Q4"
+        android:clickable="true"
+        android:enabled="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/club_name"
-        app:srcCompat="@drawable/samoyed" />
-
-    <TextView
-        android:id="@+id/event_description"
-        android:layout_width="396dp"
-        android:layout_height="87dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="100dp"
-        android:gravity="center_horizontal"
-        android:text="TextView"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@id/going_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_time" />
-
-    <TextView
-        android:id="@+id/date_time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:gravity="center_horizontal"
-        android:text="Date_Time"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/event_description"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/event_picture" />
-
-    <Button
-        android:id="@+id/going_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginEnd="53dp"
-        android:layout_marginBottom="16dp"
-        android:layout_weight="1"
-        android:text="I'm Going"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/not_going_button"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/not_going_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="53dp"
-        android:layout_marginBottom="16dp"
-        android:layout_weight="1"
-        android:text="I'm Not Going"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/going_button" />
-
-    <TextView
-        android:id="@+id/friends_going"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="35dp"
-        android:layout_marginBottom="50dp"
-        android:text="X Friends are Going"
-        app:layout_constraintBottom_toTopOf="@+id/going_button"
-        app:layout_constraintEnd_toStartOf="@+id/friends_not_going"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/check_button" />
-
-    <TextView
-        android:id="@+id/friends_not_going"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="50dp"
-        android:text="X Friends are Not Going"
-        app:layout_constraintBottom_toTopOf="@+id/going_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/friends_going"
-        app:layout_constraintTop_toBottomOf="@+id/friends_not_going_button" />
-
-    <ImageButton
-        android:id="@+id/check_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="86dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="40dp"
-        app:layout_constraintBottom_toTopOf="@+id/friends_going"
-        app:layout_constraintEnd_toStartOf="@+id/friends_not_going_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/event_description"
-        app:srcCompat="@drawable/green_check" />
-
-    <ImageButton
-        android:id="@+id/friends_not_going_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="86dp"
-        app:layout_constraintBottom_toTopOf="@+id/friends_not_going"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/check_button"
-        app:layout_constraintTop_toBottomOf="@+id/event_description"
-        app:srcCompat="@drawable/red_cross" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/tag_button"
-        android:layout_width="34dp"
-        android:layout_height="21dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@id/event_name"
-        app:layout_constraintEnd_toStartOf="@+id/tags"
+        android:id="@+id/eventFormImageView"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="25dp"
+        android:scaleType="centerInside"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/tag" />
+        app:srcCompat="@drawable/event4" />
 
     <TextView
-        android:id="@+id/tags"
-        android:layout_width="273dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="16dp"
-        android:text="Tags"
-        app:layout_constraintBottom_toTopOf="@id/club_name"
-        app:layout_constraintStart_toEndOf="@+id/tag_button"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.802" />
-
-    <TextView
-        android:id="@+id/event_name"
-        android:layout_width="412dp"
-        android:layout_height="45dp"
-        android:gravity="center_horizontal"
-        android:text="Event Name"
-        android:textSize="40sp"
+        android:id="@+id/eventFormDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="30dp"
+        android:text="Date"
+        android:textSize="17sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/club_name"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tags" />
+        app:layout_constraintTop_toBottomOf="@+id/eventFormImageView" />
 
     <TextView
-        android:id="@+id/club_name"
-        android:layout_width="409dp"
-        android:layout_height="19dp"
-        android:gravity="center_horizontal"
-        android:text="Club Name"
-        app:layout_constraintBottom_toTopOf="@+id/event_picture"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/eventFormDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:text="TextView"
+        android:textSize="17sp"
+        app:layout_constraintStart_toEndOf="@+id/eventFormImageView"
+        app:layout_constraintTop_toBottomOf="@+id/eventFormName" />
+
+    <TextView
+        android:id="@+id/eventFormName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="25dp"
+        android:text="TextView"
+        android:textStyle="bold"
+        android:textSize="23sp"
+        app:layout_constraintStart_toEndOf="@+id/eventFormImageView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="2dp"
+        android:text="09/30/20"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/event_name" />
+        app:layout_constraintTop_toBottomOf="@+id/eventFormDate" />
 
-    <ToggleButton
-        android:id="@+id/toggle"
-        android:layout_width="32dp"
-        android:layout_height="33dp"
-        android:layout_centerVertical="true"
-        android:layout_margin="10dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginEnd="62dp"
-        android:background="@drawable/star"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:textOff=""
-        android:textOn=""
-        app:layout_constraintBottom_toTopOf="@+id/event_name"
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="175dp"
+        android:layout_marginTop="30dp"
+        android:text="Start Time"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventFormImageView" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="295dp"
+        android:layout_marginTop="32dp"
+        android:text="End Time"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventFormImageView" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="175dp"
+        android:layout_marginTop="2dp"
+        android:text="8:00 PM"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="295dp"
+        android:layout_marginTop="2dp"
+        android:text="11:00 PM"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="100dp"
+        android:text="Location"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventFormImageView" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="2dp"
+        android:text="9500 Gilman Dr"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+    <Button
+        android:id="@+id/eventFormGuests"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="175dp"
+        android:layout_marginTop="100dp"
+        android:text="Attendees"
+        android:backgroundTint="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventFormImageView" />
+
+    <Button
+        android:id="@+id/eventFormRSVP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="545dp"
+        android:backgroundTint="@color/white"
+        android:text="RSVP"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tags" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="180dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="445dp"
+        android:rotation="180"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/blackvines" />
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="180dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="445dp"
+        android:rotation="180"
+        android:scaleX="-1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/blackvines" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -79,6 +81,21 @@ public class Profile extends AppCompatActivity {
 
         //Initialize and assign variable
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        // The navigation text/symbols will change color when you are on that page
+        bottomNavigationView.setSelectedItemId(R.id.dashboard);
+        int[] colors = new int[] {
+                Color.LTGRAY,
+                Color.WHITE,
+        };
+
+        int [][] states = new int [][]{
+                new int[] { android.R.attr.state_enabled, -android.R.attr.state_checked},
+                new int[] {android.R.attr.state_enabled, android.R.attr.state_checked}
+        };
+
+        bottomNavigationView.setItemTextColor(new ColorStateList(states, colors));
+        bottomNavigationView.setItemIconTintList(new ColorStateList(states, colors));
 
         //Set profile as selected
         bottomNavigationView.setSelectedItemId(R.id.profile);

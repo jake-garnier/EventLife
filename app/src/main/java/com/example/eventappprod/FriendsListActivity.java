@@ -1,18 +1,14 @@
 package com.example.eventappprod;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
@@ -21,7 +17,8 @@ public class FriendsListActivity extends AppCompatActivity {
     //https://www.youtube.com/watch?v=18VcnYN5_LM
     //Event Feed String Arrays
     String friendNames[];
-    int images[] = {R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
+    String friendBios[];
+    int images[] = {R.drawable.friend1, R.drawable.friend2, R.drawable.friend3, R.drawable.friend4, R.drawable.friend5, R.drawable.friend6, R.drawable.friend7, R.drawable.samoyed, R.drawable.khosla};
 
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
@@ -32,17 +29,17 @@ public class FriendsListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dash_board);
+        setContentView(R.layout.activity_friends_list);
 
-        //Logic for displaying the event-feed
         //Thus, somehow inject database information into these arrays?
         friendNames = getResources().getStringArray(R.array.friendNames_feed);
+        friendBios = getResources().getStringArray(R.array.friendBios_feed);
         ArrayList<ExampleItem> friendList = new ArrayList<>();
         for(int i = 0; i < friendNames.length; i++){
-            friendList.add(new ExampleItem(images[i], friendNames[i], ""));
+            friendList.add(new ExampleItem(images[i], friendNames[i], friendBios[i]));
         }
 
-        mRecyclerView =  findViewById(R.id.recyclerView);
+        mRecyclerView =  findViewById(R.id.friendListRecycler);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mAdapter = new ExampleAdapter(this, friendList, "friend");
