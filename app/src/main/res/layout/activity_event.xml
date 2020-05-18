@@ -4,42 +4,193 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".EventActivity">
 
     <ImageView
-        android:id="@+id/mainImageView"
-        android:layout_width="150dp"
-        android:layout_height="178dp"
-        android:layout_marginTop="200dp"
+        android:id="@+id/event_picture"
+        android:layout_width="408dp"
+        android:layout_height="119dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/date_time"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/club_name"
         app:srcCompat="@drawable/samoyed" />
 
     <TextView
-        android:id="@+id/event_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="121dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="121dp"
+        android:id="@+id/event_description"
+        android:layout_width="396dp"
+        android:layout_height="87dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="100dp"
+        android:gravity="center_horizontal"
         android:text="TextView"
-        android:layout_gravity="center"
-        android:textSize="40sp"
-        android:textStyle="bold"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@id/going_button"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mainImageView" />
+        app:layout_constraintTop_toBottomOf="@+id/date_time" />
 
     <TextView
-        android:id="@+id/event_description"
+        android:id="@+id/date_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:gravity="center_horizontal"
+        android:text="Date_Time"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/event_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/event_picture" />
+
+    <Button
+        android:id="@+id/going_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center"
-        android:text="TextView"
-        android:textSize="25sp"
-        app:layout_constraintTop_toBottomOf="@+id/event_title"
-        tools:layout_editor_absoluteX="153dp" />
+        android:layout_marginStart="80dp"
+        android:layout_marginEnd="53dp"
+        android:layout_marginBottom="16dp"
+        android:layout_weight="1"
+        android:text="I'm Going"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/not_going_button"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/not_going_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="53dp"
+        android:layout_marginBottom="16dp"
+        android:layout_weight="1"
+        android:text="I'm Not Going"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/going_button" />
+
+    <TextView
+        android:id="@+id/friends_going"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="35dp"
+        android:layout_marginBottom="50dp"
+        android:text="X Friends are Going"
+        app:layout_constraintBottom_toTopOf="@+id/going_button"
+        app:layout_constraintEnd_toStartOf="@+id/friends_not_going"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/check_button" />
+
+    <TextView
+        android:id="@+id/friends_not_going"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="50dp"
+        android:text="X Friends are Not Going"
+        app:layout_constraintBottom_toTopOf="@+id/going_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/friends_going"
+        app:layout_constraintTop_toBottomOf="@+id/friends_not_going_button" />
+
+    <ImageButton
+        android:id="@+id/check_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="86dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/friends_going"
+        app:layout_constraintEnd_toStartOf="@+id/friends_not_going_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/event_description"
+        app:srcCompat="@drawable/green_check" />
+
+    <ImageButton
+        android:id="@+id/friends_not_going_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="86dp"
+        app:layout_constraintBottom_toTopOf="@+id/friends_not_going"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/check_button"
+        app:layout_constraintTop_toBottomOf="@+id/event_description"
+        app:srcCompat="@drawable/red_cross" />
+
+    <ImageView
+        android:id="@+id/tag_button"
+        android:layout_width="34dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@id/event_name"
+        app:layout_constraintEnd_toStartOf="@+id/tags"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/tag" />
+
+    <TextView
+        android:id="@+id/tags"
+        android:layout_width="273dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="16dp"
+        android:text="Tags"
+        app:layout_constraintBottom_toTopOf="@id/club_name"
+        app:layout_constraintStart_toEndOf="@+id/tag_button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.802" />
+
+    <TextView
+        android:id="@+id/event_name"
+        android:layout_width="412dp"
+        android:layout_height="45dp"
+        android:gravity="center_horizontal"
+        android:text="Event Name"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/club_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tags" />
+
+    <TextView
+        android:id="@+id/club_name"
+        android:layout_width="409dp"
+        android:layout_height="19dp"
+        android:gravity="center_horizontal"
+        android:text="Club Name"
+        app:layout_constraintBottom_toTopOf="@+id/event_picture"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/event_name" />
+
+    <ToggleButton
+        android:id="@+id/toggle"
+        android:layout_width="32dp"
+        android:layout_height="33dp"
+        android:layout_centerVertical="true"
+        android:layout_margin="10dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginEnd="62dp"
+        android:background="@drawable/star"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:textOff=""
+        android:textOn=""
+        app:layout_constraintBottom_toTopOf="@+id/event_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tags" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

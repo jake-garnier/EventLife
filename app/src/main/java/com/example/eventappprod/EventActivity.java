@@ -21,8 +21,8 @@ public class EventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event);
 
         //Make references that connect the XML <--> the Java variables
-        mainImageView = findViewById(R.id.mainImageView);
-        title = findViewById(R.id.event_title);
+        mainImageView = findViewById(R.id.event_picture);
+        title = findViewById(R.id.event_name);
         description = findViewById(R.id.event_description);
 
         //Initialize these methods
