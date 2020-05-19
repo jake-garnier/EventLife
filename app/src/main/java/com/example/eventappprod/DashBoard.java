@@ -8,20 +8,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
-import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -29,42 +33,49 @@ public class DashBoard extends AppCompatActivity {
     //https://www.youtube.com/watch?v=Nw9JF55LDzE
     //https://www.youtube.com/watch?v=18VcnYN5_LM
     //Event Feed String Arrays
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference gsRef;
     String eventNames[];
     String eventDescriptions[];
     int images[] = {R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
-    //String images[];
+    int im[];
+    Uri uri[];
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
     private ExampleAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     FirebaseDatabase database;
     DatabaseReference ref;
-    ArrayList<String> evenList;
+    ArrayList<Event> evenList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
 
-        ref = database.getInstance().getReference("EVENT");
+        evenList = new ArrayList<>();
+        ref = database.getInstance().getReference("/EVENT");
+        eventNames = getResources().getStringArray(R.array.eventNames_feed);
+        eventDescriptions = getResources().getStringArray(R.array.eventNames_description);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()){
+                    evenList.add(ds.getValue(Event.class));
+                }
+                if (evenList.size()!=0) retrieveData();
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(DashBoard.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
         //Logic for displaying the event-feed
         //Thus, somehow inject database information into these arrays?
-        eventNames = getResources().getStringArray(R.array.eventNames_feed);
-        eventDescriptions = getResources().getStringArray(R.array.eventNames_description);
-        ArrayList<ExampleItem> exampleList = new ArrayList<>();
-        for (int i = 0; i < eventNames.length; i++) {
-            exampleList.add(new ExampleItem(images[i], eventNames[i], eventDescriptions[i]));
-        }
-
-        mRecyclerView = findViewById(R.id.recyclerView);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new ExampleAdapter(this, exampleList, "event");
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
 
         //Initialize and assign variable
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -117,6 +128,45 @@ public class DashBoard extends AppCompatActivity {
             }
         });
         return true;
+    }
+
+    public void retrieveData(){
+        for (int i=0; i<evenList.size();i++) {
+            eventNames[i] = evenList.get(i).getName();
+            eventDescriptions[i] = evenList.get(i).getDescription();
+        }
+        update();
+
+    }
+
+
+    public void update(){
+        ArrayList<ExampleItem> exampleList = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            exampleList.add(new ExampleItem(Uri.parse("https://firebasestorage.googleapis.com/v0/b/event-b161b.appspot.com/o/EVENT%2Facc%3D1%3Bdoc%3D21?alt=media&token=12a64f46-2cb9-40af-8ee7-077049c94e5e"),eventNames[i], eventDescriptions[i]));
+        }
+
+        mRecyclerView = findViewById(R.id.recyclerView);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        mAdapter = new ExampleAdapter(this, exampleList, "event");
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+
+    }
+    public Uri displayImage(String url){
+        gsRef = storage.getReference(url);
+        final Uri[] u = new Uri[1];
+        gsRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+
+                Log.e("Success" , "uri" + uri.toString());
+                u[0] = uri;
+            }
+        });
+        return u[0];
+
     }
 
 

@@ -144,7 +144,8 @@ public class CreateEventPage2 extends AppCompatActivity {
             event.setImage(imagePath.toString());
 
             // make an event with an unique id
-            ref.child(event.getId()).setValue(event);
+            //ref.child(event.getId()).setValue(event);
+            ref.child(event.getName()).setValue(event);
 
             // start the next page
             startActivity(new Intent(getApplicationContext(), DashBoard.class));

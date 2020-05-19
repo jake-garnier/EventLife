@@ -39,7 +39,7 @@ public class FriendsListActivity extends AppCompatActivity {
         friendNames = getResources().getStringArray(R.array.friendNames_feed);
         ArrayList<ExampleItem> friendList = new ArrayList<>();
         for(int i = 0; i < friendNames.length; i++){
-            friendList.add(new ExampleItem(images[i], friendNames[i], ""));
+            //friendList.add(new ExampleItem(images[i], friendNames[i], ""));
         }
 
         mRecyclerView =  findViewById(R.id.recyclerView);

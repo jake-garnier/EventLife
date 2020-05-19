@@ -92,7 +92,8 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
                 ExampleItem currItem = mExampleList.get(position);
 
-                holder.mImageView.setImageResource(currItem.getImageResource());
+                holder.mImageView.setImageURI(currItem.getImageResource());
+               // holder.mImageView.setImageResource(currItem.getImageResource());
                 holder.mTextView1.setText(currItem.getText1());
                 holder.mTextView2.setText(currItem.getText2());
 
@@ -113,10 +114,11 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             } else {
                 ExampleItem currItem = mExampleList.get(position);
 
-                holder.mImageView.setImageResource(currItem.getImageResource());
+                //holder.mImageView.setImageResource(currItem.getImageResource());
+                holder.mImageView.setImageURI(currItem.getImageResource());
                 holder.mTextView1.setText(currItem.getText1());
             }
-    }
+}
 
     @Override
     public int getItemViewType (int position) {

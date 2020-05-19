@@ -1,5 +1,7 @@
 package com.example.eventappprod;
 
+import java.util.ArrayList;
+
 public class Event {
     private String ID;
     private String Name;
@@ -10,6 +12,10 @@ public class Event {
     private String Tag;
     private String Description;
     private String Image;
+    public String UserGoing;
+    public String UserMaybeGoing;
+    public String UserNotGoing;
+
     public Event() {
 
     }
@@ -28,6 +34,9 @@ public class Event {
         StartTime =stime;
         EndTime = etime;
         Description = des;
+        UserGoing = null;
+        UserMaybeGoing = null;
+        UserNotGoing = null;
     }
     public String getId(){
         return ID;
