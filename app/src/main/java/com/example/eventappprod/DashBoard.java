@@ -8,21 +8,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import android.content.Intent;
-<<<<<<< HEAD
+
 
 import android.net.Uri;
 
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 
-=======
-<<<<<<< HEAD
+
 import android.net.Uri;
-=======
+
 import android.content.res.ColorStateList;
 import android.graphics.Color;
->>>>>>> b361a92b967ee8afb1cf325ba7d78405af48a1bf
->>>>>>> master
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
