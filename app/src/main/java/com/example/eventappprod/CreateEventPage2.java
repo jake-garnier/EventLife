@@ -18,7 +18,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,7 +46,7 @@ import java.util.UUID;
 import static com.squareup.picasso.Picasso.*;
 
 
-public class CreateEventPage2 extends AppCompatActivity {
+public class CreateEventPage2 extends AppCompatActivity implements OnMapReadyCallback {
 
     // Declare instance variables
     String RealTimeImagePath;
@@ -72,6 +77,20 @@ public class CreateEventPage2 extends AppCompatActivity {
         Previous = (Button) findViewById(R.id.btnPrevious);
         Cancel = (Button) findViewById(R.id.btnCancel);
         ref = database.getInstance().getReference("EVENT");
+
+
+        GeoTag = findViewById(R.id.mapView);
+        GeoTag.onCreate(savedInstanceState);
+        GeoTag.getMapAsync(new OnMapReadyCallback() {
+
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                LatLng coordinates = new LatLng(32.8851, -117.2392);
+                googleMap.addMarker(new MarkerOptions().position(coordinates).title("RIMAC"));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 15));
+                GeoTag.onResume();
+            }
+        });
 
 
         //storageReference = FirebaseStorage.getInstance().getReference();
@@ -230,4 +249,11 @@ public class CreateEventPage2 extends AppCompatActivity {
         }
     }
 
+
+
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+    }
 }

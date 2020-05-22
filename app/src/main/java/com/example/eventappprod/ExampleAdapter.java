@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,6 +67,10 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             ExampleViewHolder evh = new ExampleViewHolder(v);
             return evh;
             // Thw view type 2 is for the friend card type
+        } else if(viewType == 2){
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_friend_request_row, parent, false);
+            ExampleViewHolder evh = new ExampleViewHolder(v);
+            return evh;
         } else {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_friend_row, parent, false);
             ExampleViewHolder evh = new ExampleViewHolder(v);
@@ -78,8 +81,10 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     @Override
     public void onBindViewHolder(@NonNull ExampleViewHolder holder, final int position) {
 
+            int viewType = getItemViewType(position);
+
             //The first card is always the create event button
-            if(getItemViewType(position) == 0) {
+            if(viewType == 0) {
 
                 holder.createEvent.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -88,7 +93,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                         context.startActivity(intent);
                     }
                 });
-            } else if(getItemViewType(position) == 1){
+            } else if(viewType == 1){
 
                 ExampleItem currItem = mExampleList.get(position);
 
@@ -117,6 +122,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                 //holder.mImageView.setImageResource(currItem.getImageResource());
                 holder.mImageView.setImageURI(currItem.getImageResource());
                 holder.mTextView1.setText(currItem.getText1());
+                holder.mTextView2.setText(currItem.getText2());
             }
 }
 
@@ -127,10 +133,12 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             return 0;
         } else if(this.cardType.equals("event")){
             return 1;
-        } else if(this.cardType.equals("friend")) {
+        } else if(position == 0 && this.cardType.equals("friend")) {
             return 2;
+        } if(this.cardType.equals("nobutton")) {
+            return 1;
         }
-        return 1;
+        return 3;
     }
 
     @Override

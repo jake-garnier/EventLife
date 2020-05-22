@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/darkrose"
     tools:context=".DashBoard">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -26,6 +27,6 @@
         android:clipToPadding="false"
         android:paddingBottom="65dp"
         android:layout_marginBottom="?attr/actionBarSize"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical" />
 
 </RelativeLayout>

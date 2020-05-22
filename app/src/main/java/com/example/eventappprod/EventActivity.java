@@ -7,10 +7,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class EventActivity extends AppCompatActivity {
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+public class EventActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     ImageView mainImageView;
     TextView title, description;
+    MapView GeoTag;
 
     String data1, data2;
     int myImage;
@@ -21,13 +29,26 @@ public class EventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event);
 
         //Make references that connect the XML <--> the Java variables
-        mainImageView = findViewById(R.id.mainImageView);
-        title = findViewById(R.id.event_title);
-        description = findViewById(R.id.event_description);
+        mainImageView = findViewById(R.id.eventFormImageView);
+        title = findViewById(R.id.eventFormName);
+        description = findViewById(R.id.eventFormDescription);
 
         //Initialize these methods
         getData();
         setData();
+
+        GeoTag = findViewById(R.id.eventFormMapView);
+        GeoTag.onCreate(savedInstanceState);
+        GeoTag.getMapAsync(new OnMapReadyCallback() {
+
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                LatLng coordinates = new LatLng(32.8851, -117.2392);
+                googleMap.addMarker(new MarkerOptions().position(coordinates).title("RIMAC"));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 15));
+                GeoTag.onResume();
+            }
+        });
 
     }
 
@@ -54,4 +75,8 @@ public class EventActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+    }
 }
