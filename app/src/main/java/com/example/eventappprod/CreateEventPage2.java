@@ -49,19 +49,20 @@ import static com.squareup.picasso.Picasso.*;
 public class CreateEventPage2 extends AppCompatActivity implements OnMapReadyCallback {
 
     // Declare instance variables
-    String RealTimeImagePath;
-    EditText Description;
+
     ImageButton chooseImage;
+    String RealTimeImagePath;
     MapView GeoTag;
     Button Create;
     Button Cancel;
     Button Previous;
     FirebaseDatabase database;
-    DatabaseReference ref;
+    //DatabaseReference ref;
     Event event;
     Uri uri;
     StorageReference imagePath;
     FirebaseStorage  storage;
+    private DatabaseReference ref;
 
 
     @Override
@@ -69,14 +70,15 @@ public class CreateEventPage2 extends AppCompatActivity implements OnMapReadyCal
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event_page2);
 
-        Description = (EditText) findViewById(R.id.Description);
+        //       Description = (EditText) findViewById(R.id.Description2);
         chooseImage = (ImageButton) findViewById(R.id.btnImage);
         GeoTag = (MapView) findViewById(R.id.mapView);
 
         Create = (Button) findViewById(R.id.btnCreate);
         Previous = (Button) findViewById(R.id.btnPrevious);
         Cancel = (Button) findViewById(R.id.btnCancel);
-        ref = database.getInstance().getReference("EVENT");
+        //ref = database.getInstance().getReference("EVENT");
+        ref =FirebaseDatabase.getInstance().getReference("/EVENT");
 
 
         GeoTag = findViewById(R.id.mapView);
@@ -127,9 +129,15 @@ public class CreateEventPage2 extends AppCompatActivity implements OnMapReadyCal
         Create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!RealTimeImagePath.isEmpty()) addEvent();
-                Toast.makeText(CreateEventPage2.this, "Event created", Toast.LENGTH_LONG).show();
-                startActivity(new Intent(getApplicationContext(), DashBoard.class));
+                if(!RealTimeImagePath .isEmpty())
+                {
+                    Toast.makeText(CreateEventPage2.this, "Debug adding purpose", Toast.LENGTH_LONG).show();
+                    addEvent();
+                    Toast.makeText(CreateEventPage2.this, "Event created", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(getApplicationContext(), DashBoard.class));
+                }
+
+
             }
         });
     }
@@ -147,9 +155,8 @@ public class CreateEventPage2 extends AppCompatActivity implements OnMapReadyCal
         String StartTime = bn.getStringExtra("iStartTime");
         String EndTime = bn.getStringExtra("iEndTime");
         String Tag = bn.getStringExtra("iTag");
+        String Des = bn.getStringExtra("iDescription2");
 
-        // data in CreateEventPage2
-        String Des = Description.getText().toString();
         String id = ref.push().getKey();
 
         //
@@ -159,18 +166,20 @@ public class CreateEventPage2 extends AppCompatActivity implements OnMapReadyCal
                 !TextUtils.isEmpty(StartTime) && !TextUtils.isEmpty(EndTime) && !TextUtils.isEmpty(Tag)
                 && !TextUtils.isEmpty(Des)) {
             // make an event object with contructor
-            event = new Event(id, EventName, Day, Location, StartTime, EndTime, Tag, Des);
+            //event = new Event(id, EventName, Day, Location, StartTime, EndTime, Tag, Des);
+            event = new Event(id, EventName, Day, Location, StartTime, EndTime, Tag, Des, "", "", "");
+
 
             // store image uploaded to the event object
+            // event.setImage(imagePath.toString());
             event.setImage(RealTimeImagePath);
 
-            // make an event with an unique id
-            //ref.child(event.getId()).setValue(event);
+            // make an event with the event's name
             ref.child(event.getName()).setValue(event);
 
-            // start the next page
+            // back to Dashboard
             startActivity(new Intent(getApplicationContext(), DashBoard.class));
-            }
+        }
 
         // if one of the field is empty, prompt the user to input data again
         else {
@@ -183,17 +192,16 @@ public class CreateEventPage2 extends AppCompatActivity implements OnMapReadyCal
     // select an image in the user phone's Gallery
     //
     public void openFilechooser(){
+        // create an intent so user can jump to his phone's folder to select photo
         Intent intent = new Intent(Intent.ACTION_PICK);
         // only pick image
         intent.setType("image/*");
+        // grab the photo
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent, 1);
     }
 
 
-    //
-    // get the result of choosing picture in Gallery
-    //
     //
     // get the result of choosing picture in Gallery
     //
@@ -248,9 +256,6 @@ public class CreateEventPage2 extends AppCompatActivity implements OnMapReadyCal
 
         }
     }
-
-
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {

@@ -13,7 +13,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 
 public class CreateEventActivity extends AppCompatActivity {
-    EditText Name, Location, StartTime, EndTime, Date, Tag;
+    EditText Name, Location, StartTime, EndTime, Date, Tag, Description;
     Button Cancel;
     Button Next;
 
@@ -36,6 +36,7 @@ public class CreateEventActivity extends AppCompatActivity {
 //        Tag = (EditText) findViewById(R.id.Tag);
         Next = (Button) findViewById(R.id.btnPrevious);
         Cancel = (Button) findViewById(R.id.btnCancel);
+        Description =(EditText) findViewById(R.id.Description2);
 
 
 
@@ -55,7 +56,8 @@ public class CreateEventActivity extends AppCompatActivity {
                 intent.putExtra("iDay", Date.getText().toString());
                 intent.putExtra("iStartTime", StartTime.getText().toString());
                 intent.putExtra("iEndTime", EndTime.getText().toString());
-//                intent.putExtra("iTag", Tag.getText().toString());
+                intent.putExtra("iDescription2",Description.getText().toString());
+                intent.putExtra("iTag", Name.getText().toString());
 
                 // go to CreateEventPage2
                 startActivity(intent);
@@ -74,4 +76,3 @@ public class CreateEventActivity extends AppCompatActivity {
     }
 
 }
-

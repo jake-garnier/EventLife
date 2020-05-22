@@ -7,36 +7,39 @@ public class Event {
     private String Name;
     private String Date;
     private String Location;
+
     private String StartTime;
     private String EndTime;
     private String Tag;
     private String Description;
+
     private String Image;
-    public String UserGoing;
-    public String UserMaybeGoing;
-    public String UserNotGoing;
+    public String userGoing;
+    public String userMaybeGoing;
+    public String userNotGoing;
 
     public Event() {
 
     }
 
-    public Event(String id, String des){
-        ID=id;
-        Description =des;
-    }
 
-    public Event(String id,String name, String date, String loca, String stime, String etime, String tag, String des) {
+
+    public Event(String id,String name, String date, String loca,
+                 String stime, String etime, String tag, String des,
+                 String usergo, String usermaybe, String usernot) {
         ID = id;
         Name = name;
         Date = date;
         Location = loca;
+
         Tag =tag;
         StartTime =stime;
         EndTime = etime;
         Description = des;
-        UserGoing = null;
-        UserMaybeGoing = null;
-        UserNotGoing = null;
+
+        userGoing = usergo;
+        userMaybeGoing = usermaybe;
+        userNotGoing = usernot;
     }
     public String getId(){
         return ID;
@@ -95,6 +98,27 @@ public class Event {
     }
     public void setImage(String i){
         Image = i;
+    }
+
+    public String getUserGoing(){
+        return userGoing;
+    }
+    public void addUserGoing(String g){
+        userGoing = userGoing.concat(g);
+    }
+
+    public String getUserMaybeGoing(){
+        return userMaybeGoing;
+    }
+    public void addUserMaybeGoing(String m){
+        userMaybeGoing = userMaybeGoing.concat(m);
+    }
+
+    public String getUserNotGoing(){
+        return userNotGoing;
+    }
+    public void addUserNotGoing(String n){
+        userNotGoing = userNotGoing.concat(n);
     }
 
 }

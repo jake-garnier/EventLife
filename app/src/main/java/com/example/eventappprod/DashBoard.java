@@ -50,8 +50,6 @@ public class DashBoard extends AppCompatActivity {
     int im[];
     Uri myuri[];
 
-  //  int images[] = {R.drawable.revelle, R.drawable.event1, R.drawable.event2, R.drawable.event3, R.drawable.event4, R.drawable.event5, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
-    //String images[];
 
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
@@ -164,20 +162,18 @@ public class DashBoard extends AppCompatActivity {
             eventNames[i] = evenList.get(i).getName();
             eventDescriptions[i] = evenList.get(i).getDescription();
 
+            // you can get other info like date and time as well
+
         }
-        LoadData();
+        LoadDatatoDashBoard();
 
     }
 
 
-    public void LoadData(){
-
-
-
-
+    public void LoadDatatoDashBoard(){
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
         for (int i = 0; i <= evenList.size(); i++) {
-            exampleList.add(new ExampleItem(Uri.parse(""),eventNames[i], eventDescriptions[i]));
+            exampleList.add(new ExampleItem(images[i],eventNames[i], eventDescriptions[i]));
         }
 
         mRecyclerView = findViewById(R.id.recyclerView);
@@ -188,6 +184,5 @@ public class DashBoard extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
 
     }
-
 
 }

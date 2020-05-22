@@ -8,6 +8,7 @@
          location permissions for the 'MyLocation' functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -59,25 +60,21 @@
             android:label="Return to Dashboard"
             android:parentActivityName=".DashBoard" />
         <activity android:name=".Search" />
-        <activity
-            android:name=".DashBoard"
-            android:windowSoftInputMode="adjustPan">
+
+
+        <activity android:name=".DashBoard" />
+        <activity android:name=".Profile" />
+
+
+
+        <activity android:name=".Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Profile" />
-        <activity android:name=".Login">
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
 
         <meta-data
             android:name="preloaded_fonts"
