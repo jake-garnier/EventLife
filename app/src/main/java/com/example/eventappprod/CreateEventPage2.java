@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
@@ -43,6 +44,7 @@ import static com.squareup.picasso.Picasso.*;
 public class CreateEventPage2 extends AppCompatActivity {
 
     // Declare instance variables
+    String RealTimeImagePath;
     EditText Description;
     ImageButton chooseImage;
     MapView GeoTag;
@@ -106,7 +108,7 @@ public class CreateEventPage2 extends AppCompatActivity {
         Create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addEvent();
+                if (!RealTimeImagePath.isEmpty()) addEvent();
                 Toast.makeText(CreateEventPage2.this, "Event created", Toast.LENGTH_LONG).show();
                 startActivity(new Intent(getApplicationContext(), DashBoard.class));
             }
@@ -141,7 +143,7 @@ public class CreateEventPage2 extends AppCompatActivity {
             event = new Event(id, EventName, Day, Location, StartTime, EndTime, Tag, Des);
 
             // store image uploaded to the event object
-            event.setImage(imagePath.toString());
+            event.setImage(RealTimeImagePath);
 
             // make an event with an unique id
             //ref.child(event.getId()).setValue(event);
@@ -173,9 +175,13 @@ public class CreateEventPage2 extends AppCompatActivity {
     //
     // get the result of choosing picture in Gallery
     //
+    //
+    // get the result of choosing picture in Gallery
+    //
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
 
         if (requestCode==1 && resultCode == RESULT_OK && data!=null && data.getData()!=null)
         {
@@ -184,13 +190,28 @@ public class CreateEventPage2 extends AppCompatActivity {
             // set the chooseImage by the picture chosen
             chooseImage.setImageURI(uri);
             // assign the imagePath by using uri
-            imagePath = FirebaseStorage.getInstance().getReference().child("EVENT").child(uri.getLastPathSegment());
+
+            String url = uri.toString();
+            String filename = url.substring(url.lastIndexOf("/")+1);
+
+            imagePath = FirebaseStorage.getInstance().getReference().child("/EVENT").child(filename);
             //  put the picture to put in Image box
+
             imagePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 // if upload success, print message
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Toast.makeText(CreateEventPage2.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                    StorageMetadata snapshotMetadata = taskSnapshot.getMetadata();
+                    Task<Uri> downloadUrl = imagePath.getDownloadUrl();
+                    downloadUrl.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            RealTimeImagePath = uri.toString();
+
+                        }
+                    });
+
                 }
                 // if upload fails, print message
             }).addOnFailureListener(new OnFailureListener() {
@@ -208,4 +229,5 @@ public class CreateEventPage2 extends AppCompatActivity {
 
         }
     }
+
 }

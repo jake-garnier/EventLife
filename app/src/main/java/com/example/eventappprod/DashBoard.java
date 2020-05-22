@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +27,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -39,7 +42,7 @@ public class DashBoard extends AppCompatActivity {
     String eventDescriptions[];
     int images[] = {R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
     int im[];
-    Uri uri[];
+    Uri myuri[];
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
     private ExampleAdapter mAdapter;
@@ -131,19 +134,26 @@ public class DashBoard extends AppCompatActivity {
     }
 
     public void retrieveData(){
+
+        // fetching data to particular array
         for (int i=0; i<evenList.size();i++) {
             eventNames[i] = evenList.get(i).getName();
             eventDescriptions[i] = evenList.get(i).getDescription();
+
         }
-        update();
+        LoadData();
 
     }
 
 
-    public void update(){
+    public void LoadData(){
+
+
+
+
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
-        for (int i = 0; i < 2; i++) {
-            exampleList.add(new ExampleItem(Uri.parse("https://firebasestorage.googleapis.com/v0/b/event-b161b.appspot.com/o/EVENT%2Facc%3D1%3Bdoc%3D21?alt=media&token=12a64f46-2cb9-40af-8ee7-077049c94e5e"),eventNames[i], eventDescriptions[i]));
+        for (int i = 0; i <= evenList.size(); i++) {
+            exampleList.add(new ExampleItem(Uri.parse(""),eventNames[i], eventDescriptions[i]));
         }
 
         mRecyclerView = findViewById(R.id.recyclerView);
@@ -152,20 +162,6 @@ public class DashBoard extends AppCompatActivity {
         mAdapter = new ExampleAdapter(this, exampleList, "event");
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-
-    }
-    public Uri displayImage(String url){
-        gsRef = storage.getReference(url);
-        final Uri[] u = new Uri[1];
-        gsRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-
-                Log.e("Success" , "uri" + uri.toString());
-                u[0] = uri;
-            }
-        });
-        return u[0];
 
     }
 
