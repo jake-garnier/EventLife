@@ -8,12 +8,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import android.content.Intent;
-<<<<<<< HEAD
+
 import android.net.Uri;
-=======
+
 import android.content.res.ColorStateList;
 import android.graphics.Color;
->>>>>>> b361a92b967ee8afb1cf325ba7d78405af48a1bf
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -50,7 +50,7 @@ public class DashBoard extends AppCompatActivity {
     int im[];
     Uri myuri[];
 
-    int images[] = {R.drawable.revelle, R.drawable.event1, R.drawable.event2, R.drawable.event3, R.drawable.event4, R.drawable.event5, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
+  //  int images[] = {R.drawable.revelle, R.drawable.event1, R.drawable.event2, R.drawable.event3, R.drawable.event4, R.drawable.event5, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
     //String images[];
 
     //Recycler View Needed for Event Feed

@@ -39,7 +39,7 @@ public class FriendsListActivity extends AppCompatActivity {
 
             //friendList.add(new ExampleItem(images[i], friendNames[i], ""));
 
-            friendList.add(new ExampleItem(images[i], friendNames[i], friendBios[i]));
+           // friendList.add(new ExampleItem(images[i], friendNames[i], friendBios[i]));
 
         }
 
