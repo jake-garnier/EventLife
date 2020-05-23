@@ -28,6 +28,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -40,6 +42,8 @@ import com.squareup.picasso.Picasso;
 import android.os.Bundle;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
@@ -62,7 +66,10 @@ public class CreateEventPage2 extends AppCompatActivity implements OnMapReadyCal
     Uri uri;
     StorageReference imagePath;
     FirebaseStorage  storage;
-    private DatabaseReference ref;
+    DatabaseReference ref;
+
+    FirebaseUser currentuser = FirebaseAuth.getInstance().getCurrentUser();
+    String  currentuseremail = currentuser.getEmail();
 
 
     @Override
@@ -75,10 +82,11 @@ public class CreateEventPage2 extends AppCompatActivity implements OnMapReadyCal
         GeoTag = (MapView) findViewById(R.id.mapView);
 
         Create = (Button) findViewById(R.id.btnCreate);
+        Create.setEnabled(false);
         Previous = (Button) findViewById(R.id.btnPrevious);
         Cancel = (Button) findViewById(R.id.btnCancel);
         //ref = database.getInstance().getReference("EVENT");
-        ref =FirebaseDatabase.getInstance().getReference("/EVENT");
+        ref =FirebaseDatabase.getInstance().getReference();
 
 
         GeoTag = findViewById(R.id.mapView);
@@ -175,7 +183,10 @@ public class CreateEventPage2 extends AppCompatActivity implements OnMapReadyCal
             event.setImage(RealTimeImagePath);
 
             // make an event with the event's name
-            ref.child(event.getName()).setValue(event);
+            ref.child("/EVENT").child(event.getName()).setValue(event);
+
+
+            //ref.child("/USER").child().child("favoriteEvent").setValue(event.getName());
 
             // back to Dashboard
             startActivity(new Intent(getApplicationContext(), DashBoard.class));
@@ -220,8 +231,9 @@ public class CreateEventPage2 extends AppCompatActivity implements OnMapReadyCal
 
             String url = uri.toString();
             String filename = url.substring(url.lastIndexOf("/")+1);
-
-            imagePath = FirebaseStorage.getInstance().getReference().child("/EVENT").child(filename);
+            Date currentime = Calendar.getInstance().getTime();
+            String s = currentime.toString();
+            imagePath = FirebaseStorage.getInstance().getReference().child("/EVENT").child(s + filename);
             //  put the picture to put in Image box
 
             imagePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -235,7 +247,7 @@ public class CreateEventPage2 extends AppCompatActivity implements OnMapReadyCal
                         @Override
                         public void onSuccess(Uri uri) {
                             RealTimeImagePath = uri.toString();
-
+                            Create.setEnabled(true);
                         }
                     });
 

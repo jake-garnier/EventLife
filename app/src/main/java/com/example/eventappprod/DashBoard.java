@@ -32,6 +32,8 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,14 +46,17 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class DashBoard extends AppCompatActivity {
+public class DashBoard<user> extends AppCompatActivity {
     //https://www.youtube.com/watch?v=Nw9JF55LDzE
     //https://www.youtube.com/watch?v=18VcnYN5_LM
     //Event Feed String Arrays
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference gsRef;
+
+
     String eventNames[];
     String eventDescriptions[];
+
 
 
     int images[] = {R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
@@ -67,6 +72,8 @@ public class DashBoard extends AppCompatActivity {
     DatabaseReference ref;
     ArrayList<Event> evenList;
 
+    FirebaseUser currentuser = FirebaseAuth.getInstance().getCurrentUser();
+    String email = currentuser.getEmail();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,18 +176,16 @@ public class DashBoard extends AppCompatActivity {
         for (int i=0; i<evenList.size();i++) {
             eventNames[i] = evenList.get(i).getName();
             eventDescriptions[i] = evenList.get(i).getDescription();
-
             // you can get other info like date and time as well
-
         }
+
         LoadDatatoDashBoard();
 
     }
 
-
     public void LoadDatatoDashBoard(){
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
-        for (int i = 0; i <= evenList.size(); i++) {
+        for (int i = 0; i < evenList.size(); i++) {
             exampleList.add(new ExampleItem(images[i],eventNames[i], eventDescriptions[i]));
         }
 
@@ -190,7 +195,6 @@ public class DashBoard extends AppCompatActivity {
         mAdapter = new ExampleAdapter(this, exampleList, "event");
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-
     }
 
 }
