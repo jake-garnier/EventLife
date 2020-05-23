@@ -50,8 +50,8 @@ public class Login extends AppCompatActivity {
 
                 String email = mEmail.getText().toString().trim();
                 String password = mPassword.getText().toString().trim();
-                email = "kcpham@ucsd.edu";
-                password = "hahahaha";
+                //email = "kcpham@ucsd.edu";
+                //password = "hahahaha";
 
                 String domain = email .substring(email .indexOf("@") + 1);
                 if (domain.equals("ucsd.edu") == false) {
