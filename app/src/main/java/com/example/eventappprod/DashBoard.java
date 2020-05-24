@@ -54,7 +54,7 @@ public class DashBoard extends AppCompatActivity {
     String eventDescriptions[];
 
 
-    int images[] = {R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
+    int images[] = {R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla,  R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla,  R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla, R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla,  R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
     int im[];
     Uri myuri[];
 
@@ -181,7 +181,7 @@ public class DashBoard extends AppCompatActivity {
     public void LoadDatatoDashBoard(){
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
         for (int i = 0; i <= evenList.size(); i++) {
-            exampleList.add(new ExampleItem(images[i],eventNames[i], eventDescriptions[i]));
+            exampleList.add(new ExampleItem(images[1],eventNames[1], eventDescriptions[1]));
         }
 
         mRecyclerView = findViewById(R.id.recyclerView);
