@@ -21,8 +21,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class Login extends AppCompatActivity {
     EditText mEmail,mPassword;
@@ -31,16 +29,11 @@ public class Login extends AppCompatActivity {
     ProgressBar progressBar;
     FirebaseAuth fAuth;
 
-    FirebaseDatabase database;
-    DatabaseReference ref;
-    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        ref = database.getInstance().getReference("/USER");
 
         mEmail = findViewById(R.id.Email);
         mPassword = findViewById(R.id.password);
@@ -57,8 +50,10 @@ public class Login extends AppCompatActivity {
 
                 String email = mEmail.getText().toString().trim();
                 String password = mPassword.getText().toString().trim();
-                email = "nkt002@ucsd.edu";
-                password = "qwer1234";
+                //email = "kcpham@ucsd.edu";
+                //password = "hahahaha";
+                //email = "nkt002@ucsd.edu";
+                //password = "qwer1234";
 
                 String domain = email .substring(email .indexOf("@") + 1);
                 if (domain.equals("ucsd.edu") == false) {
@@ -89,13 +84,10 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-
-
                             if (fAuth.getCurrentUser().isEmailVerified())  {
                                 Toast.makeText(Login.this, "Logged in Successfully", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(getApplicationContext(), DashBoard.class));
                             }
-
                             else {
                                 Toast.makeText(Login.this, "Please Verify your email address",Toast.LENGTH_LONG).show();
                                 progressBar.setVisibility(View.GONE);

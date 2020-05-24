@@ -62,10 +62,12 @@ public class DashBoard<user> extends AppCompatActivity {
 
     String eventNames[];
     String eventDescriptions[];
-
-
-
     int images[] = {R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
+
+    int[] images_Screenshow = new int[100];
+    String[] eventNames_Screenshow = new String[100];
+    String[] eventDescriptions_Screenshow=new String[100];
+
     int im[];
     Uri myuri[];
 
@@ -86,6 +88,7 @@ public class DashBoard<user> extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
 
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "EventLife";
             String description = "EventLife";
@@ -102,6 +105,15 @@ public class DashBoard<user> extends AppCompatActivity {
         ref = database.getInstance().getReference("/EVENT");
         eventNames = getResources().getStringArray(R.array.eventNames_feed);
         eventDescriptions = getResources().getStringArray(R.array.eventNames_description);
+
+        for(int i=0;i<images.length;++i)
+        {
+            images_Screenshow [i] = images[i];
+            eventNames_Screenshow[i] = eventNames[i];
+            eventDescriptions_Screenshow[i]=eventDescriptions[i];
+        }
+
+
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -192,8 +204,8 @@ public class DashBoard<user> extends AppCompatActivity {
 
         // fetching data to particular array
         for (int i=0; i<evenList.size();i++) {
-            eventNames[i] = evenList.get(i).getName();
-            eventDescriptions[i] = evenList.get(i).getDescription();
+            eventNames_Screenshow[i] = evenList.get(i).getName();
+            eventDescriptions_Screenshow[i] = evenList.get(i).getDescription();
             // you can get other info like date and time as well
         }
 
@@ -203,8 +215,9 @@ public class DashBoard<user> extends AppCompatActivity {
 
     public void LoadDatatoDashBoard(){
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
+
         for (int i = 0; i < evenList.size(); i++) {
-            exampleList.add(new ExampleItem(images[i],eventNames[i], eventDescriptions[i]));
+            exampleList.add(new ExampleItem(images_Screenshow[i],eventNames_Screenshow[i], eventDescriptions_Screenshow[i]));
         }
 
         mRecyclerView = findViewById(R.id.recyclerView);

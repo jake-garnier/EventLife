@@ -2,16 +2,24 @@ package com.example.eventappprod;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.TableLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.tabs.TabLayout;
 
 public class Search extends AppCompatActivity {
+
+    private SectionPagerAdapter mSectionPagerAdapter;
+
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,5 +68,23 @@ public class Search extends AppCompatActivity {
                 return false;
             }
         });
+
+        mSectionPagerAdapter = new SectionPagerAdapter(getSupportFragmentManager());
+
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        setupViewPager(mViewPager);
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(mViewPager);
+
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_find_friends);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_search);
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        SectionPagerAdapter adapter = new SectionPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new FindFriendsFrag());
+        adapter.addFragment(new FindEventsFrag());
+        viewPager.setAdapter(adapter);
     }
 }

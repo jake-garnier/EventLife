@@ -3,6 +3,7 @@ package com.example.eventappprod;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,6 +42,8 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
     int myImage;
     DatabaseReference ref;
     FirebaseDatabase database;
+
+    Drawable drawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +130,8 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
         //mainImageView.setImageResource(myImage);
         //mainImageView.setImageURI(Uri.parse(image));
         Picasso.get().load(image).into(mainImageView);
+
+
         Date.setText(date);
         StartTime.setText(sTime);
         EndTime.setText(eTime);

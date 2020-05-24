@@ -17,12 +17,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Register extends AppCompatActivity {
     public static final String TAG = "TAG";
@@ -33,16 +37,11 @@ public class Register extends AppCompatActivity {
     ProgressBar progressBar;
     FirebaseFirestore fStore;
     String userID;
-    User u;
 
-    FirebaseDatabase database;
-    DatabaseReference ref;
-    static int usercount = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        ref =FirebaseDatabase.getInstance().getReference();
 
         mFullName   = findViewById(R.id.fullName);
         mEmail      = findViewById(R.id.Email);
@@ -61,7 +60,7 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final String email = mEmail.getText().toString().trim();
-                final String password = mPassword.getText().toString().trim();
+                String password = mPassword.getText().toString().trim();
                 String cfmPassword = confirmPassword.getText().toString().trim();
                 final String fullName = mFullName.getText().toString();
 
@@ -122,12 +121,6 @@ public class Register extends AppCompatActivity {
                                 }
                             });
 
-                            u  = new User(fullName, email, password, "", "","", "", "", "", "", "");
-                            usercount++;
-                            String userRef = Integer.toString(usercount);
-                            //ref.child(userRef).setValue(u);
-
-                            ref.child("/USER").child(userRef).setValue(u);
                             startActivity(new Intent(getApplicationContext(),Login.class));
 
                         }else {
@@ -151,5 +144,4 @@ public class Register extends AppCompatActivity {
 
 
     }
-
 }

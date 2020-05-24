@@ -27,17 +27,16 @@ public class Event {
     public Event(String id,String name, String date, String loca,
                  String stime, String etime, String tag, String des,
                  String usergo, String usermaybe, String usernot) {
-        // mandatory fields for an event object
         ID = id;
         Name = name;
         Date = date;
         Location = loca;
+
         Tag =tag;
         StartTime =stime;
         EndTime = etime;
         Description = des;
 
-        // field filled by user's action
         userGoing = usergo;
         userMaybeGoing = usermaybe;
         userNotGoing = usernot;
@@ -105,24 +104,21 @@ public class Event {
         return userGoing;
     }
     public void addUserGoing(String g){
-        userGoing = userGoing.concat(g+ "$");// use '$' to parse the users since
-        // Real-time Firebase database can store data under String objects only
+        userGoing = userGoing.concat(g);
     }
 
     public String getUserMaybeGoing(){
         return userMaybeGoing;
     }
     public void addUserMaybeGoing(String m){
-        userMaybeGoing = userMaybeGoing.concat(m+ "$");// use '$' to parse the users since
-        // Real-time Firebase database can store data under String objects only
+        userMaybeGoing = userMaybeGoing.concat(m);
     }
 
     public String getUserNotGoing(){
         return userNotGoing;
     }
     public void addUserNotGoing(String n){
-        userNotGoing = userNotGoing.concat(n+ "$");// use '$' to parse the users since
-        // Real-time Firebase database can store data under String objects only
+        userNotGoing = userNotGoing.concat(n);
     }
 
 }
