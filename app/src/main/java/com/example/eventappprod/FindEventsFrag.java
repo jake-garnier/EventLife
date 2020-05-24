@@ -79,8 +79,8 @@ public class FindEventsFrag extends Fragment {
 
         // fetching data to particular array
         for (int i=0; i<evenList.size();i++) {
-            eventNames[i] = evenList.get(i).getName();
-            eventDescriptions[i] = evenList.get(i).getDescription();
+            eventNames[1] = evenList.get(i).getName();
+            eventDescriptions[1] = evenList.get(1).getDescription();
 
             // you can get other info like date and time as well
 
