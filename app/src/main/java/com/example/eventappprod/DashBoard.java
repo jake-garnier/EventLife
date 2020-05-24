@@ -3,10 +3,15 @@ package com.example.eventappprod;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 
 
@@ -21,6 +26,7 @@ import android.net.Uri;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -48,8 +54,8 @@ public class DashBoard extends AppCompatActivity {
     //https://www.youtube.com/watch?v=Nw9JF55LDzE
     //https://www.youtube.com/watch?v=18VcnYN5_LM
     //Event Feed String Arrays
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference gsRef;
+    private static final String TAG = "PostDetailActivity";
+    private static final String CHANNEL_ID = "Channel1";
     String eventNames[];
     String eventDescriptions[];
 
@@ -72,6 +78,19 @@ public class DashBoard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "EventLife";
+            String description = "EventLife";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
 
         evenList = new ArrayList<>();
         ref = database.getInstance().getReference("/EVENT");
@@ -190,7 +209,26 @@ public class DashBoard extends AppCompatActivity {
         mAdapter = new ExampleAdapter(this, exampleList, "event");
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-
+        addNotification();
     }
 
+    private void addNotification() {
+
+
+        Intent intent = new Intent(this, EventActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        for (int i = 0; i < evenList.size(); i++) {
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setSmallIcon(R.drawable.notification_icon)
+                    .setContentTitle(evenList.get(i).getName())
+                    .setContentText(evenList.get(i).getStartTime())
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    // Set the intent that will fire when the user taps the notification
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true);
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+            notificationManager.notify(i, builder.build());
+        }
+    }
 }
