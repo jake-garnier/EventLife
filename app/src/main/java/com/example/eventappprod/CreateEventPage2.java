@@ -75,6 +75,7 @@ public class CreateEventPage2 extends AppCompatActivity implements OnMapReadyCal
         GeoTag = (MapView) findViewById(R.id.mapView);
 
         Create = (Button) findViewById(R.id.btnCreate);
+        Create.setEnabled(false);
         Previous = (Button) findViewById(R.id.btnPrevious);
         Cancel = (Button) findViewById(R.id.btnCancel);
         //ref = database.getInstance().getReference("EVENT");
@@ -235,7 +236,7 @@ public class CreateEventPage2 extends AppCompatActivity implements OnMapReadyCal
                         @Override
                         public void onSuccess(Uri uri) {
                             RealTimeImagePath = uri.toString();
-
+                            Create.setEnabled(true);
                         }
                     });
 

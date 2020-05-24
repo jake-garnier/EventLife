@@ -38,6 +38,8 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,17 +52,22 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class DashBoard extends AppCompatActivity {
+public class DashBoard<user> extends AppCompatActivity {
     //https://www.youtube.com/watch?v=Nw9JF55LDzE
     //https://www.youtube.com/watch?v=18VcnYN5_LM
     //Event Feed String Arrays
     private static final String TAG = "PostDetailActivity";
     private static final String CHANNEL_ID = "Channel1";
+
+
     String eventNames[];
     String eventDescriptions[];
+    int images[] = {R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
 
+    int[] images_Screenshow = new int[100];
+    String[] eventNames_Screenshow = new String[100];
+    String[] eventDescriptions_Screenshow=new String[100];
 
-    int images[] = {R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla,  R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla,  R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla, R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla,  R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
     int im[];
     Uri myuri[];
 
@@ -73,11 +80,14 @@ public class DashBoard extends AppCompatActivity {
     DatabaseReference ref;
     ArrayList<Event> evenList;
 
+    FirebaseUser currentuser = FirebaseAuth.getInstance().getCurrentUser();
+    String email = currentuser.getEmail();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "EventLife";
@@ -91,11 +101,19 @@ public class DashBoard extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
         }
 
-
         evenList = new ArrayList<>();
         ref = database.getInstance().getReference("/EVENT");
         eventNames = getResources().getStringArray(R.array.eventNames_feed);
         eventDescriptions = getResources().getStringArray(R.array.eventNames_description);
+
+        for(int i=0;i<images.length;++i)
+        {
+            images_Screenshow [i] = images[i];
+            eventNames_Screenshow[i] = eventNames[i];
+            eventDescriptions_Screenshow[i]=eventDescriptions[i];
+        }
+
+
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -186,21 +204,20 @@ public class DashBoard extends AppCompatActivity {
 
         // fetching data to particular array
         for (int i=0; i<evenList.size();i++) {
-            eventNames[i] = evenList.get(i).getName();
-            eventDescriptions[i] = evenList.get(i).getDescription();
-
+            eventNames_Screenshow[i] = evenList.get(i).getName();
+            eventDescriptions_Screenshow[i] = evenList.get(i).getDescription();
             // you can get other info like date and time as well
-
         }
+
         LoadDatatoDashBoard();
 
     }
 
-
     public void LoadDatatoDashBoard(){
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
-        for (int i = 0; i <= evenList.size(); i++) {
-            exampleList.add(new ExampleItem(images[1],eventNames[1], eventDescriptions[1]));
+
+        for (int i = 0; i < evenList.size(); i++) {
+            exampleList.add(new ExampleItem(images_Screenshow[i],eventNames_Screenshow[i], eventDescriptions_Screenshow[i]));
         }
 
         mRecyclerView = findViewById(R.id.recyclerView);
@@ -215,10 +232,11 @@ public class DashBoard extends AppCompatActivity {
     private void addNotification() {
 
 
+
         Intent intent = new Intent(this, EventActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-        for (int i = 0; i < evenList.size(); i++) {
+        for(int i=0; i<evenList.size(); i++) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setSmallIcon(R.drawable.notification_icon)
                     .setContentTitle(evenList.get(i).getName())
@@ -231,4 +249,5 @@ public class DashBoard extends AppCompatActivity {
             notificationManager.notify(i, builder.build());
         }
     }
+
 }

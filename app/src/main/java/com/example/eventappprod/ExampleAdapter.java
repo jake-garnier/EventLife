@@ -99,6 +99,8 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
                 //holder.mImageView.setImageURI(currItem.getImageResource());
                 holder.mImageView.setImageResource(currItem.getImageResource());
+
+
                 holder.mTextView1.setText(currItem.getText1());
                 holder.mTextView2.setText(currItem.getText2());
 
