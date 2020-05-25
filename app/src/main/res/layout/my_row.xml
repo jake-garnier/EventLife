@@ -35,11 +35,12 @@
 
             <TextView
                 android:id="@+id/event_names_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="217dp"
+                android:layout_height="45dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
                 android:text="title"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/myImageView"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -50,6 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text="description"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toStartOf="@+id/button"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/event_names_txt"
