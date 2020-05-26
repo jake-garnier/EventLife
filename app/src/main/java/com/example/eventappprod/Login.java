@@ -52,7 +52,7 @@ public class Login extends AppCompatActivity {
                 String password = mPassword.getText().toString().trim();
                 //email = "kcpham@ucsd.edu";
                 //password = "hahahaha";
-                //email = "nkt002@ucsd.edu";
+               //email = "nkt002@ucsd.edu";
                 //password = "qwer1234";
 
                 String domain = email .substring(email .indexOf("@") + 1);

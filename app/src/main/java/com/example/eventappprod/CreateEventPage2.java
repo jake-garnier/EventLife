@@ -49,6 +49,7 @@ import static com.squareup.picasso.Picasso.*;
 public class CreateEventPage2 extends AppCompatActivity implements OnMapReadyCallback {
 
     // Declare instance variables
+    GoogleMap mGoogleMap;
 
     ImageButton chooseImage;
     String RealTimeImagePath;
