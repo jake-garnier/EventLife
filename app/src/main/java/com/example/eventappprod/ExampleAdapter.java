@@ -10,6 +10,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -31,6 +32,9 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         public TextView mTextView2;
         public ConstraintLayout mainLayout;
         public Button createEvent;
+        public Button mUnfollowButton;
+        public Button mDeclineButton;
+        public Button mAcceptButton;
 
         public ExampleViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -40,6 +44,10 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             mTextView2 = itemView.findViewById(R.id.event_desc_txt);
             mainLayout = itemView.findViewById(R.id.mainLayout);
             createEvent = (Button) itemView.findViewById(R.id.create);
+            mUnfollowButton = (Button) itemView.findViewById(R.id.unfollowButton);
+            mDeclineButton = (Button) itemView.findViewById(R.id.declineButton);
+            mAcceptButton = (Button) itemView.findViewById(R.id.acceptButton);
+
         }
     }
 
@@ -118,12 +126,83 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                         context.startActivity(intent);
                     }
                 });
+            }  else if(viewType == 2){
+                //todo: this part is done in the other user list
+                ExampleItem currItem = mExampleList.get(position);
+
+                //holder.mImageView.setImageURI(currItem.getImageResource());
+                holder.mImageView.setImageResource(currItem.getImageResource());
+                holder.mTextView1.setText(currItem.getText1());
+                holder.mTextView2.setText(currItem.getText2());
+
+                //This is what allows each card to be clicked and load up a new activity containing the information that goes with that card
+                holder.mainLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Intent intent = new Intent(context, EventActivity.class);
+                        //Extras are what we are passing from the adapter --> EventActivity (the event page)
+                        //Inside EventActivity we will use these intents to pull information
+                        intent.putExtra("data1", mExampleList.get(position).getText1());
+                        intent.putExtra("data2", mExampleList.get(position).getText2());
+                        intent.putExtra("images", mExampleList.get(position).getImageResource());
+                        context.startActivity(intent);
+                    }
+                });
+               /* holder.mAcceptButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // Get the clicked item label
+                        String itemLabel = mExampleList.get(position).getText1();
+
+                        // Add the item on accept/button click
+                        mExampleList.add(0,new ExampleItem(, itemLabel, friendBios[0]);
+                        notifyItemInserted(position);
+                        notifyItemRangeChanged(position,mExampleList.size());
+
+                        Toast.makeText(context,"Added : " + itemLabel,Toast.LENGTH_SHORT).show();
+
+                        //Todo: make the person add into their list below but for the other person too
+                    }
+                });
+                */
+                //decline the person button oop
+                holder.mDeclineButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // Get the clicked item label
+                        String itemLabel = mExampleList.get(position).getText1();
+
+                        // Remove the item on remove/button click
+                        mExampleList.remove(position);
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(position,mExampleList.size());
+                        Toast.makeText(context,"Declined : " + itemLabel, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             } else {
                 ExampleItem currItem = mExampleList.get(position);
 
                 holder.mImageView.setImageResource(currItem.getImageResource());
                 holder.mTextView1.setText(currItem.getText1());
                 holder.mTextView2.setText(currItem.getText2());
+                //UnfollowButton used here
+                holder.mUnfollowButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // Get the clicked item label
+                        String itemLabel = mExampleList.get(position).getText1();
+
+                        // Remove the item on remove/button click
+                        mExampleList.remove(position);
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(position,mExampleList.size());
+                        Toast.makeText(context,"Unfollowed : " + itemLabel, Toast.LENGTH_SHORT).show();
+
+                        //Todo: add the part where they wont see that person anymore.
+                    }
+                });
             }
 }
 
@@ -134,7 +213,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             return 0;
         } else if(this.cardType.equals("event")){
             return 1;
-        } else if(position == 0 && this.cardType.equals("friend")) {
+        } else if(this.cardType.equals("friend")) {
             return 2;
         } if(this.cardType.equals("nobutton")) {
             return 1;
