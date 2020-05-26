@@ -213,7 +213,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             return 0;
         } else if(this.cardType.equals("event")){
             return 1;
-        } else if(position == 0 && this.cardType.equals("friend")) {
+        } else if(this.cardType.equals("friend")) {
             return 2;
         } if(this.cardType.equals("nobutton")) {
             return 1;
