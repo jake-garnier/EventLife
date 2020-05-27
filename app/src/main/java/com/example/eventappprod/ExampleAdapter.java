@@ -16,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,10 +45,10 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             mTextView1 = itemView.findViewById(R.id.event_names_txt);
             mTextView2 = itemView.findViewById(R.id.event_desc_txt);
             mainLayout = itemView.findViewById(R.id.mainLayout);
-            createEvent = (Button) itemView.findViewById(R.id.create);
-            mUnfollowButton = (Button) itemView.findViewById(R.id.unfollowButton);
-            mDeclineButton = (Button) itemView.findViewById(R.id.declineButton);
-            mAcceptButton = (Button) itemView.findViewById(R.id.acceptButton);
+            createEvent = itemView.findViewById(R.id.create);
+            mUnfollowButton = itemView.findViewById(R.id.unfollowButton);
+            mDeclineButton = itemView.findViewById(R.id.declineButton);
+            mAcceptButton = itemView.findViewById(R.id.acceptButton);
 
         }
     }
@@ -106,8 +108,13 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                 ExampleItem currItem = mExampleList.get(position);
 
                 //holder.mImageView.setImageURI(currItem.getImageResource());
-                holder.mImageView.setImageResource(currItem.getImageResource());
-
+                //holder.mImageView.setImageResource(currItem.getImageResource());
+                if(currItem.getImg_firestore2()=="")
+                {
+                    holder.mImageView.setImageResource(currItem.getImageResource());
+                }else {
+                    Picasso.get().load(currItem.getImg_firestore2()).into(holder.mImageView);
+                }
 
                 holder.mTextView1.setText(currItem.getText1());
                 holder.mTextView2.setText(currItem.getText2());

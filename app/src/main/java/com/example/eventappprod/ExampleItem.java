@@ -9,11 +9,14 @@ public class ExampleItem {
     //private Image mImageResource;
     private String mText1;
     private String mText2;
+    private String img_firestore;
 
-    public ExampleItem(int imageResource, String text1, String text2){
+
+    public ExampleItem(int imageResource, String text1, String text2,String imgfirestore){
         mImageResource = imageResource;
         mText1 = text1;
         mText2 = text2;
+        img_firestore=imgfirestore;
     }
 
     public int getImageResource(){
@@ -26,5 +29,9 @@ public class ExampleItem {
 
     public String getText2(){
         return mText2;
+    }
+
+    public String getImg_firestore2(){
+        return  img_firestore;
     }
 }

@@ -62,16 +62,16 @@ public class DashBoard<user> extends AppCompatActivity {
     private static final String CHANNEL_ID = "Channel1";
 
 
-    String eventNames[];
-    String eventDescriptions[];
-    int images[] = {R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
+    String[] eventNames;
+    String[] eventDescriptions;
+    int[] images = {R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
 
-    int[] images_Screenshow = new int[20];
+    String[] images_Firestore = new String[20];
     String[] eventNames_Screenshow = new String[20];
     String[] eventDescriptions_Screenshow=new String[20];
 
-    int im[];
-    Uri myuri[];
+    int[] im;
+    Uri[] myuri;
 
 
     //Recycler View Needed for Event Feed
@@ -104,13 +104,13 @@ public class DashBoard<user> extends AppCompatActivity {
         }
 
         evenList = new ArrayList<>();
-        ref = database.getInstance().getReference("/EVENT");
+        ref = FirebaseDatabase.getInstance().getReference("/EVENT");
         eventNames = getResources().getStringArray(R.array.eventNames_feed);
         eventDescriptions = getResources().getStringArray(R.array.eventNames_description);
 
         for(int i=0;i<images.length;++i)
         {
-            images_Screenshow [i] = images[i];
+            images_Firestore[i] = "";
             eventNames_Screenshow[i] = eventNames[i];
             eventDescriptions_Screenshow[i]=eventDescriptions[i];
         }
@@ -218,6 +218,7 @@ public class DashBoard<user> extends AppCompatActivity {
         for (int i=0; i<evenList.size();i++) {
             eventNames_Screenshow[i] = evenList.get(i).getName();
             eventDescriptions_Screenshow[i] = evenList.get(i).getDescription();
+            images_Firestore[i] = evenList.get(i).getImage();
             // you can get other info like date and time as well
             //Bitmap my_image;
             //Picasso.get().load(evenList.get(i).getImage()).into(my_image);
@@ -232,7 +233,7 @@ public class DashBoard<user> extends AppCompatActivity {
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
 
         for (int i = 0; i < evenList.size(); i++) {
-            exampleList.add(new ExampleItem(images_Screenshow[i],eventNames_Screenshow[i], eventDescriptions_Screenshow[i]));
+            exampleList.add(new ExampleItem(images[i],eventNames_Screenshow[i], eventDescriptions_Screenshow[i], images_Firestore[i]));
         }
 
         mRecyclerView = findViewById(R.id.recyclerView);

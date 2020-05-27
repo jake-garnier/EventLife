@@ -29,13 +29,13 @@ public class FindEventsFrag extends Fragment {
 
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference gsRef;
-    String eventNames[];
-    String eventDescriptions[];
+    String[] eventNames;
+    String[] eventDescriptions;
 
 
-    int images[] = {R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla,  R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla,  R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla, R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla,  R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
-    int im[];
-    Uri myuri[];
+    int[] images = {R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla,  R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla,  R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla, R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla,  R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
+    int[] im;
+    Uri[] myuri;
 
 
     //Recycler View Needed for Event Feed
@@ -54,7 +54,7 @@ public class FindEventsFrag extends Fragment {
         final View view = inflater.inflate(R.layout.fragment2_find_events, container, false);
 
         evenList = new ArrayList<>();
-        ref = database.getInstance().getReference("/EVENT");
+        ref = FirebaseDatabase.getInstance().getReference("/EVENT");
         eventNames = getResources().getStringArray(R.array.eventNames_feed);
         eventDescriptions = getResources().getStringArray(R.array.eventNames_description);
         ref.addValueEventListener(new ValueEventListener() {
@@ -93,7 +93,7 @@ public class FindEventsFrag extends Fragment {
     public void LoadDatatoDashBoard(View view){
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
         for (int i = 0; i <= evenList.size(); i++) {
-            exampleList.add(new ExampleItem(images[1],eventNames[1], eventDescriptions[1]));
+            exampleList.add(new ExampleItem(images[1],eventNames[1], eventDescriptions[1],""));
         }
 
         mRecyclerView = view.findViewById(R.id.recyclerViewFindEvents);

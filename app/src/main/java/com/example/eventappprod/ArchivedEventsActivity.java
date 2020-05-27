@@ -18,9 +18,9 @@ import java.util.ArrayList;
 public class ArchivedEventsActivity extends AppCompatActivity {
     //https://www.youtube.com/watch?v=18VcnYN5_LM
     //Event Feed String Arrays
-    String eventNames[];
-    String eventDescriptions[];
-    int images[] = {R.drawable.revelle, R.drawable.event1, R.drawable.event2, R.drawable.event3, R.drawable.event4, R.drawable.event5, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
+    String[] eventNames;
+    String[] eventDescriptions;
+    int[] images = {R.drawable.revelle, R.drawable.event1, R.drawable.event2, R.drawable.event3, R.drawable.event4, R.drawable.event5, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
     //Recycler View Needed for Event Feed
     RecyclerView recyclerView;
     private RecyclerView mRecyclerView;
@@ -41,7 +41,7 @@ public class ArchivedEventsActivity extends AppCompatActivity {
         eventDescriptions = getResources().getStringArray(R.array.eventNames_description);
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
         for (int i = 0; i < eventNames.length; i++) {
-            exampleList.add(new ExampleItem(images[i], eventNames[i], eventDescriptions[i]));
+            exampleList.add(new ExampleItem(images[i], eventNames[i], eventDescriptions[i],""));
         }
 
         mRecyclerView = findViewById(R.id.recyclerViewArchive);
