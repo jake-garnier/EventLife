@@ -15,6 +15,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 
 import android.content.res.ColorStateList;
@@ -33,6 +34,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -64,9 +66,9 @@ public class DashBoard<user> extends AppCompatActivity {
     String eventDescriptions[];
     int images[] = {R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
 
-    int[] images_Screenshow = new int[100];
-    String[] eventNames_Screenshow = new String[100];
-    String[] eventDescriptions_Screenshow=new String[100];
+    int[] images_Screenshow = new int[20];
+    String[] eventNames_Screenshow = new String[20];
+    String[] eventDescriptions_Screenshow=new String[20];
 
     int im[];
     Uri myuri[];
@@ -184,29 +186,42 @@ public class DashBoard<user> extends AppCompatActivity {
         MenuItem searchItem =  menu.findItem(R.id.action_search);
         final androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) searchItem.getActionView();
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
-
         searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 mAdapter.getFilter().filter(newText);
                 return false;
             }
         });
+
+        MenuItem addevent=  menu.findItem(R.id.addEvent);
+        addevent.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                startActivity(new Intent(getApplicationContext(), CreateEventActivity.class));
+                return false;
+            }
+        });
+
+
         return true;
     }
 
     public void retrieveData(){
 
         // fetching data to particular array
+        
         for (int i=0; i<evenList.size();i++) {
             eventNames_Screenshow[i] = evenList.get(i).getName();
             eventDescriptions_Screenshow[i] = evenList.get(i).getDescription();
             // you can get other info like date and time as well
+            //Bitmap my_image;
+            //Picasso.get().load(evenList.get(i).getImage()).into(my_image);
+
         }
 
         LoadDatatoDashBoard();
@@ -230,9 +245,6 @@ public class DashBoard<user> extends AppCompatActivity {
     }
 
     private void addNotification() {
-
-
-
         Intent intent = new Intent(this, EventActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);

@@ -3,14 +3,18 @@ package com.example.eventappprod;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.renderscript.Allocation;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -35,6 +39,7 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
 
     TextView Date, StartTime, EndTime, Location;
     MapView GeoTag;
+    GoogleMap map;
 
     String data1, data2;
     String sTime, eTime, loca, date, image;
@@ -67,16 +72,23 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
         getData();
         //setData();
 
+
+
         GeoTag = findViewById(R.id.eventFormMapView);
         GeoTag.onCreate(savedInstanceState);
+
         GeoTag.getMapAsync(new OnMapReadyCallback() {
 
             @Override
             public void onMapReady(GoogleMap googleMap) {
-                LatLng coordinates = new LatLng(32.8851, -117.2392);
+                LatLng coordinates =   new LatLng(-34, 151);
                 googleMap.addMarker(new MarkerOptions().position(coordinates).title("RIMAC"));
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 15));
-                GeoTag.onResume();
+                googleMap.setMaxZoomPreference(10);
+
+                //googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+                //googleMap.setMyLocationEnabled(true );
+                 GeoTag.onResume();
             }
         });
 
@@ -129,7 +141,8 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
         description.setText(data2);
         //mainImageView.setImageResource(myImage);
         //mainImageView.setImageURI(Uri.parse(image));
-        Picasso.get().load(image).into(mainImageView);
+        //Picasso.get().load(image).into(mainImageView);
+        Glide.with(EventActivity.this).load(image).into(mainImageView);
 
 
         Date.setText(date);
@@ -140,6 +153,8 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
+        map = googleMap;
+        map.getUiSettings().setMyLocationButtonEnabled(false);
+        map.setMyLocationEnabled(true);
     }
 }
