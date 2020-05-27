@@ -35,9 +35,9 @@ public class FriendsListActivity extends AppCompatActivity {
     //https://www.youtube.com/watch?v=Nw9JF55LDzE
     //https://www.youtube.com/watch?v=18VcnYN5_LM
     //Event Feed String Arrays
-    String friendNames[];
-    String friendBios[];
-    int images[] = {R.drawable.friend1, R.drawable.friend2, R.drawable.friend3, R.drawable.friend4, R.drawable.friend5, R.drawable.friend6, R.drawable.friend7, R.drawable.samoyed, R.drawable.khosla};
+    String[] friendNames;
+    String[] friendBios;
+    int[] images = {R.drawable.friend1, R.drawable.friend2, R.drawable.friend3, R.drawable.friend4, R.drawable.friend5, R.drawable.friend6, R.drawable.friend7, R.drawable.samoyed, R.drawable.khosla};
 
     //private FriendsList
     private ArrayList<ExampleItem> friendList;
@@ -55,7 +55,7 @@ public class FriendsListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_friends_list);
 
         //set the add button to the image button(code from the link above)
-        mButtonAdd = (ImageButton) findViewById(R.id.addFriendBtn);
+       // mButtonAdd = (ImageButton) findViewById(R.id.addFriendBtn);
 
 
         //Thus, somehow inject database information into these arrays?
