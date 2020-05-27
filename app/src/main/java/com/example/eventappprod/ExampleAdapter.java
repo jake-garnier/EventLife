@@ -109,11 +109,11 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
                 //holder.mImageView.setImageURI(currItem.getImageResource());
                 //holder.mImageView.setImageResource(currItem.getImageResource());
-                if(currItem.getImg_firestore2()=="")
+                if(currItem.getImg_firestore()=="")
                 {
                     holder.mImageView.setImageResource(currItem.getImageResource());
                 }else {
-                    Picasso.get().load(currItem.getImg_firestore2()).into(holder.mImageView);
+                    Picasso.get().load(currItem.getImg_firestore()).into(holder.mImageView);
                 }
 
                 holder.mTextView1.setText(currItem.getText1());
