@@ -173,6 +173,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     }
                 });
                 */
+               /*
                 //decline the person button oop
                 holder.mDeclineButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -187,6 +188,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                         Toast.makeText(context,"Declined : " + itemLabel, Toast.LENGTH_SHORT).show();
                     }
                 });
+                */
 
             } else {
                 ExampleItem currItem = mExampleList.get(position);
@@ -220,10 +222,10 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             return 0;
         } else if(this.cardType.equals("event")){
             return 1;
-        } else if(this.cardType.equals("friend")) {
-            return 2;
-        } if(this.cardType.equals("nobutton")) {
-            return 1;
+        //} else if(this.cardType.equals("friend")) {
+           //return 2;
+        } if(this.cardType.equals("friend")) {
+            return 3;
         }
         return 3;
     }

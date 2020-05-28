@@ -55,7 +55,7 @@ public class FriendsListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_friends_list);
 
         //set the add button to the image button(code from the link above)
-       // mButtonAdd = (ImageButton) findViewById(R.id.addFriendBtn);
+        mButtonAdd = (ImageButton) findViewById(R.id.addFriendBtn);
 
 
         //Thus, somehow inject database information into these arrays?
