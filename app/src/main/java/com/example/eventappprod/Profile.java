@@ -43,6 +43,7 @@ public class Profile extends AppCompatActivity {
 
     private ImageView profilePic;
     private TextView profileName;
+    User currUser;
 
     // authorization
     private FirebaseAuth firebaseAuth;
@@ -69,9 +70,14 @@ public class Profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        //release the user info
+        Intent ib = getIntent();
+        currUser = (User) ib.getSerializableExtra("currUser");
+
         //user's profile
         profilePic = (ImageView) findViewById(R.id.profilePicture);
         profileName = (TextView) findViewById(R.id.profileName);
+        //profileName.setText(currUser.getName());
 
         ref = FirebaseDatabase.getInstance().getReference("/USER");
 
