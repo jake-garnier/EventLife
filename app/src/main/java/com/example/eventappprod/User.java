@@ -4,7 +4,7 @@ import java.io.Serializable;
 public class User implements Serializable{
     // mandatory fields for an user created
 
-    private String UserName;
+    private String Name;
     private String Email;
     private String Password;
     private String Biointro;
@@ -19,32 +19,34 @@ public class User implements Serializable{
     private String PastEvent;
     private String NotifiedEvent;
     private String FriendList;
-    public int numberofFriend;
+
+    public User() {
+
+    }
 
 
-
-    public User(String name, String email, String pass, String bio,
-                String ima, String col, String group,
-                String favorite, String past, String notified, String friendlist) {
-        UserName = name;
-        Email = email;
-        Password = pass;
-        Biointro = bio;
-        Image = ima;
-        College  = col;
-        Group = group;
-        FavoriteEvent = favorite;
-        PastEvent = past;
-        NotifiedEvent = notified;
-        FriendList  = friendlist;
+    public User(String aname, String aemail, String apass, String abio,
+                String aima, String acol, String agroup,
+                String afavorite, String apast, String anotified, String afriendlist) {
+        Name = aname;
+        Email = aemail;
+        Password = apass;
+        Biointro = abio;
+        Image = aima;
+        College  = acol;
+        Group = agroup;
+        FavoriteEvent = afavorite;
+        PastEvent = apast;
+        NotifiedEvent = anotified;
+        FriendList  = afriendlist;
         //numberofFriend =0;
     }
 
     public String getName(){
-        return UserName;
+        return Name;
     }
     public void setName(String n){
-        UserName = n;
+        Name = n;
     }
 
     public String getEmail(){

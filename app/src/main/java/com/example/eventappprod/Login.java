@@ -36,9 +36,13 @@ public class Login extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseDatabase database;
     DatabaseReference ref;
-    User user;
+
 
     private TextView profileName;
+    String email = "";
+    String password = "";
+
+
 
 
     @Override
@@ -46,7 +50,6 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        ref = FirebaseDatabase.getInstance().getReference();
 
         mEmail = findViewById(R.id.Email);
         mPassword = findViewById(R.id.password);
@@ -56,16 +59,16 @@ public class Login extends AppCompatActivity {
         mCreateBtn = findViewById(R.id.createText);
         forgotTextLink = findViewById(R.id.forgotPassword);
 
-        profileName = (TextView) findViewById(R.id.profileName);
+        profileName = findViewById(R.id.profileName);
 
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                final String email = mEmail.getText().toString().trim();
-                String password = mPassword.getText().toString().trim();
-                //email = "kcpham@ucsd.edu";
-                //password = "hahahaha";
+                email = mEmail.getText().toString().trim();
+                password = mPassword.getText().toString().trim();
+                email = "kcpham@ucsd.edu";
+                password = "hahahaha";
                 //email = "nkt002@ucsd.edu";
                 //password = "qwer1234";
 
@@ -92,7 +95,6 @@ public class Login extends AppCompatActivity {
 
                 // turn off the process bar
                 progressBar.setVisibility(View.VISIBLE);
-
                 // authenticate the user
                 fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -100,12 +102,17 @@ public class Login extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             if (fAuth.getCurrentUser().isEmailVerified()) {
                                 Toast.makeText(Login.this, "Logged in Successfully", Toast.LENGTH_SHORT).show();
-                                final String userID = email.substring(0, email.indexOf("@"));
-                                ref = database.getInstance().getReference("/USER"+userID);
+                                ref = FirebaseDatabase.getInstance().getReference("/USER");
                                 ref.addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        user = (User) dataSnapshot.getValue(User.class);
+                                        String userID = email.substring(0, email.indexOf("@"))+"@ucsd,edu";
+                                        User user = dataSnapshot.child(userID).getValue(User.class);
+                                        Intent intent = new Intent(Login.this, DashBoard.class);
+                                        intent.putExtra("currUser", user);
+                                        Toast.makeText(Login.this, "This is printed cuz it works", Toast.LENGTH_LONG).show();
+                                        //startActivity(intent)
+                                        startActivity(new Intent(getApplicationContext(), DashBoard.class));
                                     }
 
                                     @Override
@@ -113,12 +120,7 @@ public class Login extends AppCompatActivity {
                                         Toast.makeText(Login.this,"Error on Firebase", Toast.LENGTH_SHORT).show();
                                     }
                                 });
-                                Intent intent = new Intent(Login.this, DashBoard.class);
-                                intent.putExtra("currUser", user);
-                                Toast.makeText(Login.this, "This is printed cuz it works", Toast.LENGTH_LONG).show();
 
-                                //startActivity(intent)
-                                startActivity(new Intent(getApplicationContext(), DashBoard.class));
                             } else {
                                 Toast.makeText(Login.this, "Please Verify your email address", Toast.LENGTH_LONG).show();
                                 progressBar.setVisibility(View.GONE);
