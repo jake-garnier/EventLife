@@ -100,12 +100,23 @@
 
         <ImageView
             android:id="@+id/profilePicture"
-            android:layout_width="161dp"
-            android:layout_height="184dp"
+            android:layout_width="159dp"
+            android:layout_height="161dp"
             android:layout_marginTop="136dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/khosla" />
+
+        <Button
+            android:id="@+id/updatePicBtn"
+            android:layout_width="120dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#F3F3F3F3"
+            android:text="Update Pic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profilePicture" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
