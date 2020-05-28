@@ -34,6 +34,7 @@ public class Register extends AppCompatActivity {
     FirebaseFirestore fStore;
     String userID;
     User u;
+    private TextView profileName;
 
 
     FirebaseDatabase database;
@@ -56,6 +57,8 @@ public class Register extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         progressBar = findViewById(R.id.progressBar);
+
+        profileName = (TextView) findViewById(R.id.profileName);
 
 
         mRegisterBtn.setOnClickListener(new View.OnClickListener() {
@@ -133,9 +136,11 @@ public class Register extends AppCompatActivity {
                             //String userID = fullName + "/" + email.substring(0, email.indexOf("@"));
                             //ref.child(userRef).setValue(u);
                             String userID = email.substring(0, email.indexOf("@"));
+                            profileName.setText(userID);
 
                             ref.child("/USER").child(userID).setValue(u);
                             startActivity(new Intent(getApplicationContext(),Login.class));
+                            //profileName.setText(userID);
 
                         }else {
                             Toast.makeText(Register.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();

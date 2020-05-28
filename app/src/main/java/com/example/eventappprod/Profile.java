@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -41,6 +42,7 @@ public class Profile extends AppCompatActivity {
     String RealTimeImagePath;
 
     private ImageView profilePic;
+    private TextView profileName;
 
     // authorization
     private FirebaseAuth firebaseAuth;
@@ -69,6 +71,8 @@ public class Profile extends AppCompatActivity {
 
         //user's profile
         profilePic = (ImageView) findViewById(R.id.profilePicture);
+        profileName = (TextView) findViewById(R.id.profileName);
+
         ref = FirebaseDatabase.getInstance().getReference("/USER");
 
         //Button Stuff

@@ -29,6 +29,7 @@ public class Login extends AppCompatActivity {
     ProgressBar progressBar;
     FirebaseAuth fAuth;
 
+    private TextView profileName;
 
 
     @Override
@@ -44,12 +45,13 @@ public class Login extends AppCompatActivity {
         mCreateBtn = findViewById(R.id.createText);
         forgotTextLink = findViewById(R.id.forgotPassword);
 
+        profileName = (TextView) findViewById(R.id.profileName);
 
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String email = mEmail.getText().toString().trim();
+                final String email = mEmail.getText().toString().trim();
                 String password = mPassword.getText().toString().trim();
                 //email = "kcpham@ucsd.edu";
                 //password = "hahahaha";
@@ -87,6 +89,8 @@ public class Login extends AppCompatActivity {
                         if(task.isSuccessful()){
                             if (fAuth.getCurrentUser().isEmailVerified())  {
                                 Toast.makeText(Login.this, "Logged in Successfully", Toast.LENGTH_SHORT).show();
+                                String userID = email.substring(0, email.indexOf("@"));
+                                profileName.setText(userID);
                                 startActivity(new Intent(getApplicationContext(), DashBoard.class));
                             }
                             else {
