@@ -83,7 +83,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="170dp"
             android:layout_marginTop="216dp"
-            android:text="Pradeep Khosla"
             android:textSize="19sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -96,16 +95,27 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/geisel" />
+            app:srcCompat="@drawable/ic_launcher_background" />
 
         <ImageView
             android:id="@+id/profilePicture"
-            android:layout_width="160dp"
-            android:layout_height="213dp"
+            android:layout_width="159dp"
+            android:layout_height="161dp"
             android:layout_marginTop="136dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/khosla" />
+
+        <Button
+            android:id="@+id/updatePicBtn"
+            android:layout_width="120dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#F3F3F3F3"
+            android:text="Update Pic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profilePicture" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

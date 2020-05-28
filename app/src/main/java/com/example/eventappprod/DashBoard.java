@@ -81,6 +81,7 @@ public class DashBoard<user> extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference ref;
     ArrayList<Event> evenList;
+    User currUser;
 
     FirebaseUser currentuser = FirebaseAuth.getInstance().getCurrentUser();
     String email = currentuser.getEmail();

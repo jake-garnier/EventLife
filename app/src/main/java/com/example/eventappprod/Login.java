@@ -21,19 +21,32 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class Login extends AppCompatActivity {
-    EditText mEmail,mPassword;
+    EditText mEmail, mPassword;
     Button mLoginBtn;
-    TextView mCreateBtn,forgotTextLink;
+    TextView mCreateBtn, forgotTextLink;
     ProgressBar progressBar;
     FirebaseAuth fAuth;
+    FirebaseDatabase database;
+    DatabaseReference ref;
+    User user;
+
+    private TextView profileName;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        ref = FirebaseDatabase.getInstance().getReference();
 
         mEmail = findViewById(R.id.Email);
         mPassword = findViewById(R.id.password);
@@ -43,35 +56,36 @@ public class Login extends AppCompatActivity {
         mCreateBtn = findViewById(R.id.createText);
         forgotTextLink = findViewById(R.id.forgotPassword);
 
+        profileName = (TextView) findViewById(R.id.profileName);
 
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String email = mEmail.getText().toString().trim();
+                final String email = mEmail.getText().toString().trim();
                 String password = mPassword.getText().toString().trim();
                 //email = "kcpham@ucsd.edu";
                 //password = "hahahaha";
                 //email = "nkt002@ucsd.edu";
                 //password = "qwer1234";
 
-                String domain = email .substring(email .indexOf("@") + 1);
+                String domain = email.substring(email.indexOf("@") + 1);
                 if (domain.equals("ucsd.edu") == false) {
                     mEmail.setError("Email is invalid. Make Sure to Login with ucsd email");
                     return;
                 }
 
-                if(TextUtils.isEmpty(email)){
+                if (TextUtils.isEmpty(email)) {
                     mEmail.setError("Email is Required.");
                     return;
                 }
 
-                if(TextUtils.isEmpty(password)){
+                if (TextUtils.isEmpty(password)) {
                     mPassword.setError("Password is Required.");
                     return;
                 }
 
-                if(password.length() < 8){
+                if (password.length() < 8) {
                     mPassword.setError("Password Must be Longer Than 8 Characters");
                     return;
                 }
@@ -80,21 +94,38 @@ public class Login extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
 
                 // authenticate the user
-                fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            if (fAuth.getCurrentUser().isEmailVerified())  {
+                        if (task.isSuccessful()) {
+                            if (fAuth.getCurrentUser().isEmailVerified()) {
                                 Toast.makeText(Login.this, "Logged in Successfully", Toast.LENGTH_SHORT).show();
+                                final String userID = email.substring(0, email.indexOf("@"));
+                                ref = database.getInstance().getReference("/USER"+userID);
+                                ref.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        user = (User) dataSnapshot.getValue(User.class);
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        Toast.makeText(Login.this,"Error on Firebase", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                Intent intent = new Intent(Login.this, DashBoard.class);
+                                intent.putExtra("currUser", user);
+                                Toast.makeText(Login.this, "This is printed cuz it works", Toast.LENGTH_LONG).show();
+
+                                //startActivity(intent)
                                 startActivity(new Intent(getApplicationContext(), DashBoard.class));
-                            }
-                            else {
-                                Toast.makeText(Login.this, "Please Verify your email address",Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(Login.this, "Please Verify your email address", Toast.LENGTH_LONG).show();
                                 progressBar.setVisibility(View.GONE);
                             }
 
 
-                        }else {
+                        } else {
                             Toast.makeText(Login.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
                         }
@@ -109,7 +140,7 @@ public class Login extends AppCompatActivity {
         mCreateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),Register.class));
+                startActivity(new Intent(getApplicationContext(), Register.class));
             }
         });
 
