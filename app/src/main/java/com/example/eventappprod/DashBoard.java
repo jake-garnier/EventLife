@@ -198,6 +198,16 @@ public class DashBoard<user> extends AppCompatActivity {
             }
         });
 
+        MenuItem addevent=  menu.findItem(R.id.addEvent);
+        addevent.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                startActivity(new Intent(getApplicationContext(), CreateEventActivity.class));
+                return false;
+            }
+        });
+
+
         return true;
     }
 
@@ -210,6 +220,7 @@ public class DashBoard<user> extends AppCompatActivity {
             eventDescriptions_Screenshow[i] = evenList.get(i).getDescription();
             images_Firestore[i] = evenList.get(i).getImage();
             // you can get other info like date and time as well
+            //Bitmap my_image;
             //Picasso.get().load(evenList.get(i).getImage()).into(my_image);
 
         }

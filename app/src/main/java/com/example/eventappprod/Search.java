@@ -78,7 +78,7 @@ public class Search extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
 
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_find_friends);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_search);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_dashboard);
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -87,4 +87,5 @@ public class Search extends AppCompatActivity {
         adapter.addFragment(new FindEventsFrag());
         viewPager.setAdapter(adapter);
     }
+
 }
