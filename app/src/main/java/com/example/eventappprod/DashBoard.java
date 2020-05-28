@@ -199,15 +199,6 @@ public class DashBoard<user> extends AppCompatActivity {
             }
         });
 
-        MenuItem addevent=  menu.findItem(R.id.addEvent);
-        addevent.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                startActivity(new Intent(getApplicationContext(), CreateEventActivity.class));
-                return false;
-            }
-        });
-
 
         return true;
     }
