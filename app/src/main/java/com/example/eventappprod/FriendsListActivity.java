@@ -8,7 +8,6 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Menu;
@@ -23,22 +22,9 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
 import java.util.ArrayList;
 
 public class FriendsListActivity extends AppCompatActivity {
-    //database
-    private DatabaseReference ref;
-    private Uri uri;
-    private StorageReference imagePath;
-    private FirebaseStorage storage;
-
-    //store this in in database for other use
-    private int requestSpot = 0;
-
     //Used Alert Dialogue with this website : https://stackoverflow.com/questions/10903754/input-text-dialog-android
     private ImageButton mButtonAdd;
     private String friendAdd;
@@ -119,9 +105,6 @@ public class FriendsListActivity extends AppCompatActivity {
                         //create a new row for that friend
                         mAdapter.notifyItemInserted(0);
                         mRecyclerView.scrollToPosition(0);
-                        
-                        //the database will update this number to keep track user.
-                        requestSpot++;
                         Toast.makeText(mContext,"Added : " + friendAdd,Toast.LENGTH_SHORT).show();
 
                     }
