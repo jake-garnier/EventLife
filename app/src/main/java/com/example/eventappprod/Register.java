@@ -33,6 +33,7 @@ public class Register extends AppCompatActivity {
     ProgressBar progressBar;
     FirebaseFirestore fStore;
     String userID;
+    User u;
 
 
     FirebaseDatabase database;
@@ -123,10 +124,17 @@ public class Register extends AppCompatActivity {
                             });
 
 
+                            //usercount++;
+                            //String userRef = Integer.toString(usercount);
+                            //ref.child(userRef).setValue(u);
+                            u  = new User(fullName, email, password, "", "","", "", "", "", "", "");
                             usercount++;
                             String userRef = Integer.toString(usercount);
+                            //String userID = fullName + "/" + email.substring(0, email.indexOf("@"));
                             //ref.child(userRef).setValue(u);
+                            String userID = email.substring(0, email.indexOf("@"));
 
+                            ref.child("/USER").child(userID).setValue(u);
                             startActivity(new Intent(getApplicationContext(),Login.class));
 
                         }else {

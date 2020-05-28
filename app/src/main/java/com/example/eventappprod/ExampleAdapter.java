@@ -47,8 +47,8 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             mainLayout = itemView.findViewById(R.id.mainLayout);
             createEvent = itemView.findViewById(R.id.create);
             mUnfollowButton = itemView.findViewById(R.id.unfollowButton);
-            mDeclineButton = itemView.findViewById(R.id.declineButton);
-            mAcceptButton = itemView.findViewById(R.id.acceptButton);
+           // mDeclineButton = itemView.findViewById(R.id.declineButton);
+            //mAcceptButton = itemView.findViewById(R.id.acceptButton);
 
         }
     }

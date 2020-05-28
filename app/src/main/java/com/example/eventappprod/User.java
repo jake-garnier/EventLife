@@ -19,7 +19,7 @@ public class User implements Serializable{
     private String PastEvent;
     private String NotifiedEvent;
     private String FriendList;
-    // public int numberofFriend;
+    public int numberofFriend;
 
 
 

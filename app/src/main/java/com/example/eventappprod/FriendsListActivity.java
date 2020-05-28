@@ -22,6 +22,8 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 public class FriendsListActivity extends AppCompatActivity {
@@ -37,7 +39,7 @@ public class FriendsListActivity extends AppCompatActivity {
     //Event Feed String Arrays
     String[] friendNames;
     String[] friendBios;
-    int[] images = {R.drawable.friend1, R.drawable.friend2, R.drawable.friend3, R.drawable.friend4, R.drawable.friend5, R.drawable.friend6, R.drawable.friend7, R.drawable.samoyed, R.drawable.khosla};
+    int[] images; //={R.drawable.friend1, R.drawable.friend2, R.drawable.friend3, R.drawable.friend4, R.drawable.friend5, R.drawable.friend6, R.drawable.friend7, R.drawable.samoyed, R.drawable.khosla};
 
     //private FriendsList
     private ArrayList<ExampleItem> friendList;
@@ -97,8 +99,23 @@ public class FriendsListActivity extends AppCompatActivity {
                 builder.setPositiveButton("ZOOM", new DialogInterface.OnClickListener() {
                     //todo: this happens in the other person's friends list with a notification heh
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                       /* u  = new User(fullName, email, password, "", "","", "", "", "", "", "");
+                        usercount++;
+                        String userRef = Integer.toString(usercount);
+                        //String userID = fullName + "/" + email.substring(0, email.indexOf("@"));
+                        //ref.child(userRef).setValue(u);
+                        String userID = email.substring(0, email.indexOf("@"));
+
+
+                        ref.child("/USER").child(userID).setValue(u);*/
+
+                        //ref = FirebaseDatabase.getInstance().getReference("/USER/" + friendAdd);
+
+
                         friendAdd = input.getText().toString();
+
                         //add word to friendRequestList
                         //Todo: fix the temp images and bios to the user's
                         friendList.add(0, new ExampleItem(images[0], friendAdd, friendBios[0],""));

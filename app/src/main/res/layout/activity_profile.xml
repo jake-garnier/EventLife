@@ -96,12 +96,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/geisel" />
+            app:srcCompat="@drawable/ic_launcher_background" />
 
         <ImageView
             android:id="@+id/profilePicture"
-            android:layout_width="160dp"
-            android:layout_height="213dp"
+            android:layout_width="161dp"
+            android:layout_height="184dp"
             android:layout_marginTop="136dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
