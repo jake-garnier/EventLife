@@ -27,6 +27,10 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     private ArrayList<ExampleItem> exampleListFull;
     Context context;
     private String cardType;
+    //some count stored in database
+    private int orderRequest = 5;
+    private int orderFollow = 5;
+
 
     public static class ExampleViewHolder extends RecyclerView.ViewHolder{
         public ImageView mImageView;
@@ -156,14 +160,20 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                         context.startActivity(intent);
                     }
                 });
-               /* holder.mAcceptButton.setOnClickListener(new View.OnClickListener() {
+               holder.mAcceptButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         // Get the clicked item label
                         String itemLabel = mExampleList.get(position).getText1();
+                        String itemData = mExampleList.get(position).getText2();
+                        int imageData = mExampleList.get(position).getImageResource();
 
                         // Add the item on accept/button click
-                        mExampleList.add(0,new ExampleItem(, itemLabel, friendBios[0]);
+                        mExampleList.remove(position);
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(position,mExampleList.size());
+                        orderRequest--;
+                        mExampleList.add(orderRequest, new ExampleItem(imageData, itemLabel, itemData));
                         notifyItemInserted(position);
                         notifyItemRangeChanged(position,mExampleList.size());
 
@@ -172,7 +182,6 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                         //Todo: make the person add into their list below but for the other person too
                     }
                 });
-                */
                 //decline the person button oop
                 holder.mDeclineButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -220,7 +229,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             return 0;
         } else if(this.cardType.equals("event")){
             return 1;
-        } else if(this.cardType.equals("friend")) {
+        } else if(position < orderRequest && this.cardType.equals("friend")) {
             return 2;
         } if(this.cardType.equals("nobutton")) {
             return 1;
