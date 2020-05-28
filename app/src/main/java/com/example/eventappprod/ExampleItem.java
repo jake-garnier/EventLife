@@ -31,7 +31,7 @@ public class ExampleItem {
         return mText2;
     }
 
-    public String getImg_firestore2(){
+    public String getImg_firestore(){
         return  img_firestore;
     }
 }
