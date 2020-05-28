@@ -37,19 +37,19 @@ public class ArchivedEventsActivity extends AppCompatActivity {
 
         //Logic for displaying the event-feed
         //Thus, somehow inject database information into these arrays?
-//        eventNames = getResources().getStringArray(R.array.eventNames_feed);
-//        eventDescriptions = getResources().getStringArray(R.array.eventNames_description);
-//        ArrayList<ExampleItem> exampleList = new ArrayList<>();
-//        for (int i = 0; i < eventNames.length; i++) {
-//            exampleList.add(new ExampleItem(images[i], eventNames[i], eventDescriptions[i],""));
-//        }
-//
-//        mRecyclerView = findViewById(R.id.recyclerViewArchive);
-//        mRecyclerView.setHasFixedSize(true);
-//        mLayoutManager = new LinearLayoutManager(this);
-//        mAdapter = new ExampleAdapter(this, exampleList, "nobutton");
-//        mRecyclerView.setLayoutManager(mLayoutManager);
-//        mRecyclerView.setAdapter(mAdapter);
+        eventNames = getResources().getStringArray(R.array.eventNames_feed);
+        eventDescriptions = getResources().getStringArray(R.array.eventNames_description);
+        ArrayList<ExampleItem> exampleList = new ArrayList<>();
+        for (int i = 0; i < eventNames.length; i++) {
+            exampleList.add(new ExampleItem(images[i], eventNames[i], eventDescriptions[i],""));
+        }
+
+        mRecyclerView = findViewById(R.id.recyclerViewArchive);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        mAdapter = new ExampleAdapter(this, exampleList, "nobutton");
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override

@@ -6,18 +6,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,16 +25,18 @@ import java.util.ArrayList;
 
 import javax.annotation.Nullable;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
-
 public class FindEventsFrag extends Fragment {
 
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference gsRef;
+    String[] eventNames;
+    String[] eventDescriptions;
 
-    String[] images_Firestore = new String[20];
-    String[] eventNames_Screenshow = new String[20];
-    String[] eventDescriptions_Screenshow=new String[20];
+
+    int[] images = {R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla,  R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla,  R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla, R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla,  R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
+    int[] im;
+    Uri[] myuri;
+
 
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
@@ -56,11 +52,11 @@ public class FindEventsFrag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment2_find_events, container, false);
-        setHasOptionsMenu(true);
 
         evenList = new ArrayList<>();
         ref = FirebaseDatabase.getInstance().getReference("/EVENT");
-
+        eventNames = getResources().getStringArray(R.array.eventNames_feed);
+        eventDescriptions = getResources().getStringArray(R.array.eventNames_description);
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -72,7 +68,7 @@ public class FindEventsFrag extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(FindEventsFrag.super.getContext(), "Error on Firebase", Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -82,54 +78,30 @@ public class FindEventsFrag extends Fragment {
     public void retrieveData(View view){
 
         // fetching data to particular array
-
         for (int i=0; i<evenList.size();i++) {
-            eventNames_Screenshow[i] = evenList.get(i).getName();
-            eventDescriptions_Screenshow[i] = evenList.get(i).getDescription();
-            images_Firestore[i] = evenList.get(i).getImage();
+            eventNames[1] = evenList.get(i).getName();
+            eventDescriptions[1] = evenList.get(1).getDescription();
+
             // you can get other info like date and time as well
-            //Bitmap my_image;
-            //Picasso.get().load(evenList.get(i).getImage()).into(my_image);
 
         }
-
         LoadDatatoDashBoard(view);
 
     }
 
+
     public void LoadDatatoDashBoard(View view){
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
-        for (int i = 0; i < evenList.size(); i++) {
-            exampleList.add(new ExampleItem(0, eventNames_Screenshow[i], eventDescriptions_Screenshow[i], images_Firestore[i]));
+        for (int i = 0; i <= evenList.size(); i++) {
+            exampleList.add(new ExampleItem(images[1],eventNames[1], eventDescriptions[1],""));
         }
 
         mRecyclerView = view.findViewById(R.id.recyclerViewFindEvents);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this.getContext());
-        mAdapter = new ExampleAdapter(this.getContext(), exampleList, "nobutton");
+        mAdapter = new ExampleAdapter(this.getContext(), exampleList, "event");
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.example_menu, menu);
-
-        MenuItem searchItem =  menu.findItem(R.id.action_search);
-        final androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) searchItem.getActionView();
-        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                mAdapter.getFilter().filter(newText);
-                return false;
-            }
-        });
     }
 }
