@@ -58,7 +58,7 @@ public class Register extends AppCompatActivity {
         fStore = FirebaseFirestore.getInstance();
         progressBar = findViewById(R.id.progressBar);
 
-        profileName = (TextView) findViewById(R.id.profileName);
+        profileName = findViewById(R.id.profileName);
 
 
         mRegisterBtn.setOnClickListener(new View.OnClickListener() {
@@ -115,6 +115,17 @@ public class Register extends AppCompatActivity {
                                         Toast.makeText(Register.this, "Verification Email Has been Sent.", Toast.LENGTH_SHORT).show();
                                         mEmail.setText("");
                                         mPassword.setText("");
+                                        u  = new User(fullName, email, password, "", "","", "", "", "", "", "");
+                                        usercount++;
+                                        String userRef = Integer.toString(usercount);
+                                        //String userID = fullName + "/" + email.substring(0, email.indexOf("@"));
+                                        //ref.child(userRef).setValue(u);
+                                        String userID = email.substring(0, email.indexOf("@"))+"@ucsd,edu";
+        //                                profileName.setText(userID);
+
+                                        ref.child("/USER").child(userID).setValue(u);
+                                        startActivity(new Intent(getApplicationContext(),Login.class));
+
                                     } else {
                                         Log.e(TAG, "Email hasn't been verified. EmailVerification", task.getException());
                                     }
@@ -130,16 +141,7 @@ public class Register extends AppCompatActivity {
                             //usercount++;
                             //String userRef = Integer.toString(usercount);
                             //ref.child(userRef).setValue(u);
-                            u  = new User(fullName, email, password, "", "","", "", "", "", "", "");
-                            usercount++;
-                            String userRef = Integer.toString(usercount);
-                            //String userID = fullName + "/" + email.substring(0, email.indexOf("@"));
-                            //ref.child(userRef).setValue(u);
-                            String userID = email.substring(0, email.indexOf("@"));
-                            profileName.setText(userID);
 
-                            ref.child("/USER").child(userID).setValue(u);
-                            startActivity(new Intent(getApplicationContext(),Login.class));
                             //profileName.setText(userID);
 
                         }else {
