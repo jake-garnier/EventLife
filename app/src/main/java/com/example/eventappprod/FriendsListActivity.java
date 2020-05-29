@@ -1,5 +1,6 @@
 package com.example.eventappprod;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,8 +24,11 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -51,12 +55,15 @@ public class FriendsListActivity extends AppCompatActivity {
 
     //private FriendsList
     private ArrayList<ExampleItem> friendList;
+    private ArrayList<User> userList;
+
 
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
     private ExampleAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     User currUser;
+    int added = 0;
 
     //todo: delete later
     User testUser;
@@ -75,6 +82,21 @@ public class FriendsListActivity extends AppCompatActivity {
         currUser = (User) ib.getSerializableExtra("currUserFriendList");
         ref = FirebaseDatabase.getInstance().getReference("/USER");
         userID = currUser.getEmail().substring(0, currUser.getEmail().indexOf("@"));
+        userList = new ArrayList<User>();
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    userList.add(ds.getValue(User.class));
+                }
+            }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast.makeText(FriendsListActivity.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
+                }
+            });
 
 
         //set the add button to the image button(code from the link above)
@@ -142,19 +164,29 @@ public class FriendsListActivity extends AppCompatActivity {
                         //ref.orderByChild("/USERS").equalTo(input.getText().toString())
                         //{
                             friendAdd = input.getText().toString();
-                            currUser.addFriend(friendAdd);
-                            ref.child(userID).child("friendList").setValue(currUser.getFriendList());
+                            for (int i = 0; i < userList.size();i++)
+                            {
+                                if (userList.get(i).getUserId().equals(friendAdd))
+                                {
+                                    currUser.addFriend(friendAdd);
+                                    ref.child(userID).child("friendList").setValue(currUser.getFriendList());
+
+                                    friendList.add(0, new ExampleItem(images[0], friendAdd, friendBios[0],""));
+                                    //create a new row for that friend
+                                    mAdapter.notifyItemInserted(0);
+                                    mRecyclerView.scrollToPosition(0);
+                                    added++;
+                                }
+                            }
                         //}
                         //ref.child("/USER").child(friendAdd);
 
-                        //add word to friendRequestList
-                        //Todo: fix the temp images and bios to the user's
-                        friendList.add(0, new ExampleItem(images[0], friendAdd, friendBios[0],""));
-                        //create a new row for that friend
-                        mAdapter.notifyItemInserted(0);
-                        mRecyclerView.scrollToPosition(0);
-                        Toast.makeText(mContext,"Added : " + friendAdd,Toast.LENGTH_SHORT).show();
-
+                        if(added == 1) {
+                            Toast.makeText(mContext, "Added : " + friendAdd, Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(mContext, friendAdd + " : Does not exist", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

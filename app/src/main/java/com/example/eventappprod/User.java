@@ -8,6 +8,7 @@ public class User implements Serializable{
     private String Email;
     private String Password;
     private String Biointro;
+    private String UserId;
 
     // optinal field, user will go to profile to edit
     private String ProfileImage;
@@ -34,6 +35,7 @@ public class User implements Serializable{
         CreatedEvents =  "";
         NotifiedEvent =  "";
         FriendList  =  "";
+        UserId = "";
 
     }
 
@@ -43,6 +45,7 @@ public class User implements Serializable{
                 String arsvp, String acreated, String anotified, String afriendlist) {
         Name = aname;
         Email = aemail;
+        UserId = aemail.substring(0, aemail.indexOf("@"));
         Password = apass;
         Biointro = abio;
         ProfileImage = aima;
@@ -69,6 +72,8 @@ public class User implements Serializable{
     public void setEmail(String e){
         Email = e;
     }
+
+    public String getUserId(){return UserId;}
 
     public String getPassword(){ return Password; }
     public void setPassword(String p){ Password = p; }
