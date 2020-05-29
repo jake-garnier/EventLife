@@ -73,25 +73,6 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
         //setData();
 
 
-
-        GeoTag = findViewById(R.id.eventFormMapView);
-        GeoTag.onCreate(savedInstanceState);
-
-        GeoTag.getMapAsync(new OnMapReadyCallback() {
-
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                LatLng coordinates =   new LatLng(-34, 151);
-                googleMap.addMarker(new MarkerOptions().position(coordinates).title("RIMAC"));
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 15));
-                googleMap.setMaxZoomPreference(10);
-
-                //googleMap.getUiSettings().setMyLocationButtonEnabled(false);
-                //googleMap.setMyLocationEnabled(true );
-                 GeoTag.onResume();
-            }
-        });
-
     }
 
     //This is what will check and grab the information and load it in
