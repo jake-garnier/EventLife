@@ -35,8 +35,8 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         public ConstraintLayout mainLayout;
         public Button createEvent;
         public Button mUnfollowButton;
-        public Button mDeclineButton;
-        public Button mAcceptButton;
+        public Button mRSVPButton;
+        public Button mFollowButton;
 
         public ExampleViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -47,8 +47,8 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             mainLayout = itemView.findViewById(R.id.mainLayout);
             createEvent = itemView.findViewById(R.id.create);
             mUnfollowButton = itemView.findViewById(R.id.unfollowButton);
-            //mDeclineButton = itemView.findViewById(R.id.declineButton);
-            mAcceptButton = itemView.findViewById(R.id.acceptButton);
+            mRSVPButton = itemView.findViewById(R.id.RSVPButton);
+            mFollowButton = itemView.findViewById(R.id.acceptButton);
 
         }
     }
@@ -133,6 +133,19 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                         context.startActivity(intent);
                     }
                 });
+                holder.mRSVPButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // Get the clicked item label
+                        String itemLabel = mExampleList.get(position).getText1();
+
+                        // Remove the item on remove/button click
+                        mExampleList.remove(position);
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(position,mExampleList.size());
+                        Toast.makeText(context,"Saved in RSVP : " + itemLabel, Toast.LENGTH_SHORT).show();
+                    }
+                });
             }  else if(viewType == 2){
                 //todo: this part is done in the other user list
                 ExampleItem currItem = mExampleList.get(position);
@@ -156,39 +169,21 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                         context.startActivity(intent);
                     }
                 });
-               /* holder.mAcceptButton.setOnClickListener(new View.OnClickListener() {
+               holder.mFollowButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         // Get the clicked item label
                         String itemLabel = mExampleList.get(position).getText1();
 
                         // Add the item on accept/button click
-                        mExampleList.add(0,new ExampleItem(, itemLabel, friendBios[0]);
-                        notifyItemInserted(position);
+                        mExampleList.remove(position);
+                        notifyItemRemoved(position);
                         notifyItemRangeChanged(position,mExampleList.size());
-
-                        Toast.makeText(context,"Added : " + itemLabel,Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"Followed : " + itemLabel, Toast.LENGTH_SHORT).show();
 
                         //Todo: make the person add into their list below but for the other person too
                     }
                 });
-                */
-               /*
-                //decline the person button oop
-                holder.mDeclineButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // Get the clicked item label
-                        String itemLabel = mExampleList.get(position).getText1();
-
-                        // Remove the item on remove/button click
-                        mExampleList.remove(position);
-                        notifyItemRemoved(position);
-                        notifyItemRangeChanged(position,mExampleList.size());
-                        Toast.makeText(context,"Declined : " + itemLabel, Toast.LENGTH_SHORT).show();
-                    }
-                });
-                */
 
             } else {
                 ExampleItem currItem = mExampleList.get(position);
@@ -222,8 +217,8 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             return 0;
         } else if(this.cardType.equals("event")){
             return 1;
-        //} else if(this.cardType.equals("friend")) {
-           //return 2;
+        } else if(this.cardType.equals("follow")) {
+           return 2;
         } if(this.cardType.equals("friend")) {
             return 3;
         }
