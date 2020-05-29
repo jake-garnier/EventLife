@@ -4,17 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -24,7 +20,6 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -35,15 +30,6 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
-
-import android.os.Bundle;
-
-import java.io.IOException;
-import java.util.Map;
-import java.util.UUID;
-
-import static com.squareup.picasso.Picasso.*;
 
 
 public class CreateEventPage2 extends AppCompatActivity implements OnMapReadyCallback {
@@ -75,7 +61,7 @@ public class CreateEventPage2 extends AppCompatActivity implements OnMapReadyCal
         chooseImage = (ImageButton) findViewById(R.id.btnImage);
         GeoTag = (MapView) findViewById(R.id.mapView);
 
-        Create = (Button) findViewById(R.id.btnCreate);
+        Create = (Button) findViewById(R.id.btnCreateEvent);
         Create.setEnabled(false);
         Previous = (Button) findViewById(R.id.btnPrevious);
         Cancel = (Button) findViewById(R.id.btnCancel);
