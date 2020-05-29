@@ -93,7 +93,7 @@ public class Profile extends AppCompatActivity {
         profileUsername.setText(userID);
 
         //mainImageView.setImageURI(Uri.parse(image));
-        //Picasso.get().load(currUser.getProfileImage()).into(profilePic);
+        Picasso.get().load(currUser.getProfileImage()).into(profilePic);
         Picasso.get().load(currUser.getBackgroundImage()).into(backgroundPic);
         //create reference to the user
         ref = FirebaseDatabase.getInstance().getReference("/USER");
@@ -123,8 +123,13 @@ public class Profile extends AppCompatActivity {
         friendsListButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext()
-                        ,FriendsListActivity.class));
+                Intent intent = new Intent(getApplicationContext(), FriendsListActivity.class);
+                intent.putExtra("currUserFriendList", currUser);
+
+                startActivity(intent);
+
+                /*startActivity(new Intent(getApplicationContext()
+                        ,FriendsListActivity.class));*/
             }
 
         });

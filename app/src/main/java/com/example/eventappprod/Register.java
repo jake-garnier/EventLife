@@ -115,7 +115,8 @@ public class Register extends AppCompatActivity {
                                         Toast.makeText(Register.this, "Verification Email Has been Sent.", Toast.LENGTH_SHORT).show();
                                         mEmail.setText("");
                                         mPassword.setText("");
-                                        u  = new User(fullName, email, password, "", "", "","", "", "", "", "", "");
+                                        u  = new User(fullName, email, password, "", "https://firebasestorage.googleapis.com/v0/b/event-b161b.appspot.com/o/EVENT%2F285871589?alt=media&token=0a2f3f7e-e6f8-4b44-ac9b-b15d0669ecd1",
+                                                "https://firebasestorage.googleapis.com/v0/b/event-b161b.appspot.com/o/EVENT%2F285871589?alt=media&token=0a2f3f7e-e6f8-4b44-ac9b-b15d0669ecd1","", "", "", "", "", "");
                                         usercount++;
                                         String userRef = Integer.toString(usercount);
                                         //String userID = fullName + "/" + email.substring(0, email.indexOf("@"));
