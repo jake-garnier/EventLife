@@ -91,6 +91,10 @@ public class DashBoard<user> extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
 
+        Intent ib = getIntent();
+        currUser = (User) ib.getSerializableExtra("currUser");
+
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "EventLife";

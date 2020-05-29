@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,11 +39,14 @@ public class Profile extends AppCompatActivity {
     private Button archivedEventButton;
     private Button LogoutButton;
     private Button updatePicButton;
+    private ImageButton updateBackgroundButton;
 
     String RealTimeImagePath;
 
     private ImageView profilePic;
+    private ImageView backgroundPic;
     private TextView profileName;
+    private int update = 0;
     User currUser;
 
     // authorization
@@ -55,9 +59,10 @@ public class Profile extends AppCompatActivity {
     private DatabaseReference ref;
 
     //make phone select an image from their gallery
-    public void openFilechooser(){
+    public void openFilechooser(int i){
         // create an intent so user can jump to his phone's folder to select photo
         Intent intent = new Intent(Intent.ACTION_PICK);
+        update = i;
         // only pick image
         intent.setType("image/*");
         // grab the photo
@@ -76,6 +81,7 @@ public class Profile extends AppCompatActivity {
 
         //user's profile
         profilePic = (ImageView) findViewById(R.id.profilePicture);
+        backgroundPic = (ImageView) findViewById(R.id.background);
         profileName = (TextView) findViewById(R.id.profileName);
         //profileName.setText(currUser.getName());
 
@@ -86,12 +92,19 @@ public class Profile extends AppCompatActivity {
         updatePicButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                openFilechooser();
-
-
+                openFilechooser(0);
             }
-
         });
+
+        //Backgroundupdate
+        updateBackgroundButton = (ImageButton) findViewById(R.id.updateBackground);
+        updateBackgroundButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                openFilechooser(1);
+            }
+        });
+
 
         friendsListButton = (Button) findViewById(R.id.viewFriendsButton);
         friendsListButton.setOnClickListener(new View.OnClickListener(){
@@ -99,7 +112,6 @@ public class Profile extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext()
                         ,FriendsListActivity.class));
-
             }
 
         });
@@ -193,8 +205,14 @@ public class Profile extends AppCompatActivity {
         {
             // get the data for picture chosen
             uri = data.getData();
+            if(update == 0){
             // set the chooseImage by the picture chosen
             profilePic.setImageURI(uri);
+            }
+
+            else {
+            backgroundPic.setImageURI(uri);
+            }
             // assign the imagePath by using uri
 
             String url = uri.toString();

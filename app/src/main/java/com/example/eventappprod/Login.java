@@ -104,13 +104,13 @@ public class Login extends AppCompatActivity {
                                 ref.addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        String userID = email.substring(0, email.indexOf("@"))+"@ucsd,edu";
+                                        String userID = email.substring(0, email.indexOf("@"));//+"@ucsd,edu";
                                         User user = dataSnapshot.child(userID).getValue(User.class);
                                         Intent intent = new Intent(Login.this, DashBoard.class);
                                         intent.putExtra("currUser", user);
                                         Toast.makeText(Login.this, "This is printed cuz it works", Toast.LENGTH_LONG).show();
                                         //startActivity(intent)
-                                        startActivity(new Intent(getApplicationContext(), DashBoard.class));
+                                        startActivity(intent);
                                     }
 
                                     @Override

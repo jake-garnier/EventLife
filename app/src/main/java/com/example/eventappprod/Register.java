@@ -120,7 +120,7 @@ public class Register extends AppCompatActivity {
                                         String userRef = Integer.toString(usercount);
                                         //String userID = fullName + "/" + email.substring(0, email.indexOf("@"));
                                         //ref.child(userRef).setValue(u);
-                                        String userID = email.substring(0, email.indexOf("@"))+"@ucsd,edu";
+                                        String userID = email.substring(0, email.indexOf("@"));//+"@ucsd,edu";
         //                                profileName.setText(userID);
 
                                         ref.child("/USER").child(userID).setValue(u);
