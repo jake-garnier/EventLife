@@ -63,7 +63,7 @@ public class FriendsListActivity extends AppCompatActivity {
         //release the user info
         Intent ib = getIntent();
         currUser = (User) ib.getSerializableExtra("currUserFriendList");
-        ref = FirebaseDatabase.getInstance().getReference();
+        ref = FirebaseDatabase.getInstance().getReference("/USERS");
 
 
         //set the add button to the image button(code from the link above)
@@ -130,6 +130,7 @@ public class FriendsListActivity extends AppCompatActivity {
                         //ref.orderByChild("/USERS").equalTo(input.getText().toString())
                         //{
                             currUser.addFriend(input.getText().toString());
+                            friendAdd = input.getText().toString();
                         //}
 
                         //add word to friendRequestList
