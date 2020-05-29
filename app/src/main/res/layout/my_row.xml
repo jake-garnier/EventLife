@@ -11,7 +11,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/rose" >
+        android:backgroundTint="@color/rose"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -36,9 +38,9 @@
             <TextView
                 android:id="@+id/event_names_txt"
                 android:layout_width="217dp"
-                android:layout_height="45dp"
+                android:layout_height="20dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="7dp"
                 android:text="title"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -46,16 +48,31 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            =======
+            android:id="@+id/start_time_txt"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="85dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toStartOf="@+id/button"
+            >>>>>>> 8805d99323f71a8e88a7f26b7475076466597980
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/myImageView"
+            app:layout_constraintStart_toStartOf="@+id/myImageView"
+            app:layout_constraintTop_toBottomOf="@+id/event_names_txt" />
+
+            < HEAD
                 android:id="@+id/event_desc_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:text="description"
                 android:visibility="invisible"
                 app:layout_constraintEnd_toStartOf="@+id/RSVPButton"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/event_names_txt"
-                app:layout_constraintTop_toBottomOf="@+id/event_names_txt" />
+                tools:layout_editor_absoluteY="38dp"
+                android:layout_marginEnd="108dp" />
 
             <Button
                 android:id="@+id/RSVPButton"
@@ -73,6 +90,24 @@
                 app:layout_constraintStart_toStartOf="@+id/myImageView"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0" />
+
+            <TextView
+                android:id="@+id/end_time_txt"
+                android:layout_width="50dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toEndOf="@+id/start_time_txt"
+                app:layout_constraintTop_toBottomOf="@+id/event_names_txt" />
+
+            <TextView
+                android:id="@+id/data_text"
+                android:layout_width="70dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toEndOf="@+id/end_time_txt"
+                app:layout_constraintTop_toBottomOf="@+id/event_names_txt" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

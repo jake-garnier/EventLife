@@ -61,18 +61,11 @@ public class DashBoard<user> extends AppCompatActivity {
     private static final String TAG = "PostDetailActivity";
     private static final String CHANNEL_ID = "Channel1";
 
-
-    String[] eventNames;
-    String[] eventDescriptions;
-    int[] images = {R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
-
     String[] images_Firestore = new String[20];
     String[] eventNames_Screenshow = new String[20];
-    String[] eventDescriptions_Screenshow=new String[20];
-
-    int[] im;
-    Uri[] myuri;
-
+    String[] eventStartTime_Screenshow=new String[20];
+    String[] eventEndTime_Screenshow=new String[20];
+    String[] eventDate_Screenshow=new String[20];
 
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
@@ -81,7 +74,6 @@ public class DashBoard<user> extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference ref;
     ArrayList<Event> evenList;
-    User currUser;
 
     FirebaseUser currentuser = FirebaseAuth.getInstance().getCurrentUser();
     String email = currentuser.getEmail();
@@ -110,16 +102,6 @@ public class DashBoard<user> extends AppCompatActivity {
 
         evenList = new ArrayList<>();
         ref = FirebaseDatabase.getInstance().getReference("/EVENT");
-        eventNames = getResources().getStringArray(R.array.eventNames_feed);
-        eventDescriptions = getResources().getStringArray(R.array.eventNames_description);
-
-        for(int i=0;i<images.length;++i)
-        {
-            images_Firestore[i] = "";
-            eventNames_Screenshow[i] = eventNames[i];
-            eventDescriptions_Screenshow[i]=eventDescriptions[i];
-        }
-
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -206,6 +188,15 @@ public class DashBoard<user> extends AppCompatActivity {
             }
         });
 
+//        MenuItem addevent = menu.findItem(R.id.addEvent);
+//        addevent.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                startActivity(new Intent(getApplicationContext(), CreateEventActivity.class));
+//                return false;
+//            }
+//        });
+
 
         return true;
     }
@@ -215,12 +206,22 @@ public class DashBoard<user> extends AppCompatActivity {
         // fetching data to particular array
         
         for (int i=0; i<evenList.size();i++) {
-            eventNames_Screenshow[i] = evenList.get(i).getName();
-            eventDescriptions_Screenshow[i] = evenList.get(i).getDescription();
-            images_Firestore[i] = evenList.get(i).getImage();
-            // you can get other info like date and time as well
-            //Bitmap my_image;
-            //Picasso.get().load(evenList.get(i).getImage()).into(my_image);
+            if(i==0) { // Blank for the create event button
+                eventNames_Screenshow[i] = "";
+                eventStartTime_Screenshow[i] = "";
+                eventEndTime_Screenshow[i] = "";
+                eventDate_Screenshow[i] = "";
+                images_Firestore[i] = "";
+            } else {
+                eventNames_Screenshow[i] = evenList.get(i - 1).getName();
+                eventStartTime_Screenshow[i] = evenList.get(i - 1).getStartTime();
+                eventEndTime_Screenshow[i] = evenList.get(i - 1).getEndTime();
+                eventDate_Screenshow[i] = evenList.get(i - 1).getDate();
+                images_Firestore[i] = evenList.get(i - 1).getImage();
+                // you can get other info like date and time as well
+                //Bitmap my_image;
+                //Picasso.get().load(evenList.get(i).getImage()).into(my_image);
+            }
 
         }
 
@@ -232,7 +233,8 @@ public class DashBoard<user> extends AppCompatActivity {
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
 
         for (int i = 0; i < evenList.size(); i++) {
-            exampleList.add(new ExampleItem(images[i],eventNames_Screenshow[i], eventDescriptions_Screenshow[i], images_Firestore[i]));
+            // TODO once we have transitioned to not having hard coded images remove first param from constructor
+            exampleList.add(new ExampleItem(0, eventNames_Screenshow[i], eventStartTime_Screenshow[i], eventEndTime_Screenshow[i], eventDate_Screenshow[i], images_Firestore[i]));
         }
 
         mRecyclerView = findViewById(R.id.recyclerView);
