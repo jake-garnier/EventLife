@@ -40,12 +40,12 @@ public class User implements Serializable{
     }
 
 
-    public User(String aname, String aemail, String apass, String abio,
+    public User(String aname, String aemail, String userID, String apass, String abio,
                 String aima, String back, String acol, String agroup,
                 String arsvp, String acreated, String anotified, String afriendlist) {
         Name = aname;
         Email = aemail;
-        UserId = aemail.substring(0, aemail.indexOf("@"));
+        UserId = "";
         Password = apass;
         Biointro = abio;
         ProfileImage = aima;
@@ -74,6 +74,7 @@ public class User implements Serializable{
     }
 
     public String getUserId(){return UserId;}
+    public void setUserId(String set){UserId = set;}
 
     public String getPassword(){ return Password; }
     public void setPassword(String p){ Password = p; }
