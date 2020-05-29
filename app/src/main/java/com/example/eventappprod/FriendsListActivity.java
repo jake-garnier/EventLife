@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Menu;
@@ -22,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
@@ -31,6 +33,12 @@ public class FriendsListActivity extends AppCompatActivity {
     private ImageButton mButtonAdd;
     private String friendAdd;
 
+    //currUser Stuff
+    private String userID;
+
+    //Firebase variables
+    private DatabaseReference ref;
+
     //add context for the app
     private Context mContext;
 
@@ -39,7 +47,7 @@ public class FriendsListActivity extends AppCompatActivity {
     //Event Feed String Arrays
     String[] friendNames;
     String[] friendBios;
-    int[] images; //={R.drawable.friend1, R.drawable.friend2, R.drawable.friend3, R.drawable.friend4, R.drawable.friend5, R.drawable.friend6, R.drawable.friend7, R.drawable.samoyed, R.drawable.khosla};
+    int[] images ={R.drawable.friend2, R.drawable.friend2, R.drawable.friend4, R.drawable.friend4, R.drawable.friend5, R.drawable.friend6, R.drawable.friend6, R.drawable.samoyed, R.drawable.khosla};
 
     //private FriendsList
     private ArrayList<ExampleItem> friendList;
@@ -48,6 +56,10 @@ public class FriendsListActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private ExampleAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    User currUser;
+
+    //todo: delete later
+    User testUser;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -55,6 +67,15 @@ public class FriendsListActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends_list);
+
+        testUser = new User();
+
+        //release the user info
+        Intent ib = getIntent();
+        currUser = (User) ib.getSerializableExtra("currUserFriendList");
+        ref = FirebaseDatabase.getInstance().getReference("/USER");
+        userID = currUser.getEmail().substring(0, currUser.getEmail().indexOf("@"));
+
 
         //set the add button to the image button(code from the link above)
         mButtonAdd = (ImageButton) findViewById(R.id.addFriendBtn);
@@ -95,6 +116,7 @@ public class FriendsListActivity extends AppCompatActivity {
                 input.setInputType(InputType.TYPE_CLASS_TEXT);
                 builder.setView(input);
 
+
                 // Set up the buttons
                 builder.setPositiveButton("ZOOM", new DialogInterface.OnClickListener() {
                     //todo: this happens in the other person's friends list with a notification heh
@@ -114,7 +136,16 @@ public class FriendsListActivity extends AppCompatActivity {
                         //ref = FirebaseDatabase.getInstance().getReference("/USER/" + friendAdd);
 
 
-                        friendAdd = input.getText().toString();
+                        //friendAdd = input.getText().toString();
+                        //want to check if the typed in userID is in the database
+
+                        //ref.orderByChild("/USERS").equalTo(input.getText().toString())
+                        //{
+                            friendAdd = input.getText().toString();
+                            currUser.addFriend(friendAdd);
+                            ref.child(userID).child("friendList").setValue(currUser.getFriendList());
+                        //}
+                        //ref.child("/USER").child(friendAdd);
 
                         //add word to friendRequestList
                         //Todo: fix the temp images and bios to the user's
@@ -129,6 +160,11 @@ public class FriendsListActivity extends AppCompatActivity {
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
+                        //todo: delete
+                        friendAdd = input.getText().toString();
+                        //todo: delete later
+                        testUser.addFriend(friendAdd);
                         dialog.cancel();
                     }
                 });

@@ -83,6 +83,10 @@ public class DashBoard<user> extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
 
+        Intent ib = getIntent();
+        currUser = (User) ib.getSerializableExtra("currUser");
+
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "EventLife";
@@ -146,8 +150,11 @@ public class DashBoard<user> extends AppCompatActivity {
                     case R.id.dashboard:
                         return true;
                     case R.id.profile:
-                        startActivity(new Intent(getApplicationContext()
-                                , Profile.class));
+
+                        Intent intent = new Intent(getApplicationContext(), Profile.class);
+                        intent.putExtra("currUserPro", currUser);
+
+                        startActivity(intent);
                         overridePendingTransition(0, 0);
                         return true;
                     case R.id.search:

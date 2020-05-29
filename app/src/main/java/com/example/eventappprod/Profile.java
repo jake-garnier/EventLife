@@ -3,6 +3,7 @@ package com.example.eventappprod;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 public class Profile extends AppCompatActivity {
 
@@ -38,11 +41,16 @@ public class Profile extends AppCompatActivity {
     private Button archivedEventButton;
     private Button LogoutButton;
     private Button updatePicButton;
+    private ImageButton updateBackgroundButton;
 
     String RealTimeImagePath;
 
     private ImageView profilePic;
+    private ImageView backgroundPic;
     private TextView profileName;
+    private TextView profileUsername;
+    private String userID;
+    private int update = 0;
     User currUser;
 
     // authorization
@@ -55,9 +63,10 @@ public class Profile extends AppCompatActivity {
     private DatabaseReference ref;
 
     //make phone select an image from their gallery
-    public void openFilechooser(){
+    public void openFilechooser(int i){
         // create an intent so user can jump to his phone's folder to select photo
         Intent intent = new Intent(Intent.ACTION_PICK);
+        update = i;
         // only pick image
         intent.setType("image/*");
         // grab the photo
@@ -72,13 +81,21 @@ public class Profile extends AppCompatActivity {
 
         //release the user info
         Intent ib = getIntent();
-        currUser = (User) ib.getSerializableExtra("currUser");
+        currUser = (User) ib.getSerializableExtra("currUserPro");
 
         //user's profile
         profilePic = (ImageView) findViewById(R.id.profilePicture);
+        backgroundPic = (ImageView) findViewById(R.id.background);
         profileName = (TextView) findViewById(R.id.profileName);
-        //profileName.setText(currUser.getName());
+        profileName.setText(currUser.getName());
+        profileUsername = (TextView) findViewById(R.id.profileUser);
+        userID = currUser.getEmail().substring(0, currUser.getEmail().indexOf("@"));
+        profileUsername.setText(userID);
 
+        //mainImageView.setImageURI(Uri.parse(image));
+        Picasso.get().load(currUser.getProfileImage()).into(profilePic);
+        Picasso.get().load(currUser.getBackgroundImage()).into(backgroundPic);
+        //create reference to the user
         ref = FirebaseDatabase.getInstance().getReference("/USER");
 
         //Button Stuff
@@ -86,20 +103,33 @@ public class Profile extends AppCompatActivity {
         updatePicButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                openFilechooser();
-
-
+                openFilechooser(0);
+                currUser.setBackgroundImage(RealTimeImagePath);
             }
-
         });
+
+        //Backgroundupdate
+        updateBackgroundButton = (ImageButton) findViewById(R.id.updateBackground);
+        updateBackgroundButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                openFilechooser(1);
+                currUser.setProfileImage(RealTimeImagePath);
+            }
+        });
+
 
         friendsListButton = (Button) findViewById(R.id.viewFriendsButton);
         friendsListButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext()
-                        ,FriendsListActivity.class));
+                Intent intent = new Intent(getApplicationContext(), FriendsListActivity.class);
+                intent.putExtra("currUserFriendList", currUser);
 
+                startActivity(intent);
+
+                /*startActivity(new Intent(getApplicationContext()
+                        ,FriendsListActivity.class));*/
             }
 
         });
@@ -193,16 +223,22 @@ public class Profile extends AppCompatActivity {
         {
             // get the data for picture chosen
             uri = data.getData();
+            if(update == 0){
             // set the chooseImage by the picture chosen
             profilePic.setImageURI(uri);
+            }
+
+            else {
+            backgroundPic.setImageURI(uri);
+            }
             // assign the imagePath by using uri
 
             String url = uri.toString();
             String filename = url.substring(url.lastIndexOf("/")+1);
 
             imagePath = FirebaseStorage.getInstance().getReference().child("/EVENT").child(filename);
-            //  put the picture to put in Image box
 
+            //  put the picture to put in Image box
             imagePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 // if upload success, print message
                 @Override
@@ -214,6 +250,14 @@ public class Profile extends AppCompatActivity {
                         @Override
                         public void onSuccess(Uri uri) {
                             RealTimeImagePath = uri.toString();
+                            //save url into ref
+                            if(update == 0) {
+                                ref.child(userID).child("profileImage").setValue(RealTimeImagePath);
+                            }
+                            else {
+                                ref.child(userID).child("backgroundImage").setValue(RealTimeImagePath);
+                            }
+
                         }
                     });
 

@@ -23,12 +23,11 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/profileEmail"
+            android:id="@+id/profileUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="170dp"
             android:layout_marginTop="7dp"
-            android:text="I am UC San Diego’s eighth Chancellor! \nStay tuned for the Ninth College \nLaunch Party!!"
             android:textSize="13sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profileName" />
@@ -51,7 +50,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
             android:backgroundTint="@color/white"
-            android:text="Archived Events"
+            android:text="RSVP Events"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/viewHistoryButton" />
 
@@ -62,7 +61,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="365dp"
             android:backgroundTint="@color/white"
-            android:text="Event History"
+            android:text="Created Events"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -89,10 +88,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/background"
             android:layout_width="410dp"
             android:layout_height="207dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_launcher_background" />
@@ -116,6 +116,16 @@
             android:text="Update Pic"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profilePicture" />
+
+        <ImageButton
+            android:id="@+id/updateBackground"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/background"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/ic_add_a_photo_black_24dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
