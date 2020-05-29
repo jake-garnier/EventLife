@@ -32,9 +32,6 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         public ImageView mImageView;
         public TextView mTextView1;
         public TextView mTextView2;
-        public TextView mTextView3;
-        public TextView mTextView4;
-        public TextView mTextView5;
         public ConstraintLayout mainLayout;
         public Button createEvent;
         public Button mUnfollowButton;
@@ -46,10 +43,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             //Get references from my_row.xml
             mImageView = itemView.findViewById(R.id.myImageView);
             mTextView1 = itemView.findViewById(R.id.event_names_txt);
-            mTextView2 = itemView.findViewById(R.id.start_time_txt);
-            mTextView3 = itemView.findViewById(R.id.end_time_txt);
-            mTextView4 = itemView.findViewById(R.id.data_text);
-            mTextView5 = itemView.findViewById(R.id.friend_desc_txt);
+            mTextView2 = itemView.findViewById(R.id.event_desc_txt);
             mainLayout = itemView.findViewById(R.id.mainLayout);
             createEvent = itemView.findViewById(R.id.create);
             mUnfollowButton = itemView.findViewById(R.id.unfollowButton);
@@ -124,8 +118,6 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
                 holder.mTextView1.setText(currItem.getText1());
                 holder.mTextView2.setText(currItem.getText2());
-                holder.mTextView3.setText(currItem.getText3());
-                holder.mTextView4.setText(currItem.getText4());
 
                 //This is what allows each card to be clicked and load up a new activity containing the information that goes with that card
                 holder.mainLayout.setOnClickListener(new View.OnClickListener() {
@@ -161,7 +153,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                 //holder.mImageView.setImageURI(currItem.getImageResource());
                 holder.mImageView.setImageResource(currItem.getImageResource());
                 holder.mTextView1.setText(currItem.getText1());
-                holder.mTextView5.setText(currItem.getText2());
+                holder.mTextView2.setText(currItem.getText2());
 
                 //This is what allows each card to be clicked and load up a new activity containing the information that goes with that card
                 holder.mainLayout.setOnClickListener(new View.OnClickListener() {
@@ -227,10 +219,10 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             return 1;
         } else if(this.cardType.equals("follow")) {
            return 2;
-        } else if(this.cardType.equals("friend")) {
+        } if(this.cardType.equals("friend")) {
             return 3;
         }
-        return 1;
+        return 3;
     }
 
     @Override

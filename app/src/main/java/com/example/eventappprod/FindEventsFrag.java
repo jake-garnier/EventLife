@@ -100,7 +100,7 @@ public class FindEventsFrag extends Fragment {
     public void LoadDatatoDashBoard(View view){
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
         for (int i = 0; i < evenList.size(); i++) {
-            exampleList.add(new ExampleItem(0, eventNames_Screenshow[i], eventDescriptions_Screenshow[i], "", "", images_Firestore[i]));
+            exampleList.add(new ExampleItem(0, eventNames_Screenshow[i], eventDescriptions_Screenshow[i], images_Firestore[i]));
         }
 
         mRecyclerView = view.findViewById(R.id.recyclerViewFindEvents);

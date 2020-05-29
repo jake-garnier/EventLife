@@ -89,7 +89,7 @@ public class FriendsListActivity extends AppCompatActivity {
 
             //friendList.add(new ExampleItem(images[i], friendNames[i], ""));
 
-            friendList.add(new ExampleItem(images[i], friendNames[i], friendBios[i],"", "", ""));
+            friendList.add(new ExampleItem(images[i], friendNames[i], friendBios[i],""));
 
         }
 
@@ -149,7 +149,7 @@ public class FriendsListActivity extends AppCompatActivity {
 
                         //add word to friendRequestList
                         //Todo: fix the temp images and bios to the user's
-                        friendList.add(0, new ExampleItem(images[0], friendAdd, friendBios[0],"", "", ""));
+                        friendList.add(0, new ExampleItem(images[0], friendAdd, friendBios[0],""));
                         //create a new row for that friend
                         mAdapter.notifyItemInserted(0);
                         mRecyclerView.scrollToPosition(0);
