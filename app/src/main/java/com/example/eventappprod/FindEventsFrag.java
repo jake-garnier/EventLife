@@ -106,7 +106,7 @@ public class FindEventsFrag extends Fragment {
         mRecyclerView = view.findViewById(R.id.recyclerViewFindEvents);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this.getContext());
-        mAdapter = new ExampleAdapter(this.getContext(), exampleList, "event");
+        mAdapter = new ExampleAdapter(this.getContext(), exampleList, "nobutton");
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
