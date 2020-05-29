@@ -33,6 +33,12 @@ public class FriendsListActivity extends AppCompatActivity {
     private ImageButton mButtonAdd;
     private String friendAdd;
 
+    //currUser Stuff
+    private String userID;
+
+    //Firebase variables
+    private DatabaseReference ref;
+
     //add context for the app
     private Context mContext;
 
@@ -51,7 +57,9 @@ public class FriendsListActivity extends AppCompatActivity {
     private ExampleAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     User currUser;
-    private DatabaseReference ref;
+
+    //todo: delete later
+    User testUser;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -60,10 +68,13 @@ public class FriendsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends_list);
 
+        testUser = new User();
+
         //release the user info
         Intent ib = getIntent();
         currUser = (User) ib.getSerializableExtra("currUserFriendList");
-        ref = FirebaseDatabase.getInstance().getReference("/USERS");
+        ref = FirebaseDatabase.getInstance().getReference("/USER");
+        userID = currUser.getEmail().substring(0, currUser.getEmail().indexOf("@"));
 
 
         //set the add button to the image button(code from the link above)
@@ -105,6 +116,7 @@ public class FriendsListActivity extends AppCompatActivity {
                 input.setInputType(InputType.TYPE_CLASS_TEXT);
                 builder.setView(input);
 
+
                 // Set up the buttons
                 builder.setPositiveButton("ZOOM", new DialogInterface.OnClickListener() {
                     //todo: this happens in the other person's friends list with a notification heh
@@ -129,9 +141,11 @@ public class FriendsListActivity extends AppCompatActivity {
 
                         //ref.orderByChild("/USERS").equalTo(input.getText().toString())
                         //{
-                            currUser.addFriend(input.getText().toString());
                             friendAdd = input.getText().toString();
+                            currUser.addFriend(friendAdd);
+                            ref.child(userID).child("friendList").setValue(currUser.getFriendList());
                         //}
+                        //ref.child("/USER").child(friendAdd);
 
                         //add word to friendRequestList
                         //Todo: fix the temp images and bios to the user's
@@ -146,6 +160,11 @@ public class FriendsListActivity extends AppCompatActivity {
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
+                        //todo: delete
+                        friendAdd = input.getText().toString();
+                        //todo: delete later
+                        testUser.addFriend(friendAdd);
                         dialog.cancel();
                     }
                 });

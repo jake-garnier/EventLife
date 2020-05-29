@@ -22,6 +22,18 @@ public class User implements Serializable{
     private String FriendList;
 
     public User() {
+        Name = "";
+        Email =  "";
+        Password = "";
+        Biointro =  "";
+        ProfileImage =  "";
+        BackgroundImage =  "";
+        College  =  "";
+        Group =  "";
+        RSVPEvents =  "";
+        CreatedEvents =  "";
+        NotifiedEvent =  "";
+        FriendList  =  "";
 
     }
 
