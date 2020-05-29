@@ -7,203 +7,207 @@
     android:background="@color/darkrose"
     tools:context=".CreateEventActivity">
 
+
+    <ImageButton
+        android:id="@+id/btnImage"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerInside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_input_add" />
+
+
     <TextView
-        android:id="@+id/Eventname"
+        android:id="@+id/createEventName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="30dp"
         android:text="Event Name"
-        android:textSize="16sp"
+        android:textSize="17sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnImage"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/Description"
-        android:layout_width="251dp"
+        android:id="@+id/createEventTvName"
+        android:layout_width="210dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginEnd="80dp"
+        android:layout_marginStart="10dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="ex: CSE Study Jam!"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Eventname" />
+        android:inputType="textPersonName"
+        android:textSize="17sp"
+        app:layout_constraintStart_toEndOf="@+id/btnImage"
+        app:layout_constraintTop_toBottomOf="@+id/createEventName" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/createEventLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="25dp"
         android:text="Location"
-        android:textSize="16sp"
+        android:textSize="17sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Description2" />
+        app:layout_constraintTop_toBottomOf="@+id/btnImage" />
 
     <EditText
-        android:id="@+id/Location"
-        android:layout_width="251dp"
+        android:id="@+id/createEventTvLocation"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginEnd="80dp"
+        android:layout_marginStart="20dp"
         android:ems="10"
+        android:hint="ex: 9500 Gilman Dr"
         android:inputType="textPostalAddress"
-        android:hint="ex: 9500 Gilman Dr, La Jolla"
         android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/createEventLocation" />
 
     <EditText
-        android:id="@+id/Date"
-        android:layout_width="251dp"
+        android:id="@+id/createEventTvDate"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
+        android:layout_marginStart="20dp"
         android:ems="10"
-        android:inputType="date"
         android:hint="mm/dd/yy"
+        android:inputType="date"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/createEventDate" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/createEventDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="60dp"
         android:text="Date"
-        android:textSize="16sp"
+        android:textSize="17sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Location" />
+        app:layout_constraintTop_toBottomOf="@+id/createEventLocation"
+        tools:layout_editor_absoluteX="20dp" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/createEventStartTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
         android:text="Start Time"
-        android:textSize="16sp"
+        android:textSize="17sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Date" />
+        app:layout_constraintStart_toEndOf="@+id/btnImage"
+        app:layout_constraintTop_toBottomOf="@+id/createEventTvName" />
 
     <EditText
-        android:id="@+id/StartTime"
-        android:layout_width="120dp"
+        android:id="@+id/createEventTvStartTime"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
+        android:layout_marginStart="10dp"
         android:ems="10"
+        android:hint="ex: 8:30"
         android:inputType="time"
-        android:hint="ex: 8:30 AM"
         android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintStart_toEndOf="@+id/btnImage"
+        app:layout_constraintTop_toBottomOf="@+id/createEventStartTime" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/createEventEndTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="211dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginStart="120dp"
+        android:layout_marginTop="20dp"
         android:text="End Time"
-        android:textSize="16sp"
+        android:textSize="17sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Date" />
+        app:layout_constraintStart_toEndOf="@+id/btnImage"
+        app:layout_constraintTop_toBottomOf="@+id/createEventTvName" />
 
     <EditText
-        android:id="@+id/EndTime"
-        android:layout_width="120dp"
+        android:id="@+id/createEventTvEndTime"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="11dp"
-        android:layout_marginEnd="80dp"
+        android:layout_marginStart="120dp"
         android:ems="10"
-        android:inputType="time"
-        android:hint="ex: 10:00 PM"
+        android:hint="ex: 13:00"
+        android:inputType=""
         android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/StartTime"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintStart_toEndOf="@+id/btnImage"
+        app:layout_constraintTop_toBottomOf="@+id/createEventEndTime" />
 
     <TextView
-        android:id="@+id/Descipt"
+        android:id="@+id/createEventDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="30dp"
         android:text="Description"
-        android:textSize="16sp"
+        android:textSize="17sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Description" />
+        app:layout_constraintStart_toEndOf="@+id/btnImage"
+        app:layout_constraintTop_toBottomOf="@+id/createEventTvStartTime" />
 
     <EditText
-        android:id="@+id/Description2"
-        android:layout_width="251dp"
-        android:layout_height="143dp"
-        android:layout_marginStart="80dp"
+        android:id="@+id/createEventTvDescription"
+        android:layout_width="210dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="1dp"
         android:ellipsize="end"
         android:ems="10"
         android:hint="10-150 characters describing the event"
         android:inputType="textMultiLine"
         android:maxLines="5"
         android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Descipt" />
+        app:layout_constraintStart_toEndOf="@+id/btnImage"
+        app:layout_constraintTop_toBottomOf="@+id/createEventDescription" />
+
+    <Button
+        android:id="@+id/btnCreate"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:backgroundTint="@color/white"
+        android:text="CREATE EVENT"
+        android:textSize="13sp"
+        app:layout_constraintStart_toEndOf="@+id/btnImage"
+        tools:layout_editor_absoluteY="390dp" />
 
     <Button
         android:id="@+id/btnCancel"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="35dp"
+        android:layout_marginStart="40dp"
         android:backgroundTint="@color/white"
         android:text="CANCEL"
         android:textSize="13sp"
-        app:layout_constraintEnd_toStartOf="@+id/btnPrevious"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/StartTime" />
-
-    <Button
-        android:id="@+id/btnPrevious"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="100dp"
-        android:backgroundTint="@color/white"
-        android:text="NEXT"
-        android:textSize="13sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/EndTime" />
+        tools:layout_editor_absoluteY="390dp" />
 
     <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="180dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="445dp"
-        android:rotation="180"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/blackvines" />
+            android:id="@+id/imageView5"
+            android:layout_width="180dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="445dp"
+            android:rotation="180"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/blackvines" />
 
-    <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="180dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="445dp"
-        android:rotation="180"
-        android:scaleX="-1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/blackvines" />
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="180dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="445dp"
+            android:rotation="180"
+            android:scaleX="-1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/blackvines" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

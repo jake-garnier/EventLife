@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 
@@ -28,15 +26,15 @@ public class CreateEventActivity extends AppCompatActivity {
         //
         // create instance variable from front-end objects
         //
-        Name = (EditText) findViewById(R.id.Description);
-        Location = (EditText) findViewById(R.id.Location);
-        Date = (EditText) findViewById(R.id.Date);
-        StartTime = (EditText) findViewById(R.id.StartTime);
-        EndTime = (EditText) findViewById(R.id.EndTime);
+        Name = (EditText) findViewById(R.id.createEventTvName);
+        Location = (EditText) findViewById(R.id.createEventTvLocation);
+        Date = (EditText) findViewById(R.id.createEventTvDate);
+        StartTime = (EditText) findViewById(R.id.createEventTvStartTime);
+        EndTime = (EditText) findViewById(R.id.createEventTvEndTime);
 //        Tag = (EditText) findViewById(R.id.Tag);
         Next = (Button) findViewById(R.id.btnPrevious);
         Cancel = (Button) findViewById(R.id.btnCancel);
-        Description =(EditText) findViewById(R.id.Description2);
+        Description =(EditText) findViewById(R.id.createEventTvDescription);
 
 
 
