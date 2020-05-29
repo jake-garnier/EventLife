@@ -103,7 +103,7 @@ public class FindFriendsFrag extends Fragment {
         mRecyclerView = view.findViewById(R.id.recyclerViewFindFriends);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this.getContext());
-        mAdapter = new ExampleAdapter(this.getContext(), exampleList, "nobutton");
+        mAdapter = new ExampleAdapter(this.getContext(), exampleList, "follow");
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
