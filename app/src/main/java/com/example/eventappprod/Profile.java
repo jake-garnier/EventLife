@@ -3,6 +3,7 @@ package com.example.eventappprod;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -30,6 +31,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 public class Profile extends AppCompatActivity {
 
@@ -46,6 +48,8 @@ public class Profile extends AppCompatActivity {
     private ImageView profilePic;
     private ImageView backgroundPic;
     private TextView profileName;
+    private TextView profileUsername;
+    private String userID;
     private int update = 0;
     User currUser;
 
@@ -77,14 +81,21 @@ public class Profile extends AppCompatActivity {
 
         //release the user info
         Intent ib = getIntent();
-        currUser = (User) ib.getSerializableExtra("currUser");
+        currUser = (User) ib.getSerializableExtra("currUserPro");
 
         //user's profile
         profilePic = (ImageView) findViewById(R.id.profilePicture);
         backgroundPic = (ImageView) findViewById(R.id.background);
         profileName = (TextView) findViewById(R.id.profileName);
-        //profileName.setText(currUser.getName());
+        profileName.setText(currUser.getName());
+        profileUsername = (TextView) findViewById(R.id.profileUser);
+        userID = currUser.getEmail().substring(0, currUser.getEmail().indexOf("@"));
+        profileUsername.setText(userID);
 
+        //mainImageView.setImageURI(Uri.parse(image));
+        //Picasso.get().load(currUser.getProfileImage()).into(profilePic);
+        Picasso.get().load(currUser.getBackgroundImage()).into(backgroundPic);
+        //create reference to the user
         ref = FirebaseDatabase.getInstance().getReference("/USER");
 
         //Button Stuff
@@ -93,6 +104,7 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 openFilechooser(0);
+                currUser.setBackgroundImage(RealTimeImagePath);
             }
         });
 
@@ -102,6 +114,7 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 openFilechooser(1);
+                currUser.setProfileImage(RealTimeImagePath);
             }
         });
 
@@ -219,8 +232,8 @@ public class Profile extends AppCompatActivity {
             String filename = url.substring(url.lastIndexOf("/")+1);
 
             imagePath = FirebaseStorage.getInstance().getReference().child("/EVENT").child(filename);
-            //  put the picture to put in Image box
 
+            //  put the picture to put in Image box
             imagePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 // if upload success, print message
                 @Override
@@ -232,6 +245,14 @@ public class Profile extends AppCompatActivity {
                         @Override
                         public void onSuccess(Uri uri) {
                             RealTimeImagePath = uri.toString();
+                            //save url into ref
+                            if(update == 0) {
+                                ref.child(userID).child("profileImage").setValue(RealTimeImagePath);
+                            }
+                            else {
+                                ref.child(userID).child("backgroundImage").setValue(RealTimeImagePath);
+                            }
+
                         }
                     });
 

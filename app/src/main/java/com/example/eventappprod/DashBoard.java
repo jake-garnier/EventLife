@@ -168,8 +168,11 @@ public class DashBoard<user> extends AppCompatActivity {
                     case R.id.dashboard:
                         return true;
                     case R.id.profile:
-                        startActivity(new Intent(getApplicationContext()
-                                , Profile.class));
+
+                        Intent intent = new Intent(getApplicationContext(), Profile.class);
+                        intent.putExtra("currUserPro", currUser);
+
+                        startActivity(intent);
                         overridePendingTransition(0, 0);
                         return true;
                     case R.id.search:

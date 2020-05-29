@@ -108,8 +108,6 @@ public class Login extends AppCompatActivity {
                                         User user = dataSnapshot.child(userID).getValue(User.class);
                                         Intent intent = new Intent(Login.this, DashBoard.class);
                                         intent.putExtra("currUser", user);
-                                        Toast.makeText(Login.this, "This is printed cuz it works", Toast.LENGTH_LONG).show();
-                                        //startActivity(intent)
                                         startActivity(intent);
                                     }
 

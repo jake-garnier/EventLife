@@ -115,7 +115,7 @@ public class Register extends AppCompatActivity {
                                         Toast.makeText(Register.this, "Verification Email Has been Sent.", Toast.LENGTH_SHORT).show();
                                         mEmail.setText("");
                                         mPassword.setText("");
-                                        u  = new User(fullName, email, password, "", "","", "", "", "", "", "");
+                                        u  = new User(fullName, email, password, "", "", "","", "", "", "", "", "");
                                         usercount++;
                                         String userRef = Integer.toString(usercount);
                                         //String userID = fullName + "/" + email.substring(0, email.indexOf("@"));

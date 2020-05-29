@@ -10,7 +10,8 @@ public class User implements Serializable{
     private String Biointro;
 
     // optinal field, user will go to profile to edit
-    private String Image;
+    private String ProfileImage;
+    private String BackgroundImage;
     private String College;
     private String Group;
 
@@ -26,13 +27,14 @@ public class User implements Serializable{
 
 
     public User(String aname, String aemail, String apass, String abio,
-                String aima, String acol, String agroup,
+                String aima, String back, String acol, String agroup,
                 String arsvp, String acreated, String anotified, String afriendlist) {
         Name = aname;
         Email = aemail;
         Password = apass;
         Biointro = abio;
-        Image = aima;
+        ProfileImage = aima;
+        BackgroundImage = back;
         College  = acol;
         Group = agroup;
         RSVPEvents = arsvp;
@@ -62,8 +64,11 @@ public class User implements Serializable{
     public String getBiointro(){ return Biointro; }
     public void setBiointro(String bio){ Biointro = bio; }
 
-    public String getImage(){ return Image; }
-    public void setImage(String i){ Image = i; }
+    public String getProfileImage(){ return ProfileImage; }
+    public void setProfileImage(String i){ ProfileImage = i; }
+
+    public String getBackgroundImage(){ return BackgroundImage; }
+    public void setBackgroundImage(String i){ BackgroundImage = i; }
 
     public String getCollege(){ return College; }
     public void setCollege(String col){ College =col; }
