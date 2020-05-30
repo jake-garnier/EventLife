@@ -10,6 +10,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.DashPathEffect;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Menu;
@@ -64,6 +65,7 @@ public class FriendsListActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     User currUser;
     int added = 0;
+    String friend_list;
 
     //todo: delete later
     User testUser;
@@ -80,6 +82,7 @@ public class FriendsListActivity extends AppCompatActivity {
         //release the user info
         Intent ib = getIntent();
         currUser = (User) ib.getSerializableExtra("currUserFriendList");
+        friend_list = currUser.getFriendList();
         ref = FirebaseDatabase.getInstance().getReference("/USER");
         userID = currUser.getEmail().substring(0, currUser.getEmail().indexOf("@"));
         userList = new ArrayList<User>();
@@ -97,7 +100,10 @@ public class FriendsListActivity extends AppCompatActivity {
                 Toast.makeText(FriendsListActivity.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
             }
         });
-
+        if(userList.contains(currUser))
+        {
+            Toast.makeText(FriendsListActivity.this, "Debug", Toast.LENGTH_SHORT).show();
+        }
 
         //set the add button to the image button(code from the link above)
         mButtonAdd = (ImageButton) findViewById(R.id.addFriendBtn);
