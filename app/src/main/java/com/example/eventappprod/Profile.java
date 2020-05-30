@@ -62,6 +62,17 @@ public class Profile extends AppCompatActivity {
     FirebaseStorage  storage;
     private DatabaseReference ref;
 
+
+    //all the intents
+    Intent friendIntent = getIntent();
+
+
+
+
+
+
+
+
     //make phone select an image from their gallery
     public void openFilechooser(int i){
         // create an intent so user can jump to his phone's folder to select photo
@@ -79,9 +90,20 @@ public class Profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        //release the user info
+
+
+                //release the user info
         Intent ib = getIntent();
-        currUser = (User) ib.getSerializableExtra("currUserPro");
+        currUser = (User) ib.getSerializableExtra("DashProfile");
+        //friendlist to profile
+        //friendlisttoprofile
+        //friendIntent = (User).
+
+
+
+
+
+
 
         //user's profile
         profilePic = (ImageView) findViewById(R.id.profilePicture);
@@ -124,7 +146,7 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), FriendsListActivity.class);
-                intent.putExtra("currUserFriendList", currUser);
+                intent.putExtra("ProfileFriend", currUser);
 
                 startActivity(intent);
 

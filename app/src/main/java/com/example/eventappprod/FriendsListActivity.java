@@ -65,8 +65,7 @@ public class FriendsListActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     User currUser;
     int added = 0;
-    String friend_list;
-
+    private String[] array;
     //todo: delete later
     User testUser;
 
@@ -81,8 +80,7 @@ public class FriendsListActivity extends AppCompatActivity {
 
         //release the user info
         Intent ib = getIntent();
-        currUser = (User) ib.getSerializableExtra("currUserFriendList");
-        friend_list = currUser.getFriendList();
+        currUser = (User) ib.getSerializableExtra("ProfileFriend");
         ref = FirebaseDatabase.getInstance().getReference("/USER");
         userID = currUser.getEmail().substring(0, currUser.getEmail().indexOf("@"));
         userList = new ArrayList<User>();
@@ -92,6 +90,13 @@ public class FriendsListActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     userList.add(ds.getValue(User.class));
+                }
+                for (int i = 0; i < userList.size();i++)
+                {
+                    if(userList.get(i).getUserId().equals(currUser.getUserId()))
+                    {
+                        currUser = userList.get(i);
+                    }
                 }
             }
 
@@ -107,10 +112,21 @@ public class FriendsListActivity extends AppCompatActivity {
 
         //set the add button to the image button(code from the link above)
         mButtonAdd = (ImageButton) findViewById(R.id.addFriendBtn);
+        friendList = new ArrayList<ExampleItem>();
+        array = currUser.getFriendList().split(",");
+
+        User user = new User();
+        for (int i = 0; i < array.length;i++)
+        {
+           // user = userList
+            friendList.add(new ExampleItem(images[1], friendNames[1], friendBios[1], ""));
+
+        }
+        //friendList.add(new ExampleItem(images[1], friendNames[1], friendBios[1], ""));
 
 
         //Thus, somehow inject database information into these arrays?
-        friendNames = getResources().getStringArray(R.array.friendNames_feed);
+        /*friendNames = getResources().getStringArray(R.array.friendNames_feed);
         friendBios = getResources().getStringArray(R.array.friendBios_feed);
         friendList = new ArrayList<>();
         for (int i = 0; i < friendNames.length; i++) {
@@ -119,7 +135,7 @@ public class FriendsListActivity extends AppCompatActivity {
 
             friendList.add(new ExampleItem(images[i], friendNames[i], friendBios[i], ""));
 
-        }
+        }*/
 
         mContext = getApplicationContext();
         mRecyclerView = findViewById(R.id.friendListRecycler);
@@ -157,18 +173,23 @@ public class FriendsListActivity extends AppCompatActivity {
                                 currUser.addFriend(friendAdd);
                                 ref.child(userID).child("friendList").setValue(currUser.getFriendList());
                                 //create the ExampleItem and insert that into the friendsList
-                                friendList.add(0, new ExampleItem(images[0], friendAdd, friendBios[0], userList.get(i).getProfileImage()));
+                                friendList.add(0, new ExampleItem(0, friendAdd, userList.get(i).getUserId(), userList.get(i).getProfileImage()));
                                 //create a new row for that friend
                                 mAdapter.notifyItemInserted(0);
                                 mRecyclerView.scrollToPosition(0);
-                                added++;
-                                break;
+                                added = 1;
+                                //break;
                             }
                         }
 
                         if (added == 1) {
                             Toast.makeText(mContext, "Added : " + friendAdd, Toast.LENGTH_SHORT).show();
                             added = 0;
+                           /* Intent intent = new Intent(getApplicationContext(), FriendsListActivity.class);
+                            intent.putExtra("FriendProfile", currUser);
+
+                            startActivity(intent);*/
+
                         } else {
                             Toast.makeText(mContext, friendAdd + " : Does not exist", Toast.LENGTH_SHORT).show();
                         }

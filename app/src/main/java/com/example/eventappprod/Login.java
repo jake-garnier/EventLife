@@ -107,7 +107,7 @@ public class Login extends AppCompatActivity {
                                         String userID = email.substring(0, email.indexOf("@"));//+"@ucsd,edu";
                                         User user = dataSnapshot.child(userID).getValue(User.class);
                                         Intent intent = new Intent(Login.this, DashBoard.class);
-                                        intent.putExtra("currUser", user);
+                                        intent.putExtra("LoginDash", user);
                                         startActivity(intent);
                                     }
 

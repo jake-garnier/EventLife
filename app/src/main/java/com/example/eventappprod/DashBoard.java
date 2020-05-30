@@ -80,8 +80,12 @@ public class DashBoard<user> extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     FirebaseDatabase database;
     DatabaseReference ref;
+    DatabaseReference userref;
+
     ArrayList<Event> evenList;
     User currUser;
+    private ArrayList<User> userList;
+
 
     FirebaseUser currentuser = FirebaseAuth.getInstance().getCurrentUser();
     String email = currentuser.getEmail();
@@ -92,7 +96,33 @@ public class DashBoard<user> extends AppCompatActivity {
         setContentView(R.layout.activity_dash_board);
 
         Intent ib = getIntent();
-        currUser = (User) ib.getSerializableExtra("currUser");
+        currUser = (User) ib.getSerializableExtra("LoginDash");
+        userList = new ArrayList<User>();
+        userref = FirebaseDatabase.getInstance().getReference("/USER");
+
+
+
+        //Getting the updated user
+        userref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    userList.add(ds.getValue(User.class));
+                }
+                for (int i = 0; i < userList.size();i++)
+                {
+                    if(userList.get(i).getUserId().equals(currUser.getUserId()))
+                    {
+                        currUser = userList.get(i);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(DashBoard.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
 
@@ -172,7 +202,7 @@ public class DashBoard<user> extends AppCompatActivity {
                     case R.id.profile:
 
                         Intent intent = new Intent(getApplicationContext(), Profile.class);
-                        intent.putExtra("currUserPro", currUser);
+                        intent.putExtra("DashProfile", currUser);
 
                         startActivity(intent);
                         overridePendingTransition(0, 0);
