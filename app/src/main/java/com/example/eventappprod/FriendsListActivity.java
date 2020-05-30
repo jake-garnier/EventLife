@@ -59,6 +59,7 @@ public class FriendsListActivity extends AppCompatActivity {
     //private FriendsList
     private ArrayList<ExampleItem> friendList;
     private ArrayList<User> userList;
+    ArrayList<ExampleItem> exampleList;
 
 
     //Recycler View Needed for Event Feed
@@ -79,6 +80,8 @@ public class FriendsListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_friends_list);
 
         testUser = new User();
+        //create list to make the cards
+        exampleList = new ArrayList<>();
 
         //release the user info
         Intent ib = getIntent();
@@ -118,8 +121,7 @@ public class FriendsListActivity extends AppCompatActivity {
 
         //set the add button to the image button(code from the link above)
         mButtonAdd = findViewById(R.id.addFriendBtn);
-        friendList = new ArrayList<ExampleItem>();
-        array = currUser.getFriendList().split(",");
+       // friendList = new ArrayList<ExampleItem>();
 
 /*
         User user = new User();
@@ -157,7 +159,7 @@ public class FriendsListActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.friendListRecycler);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new ExampleAdapter(this, friendList, "friend");
+        mAdapter = new ExampleAdapter(this, exampleList, "friend");
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -189,7 +191,7 @@ public class FriendsListActivity extends AppCompatActivity {
                                 currUser.addFriend(friendAdd);
                                 ref.child(userID).child("friendList").setValue(currUser.getFriendList());
                                 //create the ExampleItem and insert that into the friendsList
-                                friendList.add(0, new ExampleItem(0, friendAdd, userList.get(i).getUserId(), userList.get(i).getProfileImage()));
+                                friendList.add(0, new ExampleItem(0, userList.get(i).getName(), userList.get(i).getUserId(), userList.get(i).getProfileImage()));
                                 //create a new row for that friend
                                 mAdapter.notifyItemInserted(0);
                                 mRecyclerView.scrollToPosition(0);
@@ -272,10 +274,16 @@ public class FriendsListActivity extends AppCompatActivity {
         LoadDatatoFriendsList();
     }
     public void LoadDatatoFriendsList(){
-        ArrayList<ExampleItem> exampleList = new ArrayList<>();
-
-        for (int i = 0; i < userList.size(); i++) {
-            exampleList.add(new ExampleItem(0, userName[i], userIDArr[i], profileImages[i]));
+        array = currUser.getFriendList().split(",");
+        User user = new User();
+        //ArrayList<ExampleItem> exampleList = new ArrayList<>();
+        for(int i = 0; i < array.length; i++ ) {
+            for(int j = 0; j < userList.size(); j++) {
+                if(userList.get(j).getUserId().equals(array[i])){
+                    user = userList.get(j);
+                    exampleList.add(0, new ExampleItem(0, user.getName(), user.getUserId(), user.getProfileImage()));
+                }
+            }
         }
 
         mRecyclerView = findViewById(R.id.friendListRecycler);
