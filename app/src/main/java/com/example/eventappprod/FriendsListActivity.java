@@ -66,7 +66,8 @@ public class FriendsListActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private ExampleAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    User currUser;
+    User currUser  = User.getInstance();
+
     int added = 0;
     private String[] array;
     //todo: delete later

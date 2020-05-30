@@ -105,9 +105,15 @@ public class Login extends AppCompatActivity {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         String userID = email.substring(0, email.indexOf("@"));//+"@ucsd,edu";
-                                        User user = dataSnapshot.child(userID).getValue(User.class);
+
+
                                         Intent intent = new Intent(Login.this, DashBoard.class);
-                                        intent.putExtra("LoginDash", user);
+
+                                        User user = dataSnapshot.child(userID).getValue(User.class);
+                                        User globalcurrentUser = User.getInstance();
+                                        globalcurrentUser.copy(user);
+
+                                       //intent.putExtra("LoginDash", user);
                                         startActivity(intent);
                                     }
 

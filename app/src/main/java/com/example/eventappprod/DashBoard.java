@@ -83,9 +83,8 @@ public class DashBoard<user> extends AppCompatActivity {
     DatabaseReference userref;
 
     ArrayList<Event> evenList;
-    User currUser;
+    User currUser  = User.getInstance();
     private ArrayList<User> userList;
-
 
     FirebaseUser currentuser = FirebaseAuth.getInstance().getCurrentUser();
     String email = currentuser.getEmail();
@@ -95,12 +94,12 @@ public class DashBoard<user> extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
 
-        Intent ib = getIntent();
-        currUser = (User) ib.getSerializableExtra("LoginDash");
+        //Use the  User.getInstance() get the current user don't use the Intent
+        //Intent ib = getIntent();
+        //currUser = (User) ib.getSerializableExtra("LoginDash");
+
         userList = new ArrayList<User>();
         userref = FirebaseDatabase.getInstance().getReference("/USER");
-
-
 
         //Getting the updated user
         userref.addValueEventListener(new ValueEventListener() {
@@ -202,7 +201,8 @@ public class DashBoard<user> extends AppCompatActivity {
                     case R.id.profile:
 
                         Intent intent = new Intent(getApplicationContext(), Profile.class);
-                        intent.putExtra("DashProfile", currUser);
+                        //intent.putExtra("DashProfile", currUser);
+
 
                         startActivity(intent);
                         overridePendingTransition(0, 0);

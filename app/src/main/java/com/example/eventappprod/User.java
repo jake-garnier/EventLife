@@ -4,6 +4,8 @@ import java.io.Serializable;
 public class User implements Serializable{
     // mandatory fields for an user created
 
+    private static User instance;
+
     private String Name;
     private String Email;
     private String Password;
@@ -58,6 +60,32 @@ public class User implements Serializable{
         friendList  = afriendlist;
         //numberofFriend =0;
     }
+
+    public static synchronized User getInstance(){
+        if(instance==null){
+            instance=new User();
+        }
+        return instance;
+    }
+
+    public User copy(User another){
+        Name = another.Name;
+        Email = another.Email;
+        UserId = another.UserId;
+        Password = another.Password;
+        Biointro = another.Biointro;
+        ProfileImage = another.ProfileImage;
+        BackgroundImage = another.BackgroundImage;
+        College  = another.College;
+        Group = another.Group;
+        RSVPEvents = another. RSVPEvents;
+        CreatedEvents = another.CreatedEvents;
+        NotifiedEvent = another.NotifiedEvent;
+        friendList  = another.friendList ;
+        return instance;
+    }
+
+
 
     public String getName(){
         return Name;

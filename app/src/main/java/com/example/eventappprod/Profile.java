@@ -51,7 +51,7 @@ public class Profile extends AppCompatActivity {
     private TextView profileUsername;
     private String userID;
     private int update = 0;
-    User currUser;
+    User currUser  = User.getInstance();
 
     // authorization
     private FirebaseAuth firebaseAuth;
@@ -93,8 +93,8 @@ public class Profile extends AppCompatActivity {
 
 
                 //release the user info
-        Intent ib = getIntent();
-        currUser = (User) ib.getSerializableExtra("DashProfile");
+        //Intent ib = getIntent();
+        //currUser = (User) ib.getSerializableExtra("DashProfile");
         //friendlist to profile
         //friendlisttoprofile
         //friendIntent = (User).
@@ -104,13 +104,12 @@ public class Profile extends AppCompatActivity {
 
 
 
-
         //user's profile
-        profilePic = (ImageView) findViewById(R.id.profilePicture);
-        backgroundPic = (ImageView) findViewById(R.id.background);
-        profileName = (TextView) findViewById(R.id.profileName);
+        profilePic = findViewById(R.id.profilePicture);
+        backgroundPic = findViewById(R.id.background);
+        profileName = findViewById(R.id.profileName);
         profileName.setText(currUser.getName());
-        profileUsername = (TextView) findViewById(R.id.profileUser);
+        profileUsername = findViewById(R.id.profileUser);
         userID = currUser.getEmail().substring(0, currUser.getEmail().indexOf("@"));
         profileUsername.setText(userID);
 
@@ -121,7 +120,7 @@ public class Profile extends AppCompatActivity {
         ref = FirebaseDatabase.getInstance().getReference("/USER");
 
         //Button Stuff
-        updatePicButton = (ImageButton) findViewById(R.id.updatePicBtn);
+        updatePicButton = findViewById(R.id.updatePicBtn);
         updatePicButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -131,7 +130,7 @@ public class Profile extends AppCompatActivity {
         });
 
         //Backgroundupdate
-        updateBackgroundButton = (ImageButton) findViewById(R.id.updateBackground);
+        updateBackgroundButton = findViewById(R.id.updateBackground);
         updateBackgroundButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -141,7 +140,7 @@ public class Profile extends AppCompatActivity {
         });
 
 
-        friendsListButton = (Button) findViewById(R.id.viewFriendsButton);
+        friendsListButton = findViewById(R.id.viewFriendsButton);
         friendsListButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -156,7 +155,7 @@ public class Profile extends AppCompatActivity {
 
         });
 
-        prevEventButton = (Button) findViewById(R.id.viewHistoryButton);
+        prevEventButton = findViewById(R.id.viewHistoryButton);
         prevEventButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -167,7 +166,7 @@ public class Profile extends AppCompatActivity {
 
         });
 
-        archivedEventButton = (Button) findViewById(R.id.viewArchiveButton);
+        archivedEventButton = findViewById(R.id.viewArchiveButton);
         archivedEventButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -179,7 +178,7 @@ public class Profile extends AppCompatActivity {
         });
 
         firebaseAuth = FirebaseAuth.getInstance();
-        LogoutButton = (Button) findViewById(R.id.btnLogout);
+        LogoutButton = findViewById(R.id.btnLogout);
         LogoutButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
