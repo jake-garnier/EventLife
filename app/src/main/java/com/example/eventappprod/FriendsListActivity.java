@@ -85,8 +85,9 @@ public class FriendsListActivity extends AppCompatActivity {
         exampleList = new ArrayList<>();
 
         //release the user info
-        Intent ib = getIntent();
-        currUser = (User) ib.getSerializableExtra("ProfileFriend");
+        //Intent ib = getIntent();
+        //currUser = (User) ib.getSerializableExtra("ProfileFriend");
+
         ref = FirebaseDatabase.getInstance().getReference("/USER");
         userID = currUser.getEmail().substring(0, currUser.getEmail().indexOf("@"));
 
@@ -98,10 +99,10 @@ public class FriendsListActivity extends AppCompatActivity {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     userList.add(ds.getValue(User.class));
                 }
-                if (userList.size()!=0) retrieveData();
+
                 for (int i = 0; i < userList.size();i++)
                 {
-                    if(userList.get(i).getUserId().equals(userID));
+                    if(userList.get(i).getUserId().equals(userID))
                     {
                        currUser = userList.get(i);
                     }
@@ -181,7 +182,7 @@ public class FriendsListActivity extends AppCompatActivity {
 
 
                 // Set up the buttons
-                builder.setPositiveButton("ZOOM", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(R.string.project_id, new DialogInterface.OnClickListener() {
                     //todo: this happens in the other person's friends list with a notification heh
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -192,7 +193,7 @@ public class FriendsListActivity extends AppCompatActivity {
                                 currUser.addFriend(friendAdd);
                                 ref.child(userID).child("friendList").setValue(currUser.getFriendList());
                                 //create the ExampleItem and insert that into the friendsList
-                                friendList.add(0, new ExampleItem(0, userList.get(i).getName(), userList.get(i).getUserId(), userList.get(i).getProfileImage()));
+                                exampleList.add(0, new ExampleItem(0, userList.get(i).getName(), userList.get(i).getUserId(), userList.get(i).getProfileImage()));
                                 //create a new row for that friend
                                 mAdapter.notifyItemInserted(0);
                                 mRecyclerView.scrollToPosition(0);
@@ -204,11 +205,6 @@ public class FriendsListActivity extends AppCompatActivity {
                         if (added == 1) {
                             Toast.makeText(mContext, "Added : " + friendAdd, Toast.LENGTH_SHORT).show();
                             added = 0;
-                           /* Intent intent = new Intent(getApplicationContext(), FriendsListActivity.class);
-                            intent.putExtra("FriendProfile", currUser);
-
-                            startActivity(intent);*/
-
                         } else {
                             Toast.makeText(mContext, friendAdd + " : Does not exist", Toast.LENGTH_SHORT).show();
                         }
