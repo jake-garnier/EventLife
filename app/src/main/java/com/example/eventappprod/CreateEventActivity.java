@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TimePicker;
@@ -34,12 +36,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 
 public class CreateEventActivity extends AppCompatActivity {
-    EditText Name, Location, StartTime, EndTime, Date, Description;
+    EditText mName, mLocation, mStartTime, mEndTime, mDate, mDescription;
     Button Create;
-    String RealTimeImagePath;
+    String RealTimeImagePath = "";
 
     ImageButton chooseImage;
     Event event;
@@ -57,13 +60,13 @@ public class CreateEventActivity extends AppCompatActivity {
         // create instance variable from front-end objects
         //
         chooseImage = (ImageButton) findViewById(R.id.btnImage);
-        Name = (EditText) findViewById(R.id.createEventTvName);
-        Location = (EditText) findViewById(R.id.createEventTvLocation);
-        Date = (EditText) findViewById(R.id.createEventTvDate);
-        StartTime = (EditText) findViewById(R.id.createEventTvStartTime);
-        EndTime = (EditText) findViewById(R.id.createEventTvEndTime);
+        mName = (EditText) findViewById(R.id.createEventTvName);
+        mLocation = (EditText) findViewById(R.id.createEventTvLocation);
+        mDate = (EditText) findViewById(R.id.createEventTvDate);
+        mStartTime = (EditText) findViewById(R.id.createEventTvStartTime);
+        mEndTime = (EditText) findViewById(R.id.createEventTvEndTime);
         Create = (Button) findViewById(R.id.btnCreateEvent);
-        Description =(EditText) findViewById(R.id.createEventTvDescription);
+        mDescription =(EditText) findViewById(R.id.createEventTvDescription);
 
         ref =FirebaseDatabase.getInstance().getReference("/EVENT");
 
@@ -102,7 +105,7 @@ public class CreateEventActivity extends AppCompatActivity {
 //            }
 //        });
 
-        StartTime.setOnClickListener(new View.OnClickListener() {
+        mStartTime.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -132,7 +135,7 @@ public class CreateEventActivity extends AppCompatActivity {
                         if(date.substring(0,1).equals("0"))
                             date = date.substring(1);
 
-                        StartTime.setText(date);
+                        mStartTime.setText(date);
                     }
                 }, hour, minute, false);
                 mTimePicker.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -142,7 +145,7 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         });
 
-        EndTime.setOnClickListener(new View.OnClickListener() {
+        mEndTime.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -172,7 +175,7 @@ public class CreateEventActivity extends AppCompatActivity {
                         if(date.substring(0,1).equals("0"))
                             date = date.substring(1);
 
-                        EndTime.setText(date);
+                        mEndTime.setText(date);
                     }
                 }, hour, minute, false);
                 mTimePicker.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -181,6 +184,38 @@ public class CreateEventActivity extends AppCompatActivity {
 
             }
         });
+
+        mDate.setOnClickListener(new View.OnClickListener() {
+            Calendar myCalendar = Calendar.getInstance();
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                new DatePickerDialog(CreateEventActivity.this, android.R.style.Theme_Holo_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                          int dayOfMonth) {
+                        // TODO Auto-generated method stub
+                        myCalendar.set(Calendar.YEAR, year);
+                        myCalendar.set(Calendar.MONTH, monthOfYear);
+                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        String myFormat = "MM/dd/yy"; //In which you need put here
+                        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+                        mDate.setText(sdf.format(myCalendar.getTime()));
+                    }
+
+                }, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)) {
+                    @Override
+                    public void onCreate(Bundle savedInstanceState) {
+                        super.onCreate(savedInstanceState);
+                        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    }
+                }.show();
+            }
+        });
+
 
         chooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,7 +227,46 @@ public class CreateEventActivity extends AppCompatActivity {
         Create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!RealTimeImagePath.isEmpty())
+
+                String name = mName.getText().toString().trim();
+                String description = mDescription.getText().toString().trim();
+                String startTime = mStartTime.getText().toString().trim();
+                String endTime = mEndTime.getText().toString().trim();
+                String location = mLocation.getText().toString().trim();
+                String date = mDate.getText().toString().trim();
+                Boolean create = true;
+
+                if (TextUtils.isEmpty(name)) {
+                    mName.setError("Name is Required.");
+                    create = false;
+                }
+
+                if (TextUtils.isEmpty(description)) {
+                    mDescription.setError("Description is Required.");
+                    create = false;
+                }
+
+                if (TextUtils.isEmpty(startTime)) {
+                    mStartTime.setError("Start Time is Required.");
+                    create = false;
+                }
+
+                if (TextUtils.isEmpty(endTime)) {
+                    mEndTime.setError("End Time is Required.");
+                    create = false;
+                }
+
+                if (TextUtils.isEmpty(location)) {
+                    mLocation.setError("Location is Required.");
+                    create = false;
+                }
+
+                if (TextUtils.isEmpty(date)) {
+                    mDate.setError("Date is Required.");
+                    create = false;
+                }
+
+                if(!RealTimeImagePath.isEmpty() && create)
                 {
                     Toast.makeText(CreateEventActivity.this, "Debug adding purpose", Toast.LENGTH_LONG).show();
                     addEvent();

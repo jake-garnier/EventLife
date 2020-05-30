@@ -40,6 +40,7 @@
         android:layout_marginStart="10dp"
         android:ems="10"
         android:hint="ex: CSE Study Jam!"
+        android:maxLength="25"
         android:inputType="textPersonName"
         android:textSize="17sp"
         app:layout_constraintStart_toEndOf="@+id/btnImage"
@@ -65,6 +66,7 @@
         android:ems="10"
         android:hint="ex: 9500 Gilman Dr"
         android:inputType="textPostalAddress"
+        android:maxLength="20"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createEventLocation" />
@@ -76,7 +78,8 @@
         android:layout_marginStart="20dp"
         android:ems="10"
         android:hint="mm/dd/yy"
-        android:inputType="date"
+        android:inputType="none"
+        android:focusable="false"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createEventDate" />
@@ -163,6 +166,7 @@
         android:layout_marginTop="1dp"
         android:ellipsize="end"
         android:ems="10"
+        android:maxLength="115"
         android:hint="10-150 characters describing the event"
         android:inputType="textMultiLine"
         android:maxLines="5"
