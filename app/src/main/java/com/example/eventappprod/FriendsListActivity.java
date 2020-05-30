@@ -50,9 +50,11 @@ public class FriendsListActivity extends AppCompatActivity {
     //https://www.youtube.com/watch?v=Nw9JF55LDzE
     //https://www.youtube.com/watch?v=18VcnYN5_LM
     //Event Feed String Arrays
-    String[] friendNames;
-    String[] friendBios;
-    int[] images = {R.drawable.friend2, R.drawable.friend2, R.drawable.friend4, R.drawable.friend4, R.drawable.friend5, R.drawable.friend6, R.drawable.friend6, R.drawable.samoyed, R.drawable.khosla};
+    String[] profileImages = new String[20];
+    String[] friendsList = new String[20];
+    String[] userName = new String[20];
+    String[] userIDArr = new String[20];
+    //int[] images = {R.drawable.friend2, R.drawable.friend2, R.drawable.friend4, R.drawable.friend4, R.drawable.friend5, R.drawable.friend6, R.drawable.friend6, R.drawable.samoyed, R.drawable.khosla};
 
     //private FriendsList
     private ArrayList<ExampleItem> friendList;
@@ -92,6 +94,7 @@ public class FriendsListActivity extends AppCompatActivity {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     userList.add(ds.getValue(User.class));
                 }
+                if (userList.size()!=0) retrieveData();
                 for (int i = 0; i < userList.size();i++)
                 {
                     if(userList.get(i).getUserId().equals(userID));
@@ -99,7 +102,9 @@ public class FriendsListActivity extends AppCompatActivity {
                         currUser = userList.get(i);
                     }
                 }
+                if (userList.size()!=0) retrieveData();
             }
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -116,7 +121,7 @@ public class FriendsListActivity extends AppCompatActivity {
         friendList = new ArrayList<ExampleItem>();
         array = currUser.getFriendList().split(",");
 
-
+/*
         User user = new User();
         for (int i = 0; i < array.length;i++)
         {
@@ -131,6 +136,8 @@ public class FriendsListActivity extends AppCompatActivity {
 
 
         }
+        */
+
         //friendList.add(new ExampleItem(images[1], friendNames[1], friendBios[1], ""));
 
 
@@ -245,5 +252,37 @@ public class FriendsListActivity extends AppCompatActivity {
             }
         });
         return true;
+    }
+
+    public void retrieveData(){
+
+        // fetching data to particular array
+
+        for (int i=0; i<userList.size();i++) {
+            userName[i] = userList.get(i).getName();
+            userIDArr[i] = userList.get(i).getUserId();
+            friendsList[i] = userList.get(i).getFriendList();
+            profileImages[i] = userList.get(i).getProfileImage();
+            // you can get other info like date and time as well
+            //Bitmap my_image;
+            //Picasso.get().load(evenList.get(i).getImage()).into(my_image);
+
+        }
+
+        LoadDatatoFriendsList();
+    }
+    public void LoadDatatoFriendsList(){
+        ArrayList<ExampleItem> exampleList = new ArrayList<>();
+
+        for (int i = 0; i < userList.size(); i++) {
+            exampleList.add(new ExampleItem(0, userName[i], userIDArr[i], profileImages[i]));
+        }
+
+        mRecyclerView = findViewById(R.id.friendListRecycler);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        mAdapter = new ExampleAdapter(this, exampleList, "friend");
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
     }
 }
