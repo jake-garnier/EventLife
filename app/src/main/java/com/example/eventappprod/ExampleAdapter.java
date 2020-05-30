@@ -107,9 +107,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
                 ExampleItem currItem = mExampleList.get(position);
 
-                //holder.mImageView.setImageURI(currItem.getImageResource());
-                //holder.mImageView.setImageResource(currItem.getImageResource());
-                if(currItem.getImg_firestore()=="")
+                if(currItem.getImg_firestore()== "")
                 {
                     holder.mImageView.setImageResource(currItem.getImageResource());
                 }else {
@@ -150,8 +148,13 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                 //todo: this part is done in the other user list
                 ExampleItem currItem = mExampleList.get(position);
 
-                //holder.mImageView.setImageURI(currItem.getImageResource());
-                holder.mImageView.setImageResource(currItem.getImageResource());
+                if(currItem.getImg_firestore()== "")
+                {
+                    holder.mImageView.setImageResource(currItem.getImageResource());
+                }else {
+                    Picasso.get().load(currItem.getImg_firestore()).into(holder.mImageView);
+                }
+
                 holder.mTextView1.setText(currItem.getText1());
                 holder.mTextView2.setText(currItem.getText2());
 
@@ -188,7 +191,13 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             } else {
                 ExampleItem currItem = mExampleList.get(position);
 
-                holder.mImageView.setImageResource(currItem.getImageResource());
+                if(currItem.getImg_firestore()== "")
+                {
+                    holder.mImageView.setImageResource(currItem.getImageResource());
+                }else {
+                    Picasso.get().load(currItem.getImg_firestore()).into(holder.mImageView);
+                }
+
                 holder.mTextView1.setText(currItem.getText1());
                 holder.mTextView2.setText(currItem.getText2());
                 //UnfollowButton used here

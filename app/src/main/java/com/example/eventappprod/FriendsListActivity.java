@@ -51,7 +51,7 @@ public class FriendsListActivity extends AppCompatActivity {
     //Event Feed String Arrays
     String[] friendNames;
     String[] friendBios;
-    int[] images ={R.drawable.friend2, R.drawable.friend2, R.drawable.friend4, R.drawable.friend4, R.drawable.friend5, R.drawable.friend6, R.drawable.friend6, R.drawable.samoyed, R.drawable.khosla};
+    int[] images = {R.drawable.friend2, R.drawable.friend2, R.drawable.friend4, R.drawable.friend4, R.drawable.friend5, R.drawable.friend6, R.drawable.friend6, R.drawable.samoyed, R.drawable.khosla};
 
     //private FriendsList
     private ArrayList<ExampleItem> friendList;
@@ -92,11 +92,11 @@ public class FriendsListActivity extends AppCompatActivity {
                 }
             }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Toast.makeText(FriendsListActivity.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
-                }
-            });
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(FriendsListActivity.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
         //set the add button to the image button(code from the link above)
@@ -111,7 +111,7 @@ public class FriendsListActivity extends AppCompatActivity {
 
             //friendList.add(new ExampleItem(images[i], friendNames[i], ""));
 
-            friendList.add(new ExampleItem(images[i], friendNames[i], friendBios[i],""));
+            friendList.add(new ExampleItem(images[i], friendNames[i], friendBios[i], ""));
 
         }
 
@@ -143,48 +143,28 @@ public class FriendsListActivity extends AppCompatActivity {
                 builder.setPositiveButton("ZOOM", new DialogInterface.OnClickListener() {
                     //todo: this happens in the other person's friends list with a notification heh
                     @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                       /* u  = new User(fullName, email, password, "", "","", "", "", "", "", "");
-                        usercount++;
-                        String userRef = Integer.toString(usercount);
-                        //String userID = fullName + "/" + email.substring(0, email.indexOf("@"));
-                        //ref.child(userRef).setValue(u);
-                        String userID = email.substring(0, email.indexOf("@"));
-
-
-                        ref.child("/USER").child(userID).setValue(u);*/
-
-                        //ref = FirebaseDatabase.getInstance().getReference("/USER/" + friendAdd);
-
-
-                        //friendAdd = input.getText().toString();
-                        //want to check if the typed in userID is in the database
-
-                        //ref.orderByChild("/USERS").equalTo(input.getText().toString())
-                        //{
-                            friendAdd = input.getText().toString();
-                            for (int i = 0; i < userList.size();i++)
-                            {
-                                if (userList.get(i).getUserId().equals(friendAdd))
-                                {
-                                    currUser.addFriend(friendAdd);
-                                    ref.child(userID).child("friendList").setValue(currUser.getFriendList());
-
-                                    friendList.add(0, new ExampleItem(images[0], friendAdd, friendBios[0],""));
-                                    //create a new row for that friend
-                                    mAdapter.notifyItemInserted(0);
-                                    mRecyclerView.scrollToPosition(0);
-                                    added++;
-                                }
+                    public void onClick(DialogInterface dialog, int which) {
+                        friendAdd = input.getText().toString();
+                        for (int i = 0; i < userList.size(); i++) {
+                            //checks if the user exists in the database or not (aka spelling errors)
+                            if (userList.get(i).getUserId().equals(friendAdd)) {
+                                currUser.addFriend(friendAdd);
+                                ref.child(userID).child("friendList").setValue(currUser.getFriendList());
+                                //create the ExampleItem and insert that into the friendsList
+                                friendList.add(0, new ExampleItem(images[0], friendAdd, friendBios[0], userList.get(i).getProfileImage()));
+                                //create a new row for that friend
+                                mAdapter.notifyItemInserted(0);
+                                mRecyclerView.scrollToPosition(0);
+                                mRecyclerView.setLayoutManager(mLayoutManager);
+                                mRecyclerView.setAdapter(mAdapter);
+                                added++;
                             }
-                        //}
-                        //ref.child("/USER").child(friendAdd);
-
-                        if(added == 1) {
-                            Toast.makeText(mContext, "Added : " + friendAdd, Toast.LENGTH_SHORT).show();
                         }
-                        else {
+
+                        if (added == 1) {
+                            Toast.makeText(mContext, "Added : " + friendAdd, Toast.LENGTH_SHORT).show();
+                            added = 0;
+                        } else {
                             Toast.makeText(mContext, friendAdd + " : Does not exist", Toast.LENGTH_SHORT).show();
                         }
                     }
