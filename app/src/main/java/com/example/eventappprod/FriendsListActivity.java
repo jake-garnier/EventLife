@@ -87,7 +87,7 @@ public class FriendsListActivity extends AppCompatActivity {
         userID = currUser.getEmail().substring(0, currUser.getEmail().indexOf("@"));
 
         //create user list and update info inside current user from database
-        userList = new ArrayList<User>();
+        userList = new ArrayList<>();
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -99,7 +99,7 @@ public class FriendsListActivity extends AppCompatActivity {
                 {
                     if(userList.get(i).getUserId().equals(userID));
                     {
-                        currUser = userList.get(i);
+                       currUser = userList.get(i);
                     }
                 }
                 if (userList.size()!=0) retrieveData();
@@ -117,7 +117,7 @@ public class FriendsListActivity extends AppCompatActivity {
         }
 
         //set the add button to the image button(code from the link above)
-        mButtonAdd = (ImageButton) findViewById(R.id.addFriendBtn);
+        mButtonAdd = findViewById(R.id.addFriendBtn);
         friendList = new ArrayList<ExampleItem>();
         array = currUser.getFriendList().split(",");
 

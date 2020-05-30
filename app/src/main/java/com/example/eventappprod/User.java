@@ -20,7 +20,7 @@ public class User implements Serializable{
     private String RSVPEvents;
     private String CreatedEvents;
     private String NotifiedEvent;
-    private String FriendList;
+    private String friendList;
 
     public User() {
         Name = "";
@@ -34,7 +34,7 @@ public class User implements Serializable{
         RSVPEvents =  "";
         CreatedEvents =  "";
         NotifiedEvent =  "";
-        FriendList  =  "";
+        friendList  =  "";
         UserId = "";
 
     }
@@ -55,7 +55,7 @@ public class User implements Serializable{
         RSVPEvents = arsvp;
         CreatedEvents = acreated;
         NotifiedEvent = anotified;
-        FriendList  = afriendlist;
+        friendList  = afriendlist;
         //numberofFriend =0;
     }
 
@@ -117,15 +117,15 @@ public class User implements Serializable{
         // Real-time Firebase database can store data under String objects only
     }
 
-    public String getFriendList(){ return FriendList; }
+    public String getFriendList(){ return friendList; }
     public void addFriend(String f){
-        FriendList = FriendList + f + ",";// use '$' to parse the friends since
+       friendList = friendList + f + ",";// use '$' to parse the friends since
         // Real-time Firebase database can store data under String objects only
         //numberofFriend++;
     }
 
     public void removeFriend(String f){
-        FriendList = FriendList.replace(f+",", "");
+       friendList = friendList.replace(f+",", "");
         // numberofFriend--;
     }
 }
