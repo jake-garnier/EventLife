@@ -158,7 +158,8 @@ public class DashBoard<user> extends AppCompatActivity {
                 for (DataSnapshot ds : dataSnapshot.getChildren()){
                     evenList.add(ds.getValue(Event.class));
                 }
-                if (evenList.size()!=0) retrieveData();
+               // if (evenList.size()!=0)
+                retrieveData();
             }
 
             @Override
@@ -245,7 +246,7 @@ public class DashBoard<user> extends AppCompatActivity {
     public void retrieveData(){
 
         // fetching data to particular array
-        
+
         for (int i=0; i<evenList.size();i++) {
             eventNames_Screenshow[i] = evenList.get(i).getName();
             eventDescriptions_Screenshow[i] = evenList.get(i).getDescription();

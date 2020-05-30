@@ -24,6 +24,8 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -50,7 +52,7 @@ public class CreateEventActivity extends AppCompatActivity {
     StorageReference imagePath;
     FirebaseStorage storage;
     private DatabaseReference ref;
-
+    FirebaseUser curruser = FirebaseAuth.getInstance().getCurrentUser();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,44 +68,10 @@ public class CreateEventActivity extends AppCompatActivity {
         mStartTime = (EditText) findViewById(R.id.createEventTvStartTime);
         mEndTime = (EditText) findViewById(R.id.createEventTvEndTime);
         Create = (Button) findViewById(R.id.btnCreateEvent);
+        Create.setEnabled(false);
         mDescription =(EditText) findViewById(R.id.createEventTvDescription);
 
-        ref =FirebaseDatabase.getInstance().getReference("/EVENT");
-
-
-        //
-        // create event button clicked
-        //
-//        Next.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                //
-//                // transfer all data from CreateEventEactivity  to CreateEventPage2
-//                //
-//                Intent intent = new Intent(CreateEventActivity.this, CreateEventPage2.class);
-//                intent.putExtra("iName", Name.getText().toString());
-//                intent.putExtra("iLocation", Location.getText().toString());
-//                intent.putExtra("iDay", Date.getText().toString());
-//                intent.putExtra("iStartTime", StartTime.getText().toString());
-//                intent.putExtra("iEndTime", EndTime.getText().toString());
-//                intent.putExtra("iDescription2",Description.getText().toString());
-//                intent.putExtra("iTag", Name.getText().toString());
-//
-//                // go to CreateEventPage2
-//                startActivity(intent);
-//            }
-//        });
-
-        //
-        // user changes his mind, click CANCEL, then go back to DashBoard page
-        //
-//        Cancel.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(getApplicationContext(), DashBoard.class));
-//            }
-//        });
+        ref =FirebaseDatabase.getInstance().getReference();
 
         mStartTime.setOnClickListener(new View.OnClickListener() {
 
@@ -282,34 +250,36 @@ public class CreateEventActivity extends AppCompatActivity {
         //
         // This block is to grab all the data from CreateEventActivity page
         //
-        Intent bn = getIntent();
-        String EventName = bn.getStringExtra("iName");
-        String Location = bn.getStringExtra("iLocation");
-        String Day = bn.getStringExtra("iDay");
-        String StartTime = bn.getStringExtra("iStartTime");
-        String EndTime = bn.getStringExtra("iEndTime");
-        String Tag = bn.getStringExtra("iTag");
-        String Des = bn.getStringExtra("iDescription2");
-
+        String EventName = mName.getText().toString();
+        String Location = mLocation.getText().toString();
+        String Day = mDate.getText().toString();
+        String StartTime = mStartTime.getText().toString();
+        String EndTime = mEndTime.getText().toString();
+        String Des = mDescription.getText().toString();
         String id = ref.push().getKey();
 
         //
         // check if all instances filled
         //
         if (!TextUtils.isEmpty(EventName) && !TextUtils.isEmpty(Day) && !TextUtils.isEmpty(Location) &&
-                !TextUtils.isEmpty(StartTime) && !TextUtils.isEmpty(EndTime) && !TextUtils.isEmpty(Tag)
-                && !TextUtils.isEmpty(Des)) {
-            // make an event object with contructor
-            //event = new Event(id, EventName, Day, Location, StartTime, EndTime, Tag, Des);
-            event = new Event(id, EventName, Day, Location, StartTime, EndTime, Tag, Des, "", "", "");
+                !TextUtils.isEmpty(StartTime) && !TextUtils.isEmpty(EndTime) && !TextUtils.isEmpty(Des)) {
+            // make an event object with designated contructor
+            event = new Event(id, EventName, Day, Location, StartTime, EndTime, EventName, Des, "", "", "");
 
 
             // store image uploaded to the event object
-            // event.setImage(imagePath.toString());
             event.setImage(RealTimeImagePath);
 
             // make an event with the event's name
-            ref.child(event.getName()).setValue(event);
+            ref.child("/EVENT").child(event.getName()).setValue(event);
+
+            // to point to an user
+            String userId = curruser.getEmail().substring(0, curruser.getEmail().indexOf("@"));
+            // creator must go to the event he created
+            ref.child("/EVENT").child(EventName).child("userGoing").setValue(userId+ ",");
+
+            // also, the event will go to the user's createdEvent list
+            ref.child("/USER").child(userId).child("createdEvents").setValue(EventName+ ",");
 
             // back to Dashboard
             startActivity(new Intent(getApplicationContext(), DashBoard.class));
