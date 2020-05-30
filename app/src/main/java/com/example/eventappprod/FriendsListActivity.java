@@ -281,7 +281,7 @@ public class FriendsListActivity extends AppCompatActivity {
             for(int j = 0; j < userList.size(); j++) {
                 if(userList.get(j).getUserId().equals(array[i])){
                     user = userList.get(j);
-                    exampleList.add(new ExampleItem(0, user.getName(), user.getUserId(), user.getProfileImage()));
+                    exampleList.add(0, new ExampleItem(0, user.getName(), user.getUserId(), user.getProfileImage()));
                 }
             }
         }

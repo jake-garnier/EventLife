@@ -119,7 +119,7 @@ public class User implements Serializable{
 
     public String getFriendList(){ return friendList; }
     public void addFriend(String f){
-       friendList = friendList + f + ",";// use '$' to parse the friends since
+       friendList = f + "," + friendList;// use '$' to parse the friends since
         // Real-time Firebase database can store data under String objects only
         //numberofFriend++;
     }
