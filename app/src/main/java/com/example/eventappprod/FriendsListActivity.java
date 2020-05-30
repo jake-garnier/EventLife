@@ -155,9 +155,8 @@ public class FriendsListActivity extends AppCompatActivity {
                                 //create a new row for that friend
                                 mAdapter.notifyItemInserted(0);
                                 mRecyclerView.scrollToPosition(0);
-                                mRecyclerView.setLayoutManager(mLayoutManager);
-                                mRecyclerView.setAdapter(mAdapter);
                                 added++;
+                                break;
                             }
                         }
 
