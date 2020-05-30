@@ -83,8 +83,9 @@ public class FriendsListActivity extends AppCompatActivity {
         currUser = (User) ib.getSerializableExtra("ProfileFriend");
         ref = FirebaseDatabase.getInstance().getReference("/USER");
         userID = currUser.getEmail().substring(0, currUser.getEmail().indexOf("@"));
-        userList = new ArrayList<User>();
 
+        //create user list and update info inside current user from database
+        userList = new ArrayList<User>();
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -93,7 +94,7 @@ public class FriendsListActivity extends AppCompatActivity {
                 }
                 for (int i = 0; i < userList.size();i++)
                 {
-                    if(userList.get(i).getUserId().equals(currUser.getUserId()))
+                    if(userList.get(i).getUserId().equals(userID));
                     {
                         currUser = userList.get(i);
                     }
@@ -115,11 +116,19 @@ public class FriendsListActivity extends AppCompatActivity {
         friendList = new ArrayList<ExampleItem>();
         array = currUser.getFriendList().split(",");
 
+
         User user = new User();
         for (int i = 0; i < array.length;i++)
         {
-           // user = userList
-            friendList.add(new ExampleItem(images[1], friendNames[1], friendBios[1], ""));
+            for (int j = 0; j < userList.size();j++)
+            {
+                if(userList.get(i).getUserId().equals(array[i]))
+                {
+                    user = userList.get(i);
+                    friendList.add(new ExampleItem(0, array[i], user.getUserId(),user.getProfileImage()));
+                }
+            }
+
 
         }
         //friendList.add(new ExampleItem(images[1], friendNames[1], friendBios[1], ""));
