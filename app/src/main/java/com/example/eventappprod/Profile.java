@@ -40,7 +40,7 @@ public class Profile extends AppCompatActivity {
     private Button prevEventButton;
     private Button archivedEventButton;
     private Button LogoutButton;
-    private Button updatePicButton;
+    private ImageButton updatePicButton;
     private ImageButton updateBackgroundButton;
 
     String RealTimeImagePath;
@@ -99,12 +99,12 @@ public class Profile extends AppCompatActivity {
         ref = FirebaseDatabase.getInstance().getReference("/USER");
 
         //Button Stuff
-        updatePicButton = (Button) findViewById(R.id.updatePicBtn);
+        updatePicButton = (ImageButton) findViewById(R.id.updatePicBtn);
         updatePicButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 openFilechooser(0);
-                currUser.setBackgroundImage(RealTimeImagePath);
+                currUser.setProfileImage(RealTimeImagePath);
             }
         });
 
@@ -114,7 +114,7 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 openFilechooser(1);
-                currUser.setProfileImage(RealTimeImagePath);
+                currUser.setBackgroundImage(RealTimeImagePath);
             }
         });
 
