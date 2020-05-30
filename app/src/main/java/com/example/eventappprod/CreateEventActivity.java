@@ -264,18 +264,19 @@ public class CreateEventActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(EventName) && !TextUtils.isEmpty(Day) && !TextUtils.isEmpty(Location) &&
                 !TextUtils.isEmpty(StartTime) && !TextUtils.isEmpty(EndTime) && !TextUtils.isEmpty(Des)) {
             // make an event object with designated contructor
-            event = new Event(id, EventName, Day, Location, StartTime, EndTime, EventName, Des, "", "", "");
+            event = new Event(id, EventName,"", Day, Location, StartTime, EndTime, EventName, Des, "", "", "");
 
 
             // store image uploaded to the event object
             event.setImage(RealTimeImagePath);
 
+            // to point to an user
+            String userId = curruser.getEmail().substring(0, curruser.getEmail().indexOf("@"));
+            event.setOwner(userId+",");
             // make an event with the event's name
             ref.child("/EVENT").child(event.getName()).setValue(event);
 
-            // to point to an user
-            String userId = curruser.getEmail().substring(0, curruser.getEmail().indexOf("@"));
-            // creator must go to the event he created
+            // creator must go to the event UserGoing list since he is the host
             ref.child("/EVENT").child(EventName).child("userGoing").setValue(userId+ ",");
 
             // also, the event will go to the user's createdEvent list
