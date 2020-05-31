@@ -23,6 +23,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
@@ -45,9 +46,6 @@ public class FriendsListActivity extends AppCompatActivity {
     //Firebase variables
     private DatabaseReference ref;
 
-    //add context for the app
-    private Context mContext;
-
     //https://www.youtube.com/watch?v=Nw9JF55LDzE
     //https://www.youtube.com/watch?v=18VcnYN5_LM
     //Event Feed String Arrays
@@ -61,11 +59,13 @@ public class FriendsListActivity extends AppCompatActivity {
     private ArrayList<User> userList;
     ArrayList<ExampleItem> exampleList;
 
-
+    //add context for the app
+    private Context mContext;
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
     private ExampleAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private RelativeLayout mRelativeLayout;
     User currUser  = User.getInstance();
 
     int added = 0;
@@ -80,14 +80,19 @@ public class FriendsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends_list);
 
+        //set context at very top
+        mContext = getApplicationContext();
+
         //create list to make the cards
         exampleList = new ArrayList<>();
 
-        mRecyclerView = findViewById(R.id.friendListRecycler);
+        mRelativeLayout = (RelativeLayout) findViewById(R.id.friendsRL);
+        mRecyclerView = (RecyclerView) findViewById(R.id.friendListRecycler);
+
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mContext = getApplicationContext();
+
         mAdapter = new ExampleAdapter(mContext, exampleList, "friend");
         mRecyclerView.setAdapter(mAdapter);
 
