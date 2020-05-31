@@ -100,6 +100,10 @@ public class Profile extends AppCompatActivity {
         //friendIntent = (User).
 
 
+
+
+
+
         //user's profile
         profilePic = findViewById(R.id.profilePicture);
         backgroundPic = findViewById(R.id.background);

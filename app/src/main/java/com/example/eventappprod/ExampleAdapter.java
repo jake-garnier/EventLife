@@ -201,7 +201,6 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                         mExampleList.remove(position);
                         notifyItemRemoved(position);
                         notifyItemRangeChanged(position,mExampleList.size());
-                        exampleListFull = mExampleList;
                         Toast.makeText(context,"Followed : " + itemLabel, Toast.LENGTH_SHORT).show();
 
                         //Todo: make the person add into their list below but for the other person too
@@ -279,11 +278,11 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                 //Searches for query in text1 and text2
                 int i = 0;
                 for(ExampleItem item : exampleListFull) {
-                    if (i == 0 && cardType.equals("event")) { // The item is the button and always should be added
+                    if (i == 0) { // The item is the button and always should be added
                         filteredList.add(item);
                     } else {
-                        if (item.getName().toLowerCase().contains(filterPattern)
-                            || item.getStartTime().contains(filterPattern)) {
+                        if (item.getName().toLowerCase().contains(filterPattern)) {
+                            //|| item.getStartTime().toLowerCase().contains(filterPattern)
                             filteredList.add(item);
                         }
                     }
@@ -303,8 +302,4 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             notifyDataSetChanged();
         }
     };
-
-    public void resetFull() {
-        exampleListFull = new ArrayList<>(mExampleList);
-    }
 }
