@@ -110,7 +110,7 @@ public class Profile extends AppCompatActivity {
         profileName = findViewById(R.id.profileName);
         profileName.setText(currUser.getName());
         profileUsername = findViewById(R.id.profileUser);
-        userID = currUser.getEmail().substring(0, currUser.getEmail().indexOf("@"));
+        userID = currUser.getUserId();
         profileUsername.setText(userID);
 
         //mainImageView.setImageURI(Uri.parse(image));

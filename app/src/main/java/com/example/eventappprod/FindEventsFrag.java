@@ -1,13 +1,10 @@
 package com.example.eventappprod;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -24,33 +20,25 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
 import javax.annotation.Nullable;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
-
 public class FindEventsFrag extends Fragment {
-
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference gsRef;
 
     String[] images_Firestore = new String[20];
     String[] eventNames_Screenshow = new String[20];
-    String[] eventDescriptions_Screenshow=new String[20];
+    String[] eventStartTime_Screenshow=new String[20];
+    String[] eventEndTime_Screenshow=new String[20];
+    String[] eventDate_Screenshow=new String[20];
 
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
     private ExampleAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    FirebaseDatabase database;
     DatabaseReference ref;
     ArrayList<Event> evenList;
-
-    private Button btnTEST;
 
     @Nullable
     @Override
@@ -83,14 +71,13 @@ public class FindEventsFrag extends Fragment {
 
         // fetching data to particular array
 
+        // fetching data to particular array
         for (int i=0; i<evenList.size();i++) {
             eventNames_Screenshow[i] = evenList.get(i).getName();
-            eventDescriptions_Screenshow[i] = evenList.get(i).getDescription();
+            eventStartTime_Screenshow[i] = evenList.get(i).getStartTime();
+            eventEndTime_Screenshow[i] = evenList.get(i).getEndTime();
+            eventDate_Screenshow[i] = evenList.get(i).getDate();
             images_Firestore[i] = evenList.get(i).getImage();
-            // you can get other info like date and time as well
-            //Bitmap my_image;
-            //Picasso.get().load(evenList.get(i).getImage()).into(my_image);
-
         }
 
         LoadDatatoDashBoard(view);
@@ -100,13 +87,14 @@ public class FindEventsFrag extends Fragment {
     public void LoadDatatoDashBoard(View view){
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
         for (int i = 0; i < evenList.size(); i++) {
-            exampleList.add(new ExampleItem(0, eventNames_Screenshow[i], eventDescriptions_Screenshow[i], images_Firestore[i]));
+            exampleList.add(new ExampleItem(eventNames_Screenshow[i], eventStartTime_Screenshow[i],
+                    eventEndTime_Screenshow[i], eventDate_Screenshow[i], images_Firestore[i]));
         }
 
         mRecyclerView = view.findViewById(R.id.recyclerViewFindEvents);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this.getContext());
-        mAdapter = new ExampleAdapter(this.getContext(), exampleList, "event");
+        mAdapter = new ExampleAdapter(this.getContext(), exampleList, "");
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 

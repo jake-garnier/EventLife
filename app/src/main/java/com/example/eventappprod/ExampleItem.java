@@ -1,35 +1,39 @@
 package com.example.eventappprod;
 
-import android.media.Image;
-import android.net.Uri;
-
 public class ExampleItem {
-    private int mImageResource;
+//    private int mImageResource;
     //private Uri mImageResource;
     //private Image mImageResource;
-    private String mText1;
-    private String mText2;
+    private String mName;
+    private String mStartTime;
+    private String mEndTime;
+    private String mDate;
     private String img_firestore;
 
 
-    public ExampleItem(int imageResource, String text1, String text2,String imgfirestore){
-        mImageResource = imageResource;
-        mText1 = text1;
-        mText2 = text2;
+    public ExampleItem(String cardName, String cardStartTime, String cardEndTime, String cardDate, String imgfirestore){
+        mName = cardName;
+        mStartTime = cardStartTime;
+        mEndTime = cardEndTime;
+        mDate = cardDate;
         img_firestore=imgfirestore;
     }
 
-    public int getImageResource(){
-        return mImageResource;
+//    public int getImageResource(){
+//        return mImageResource;
+//    }
+
+    public String getName(){
+        return mName;
     }
 
-    public String getText1(){
-        return mText1;
+    public String getStartTime(){
+        return mStartTime;
     }
 
-    public String getText2(){
-        return mText2;
-    }
+    public String getEndTime() { return mEndTime; }
+
+    public String getDate() { return mDate; }
 
     public String getImg_firestore(){
         return  img_firestore;
