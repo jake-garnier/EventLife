@@ -252,7 +252,7 @@ public class FriendsListActivity extends AppCompatActivity {
             for(int j = 0; j < userList.size(); j++) {
                 if(userList.get(j).getUserId().equals(array[i])){
                     user = userList.get(j);
-                    exampleList.add(0, new ExampleItem(user.getName(), user.getUserId(), "", "", "", user.getProfileImage()));
+                    exampleList.add(new ExampleItem(user.getName(), user.getUserId(), "", "", "", user.getProfileImage()));
                     mAdapter.notifyItemInserted(0);
                     mAdapter.resetFull();
                     mRecyclerView.scrollToPosition(0);
@@ -261,5 +261,7 @@ public class FriendsListActivity extends AppCompatActivity {
         }
 
 
-    }
+
+
+        }
 }
