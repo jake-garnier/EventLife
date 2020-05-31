@@ -1,12 +1,10 @@
 package com.example.eventappprod;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -35,9 +33,9 @@ public class FindFriendsFrag extends Fragment {
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference gsRef;
 
-    String[] images_Firestore = new String[20];
-    String[] eventNames_Screenshow = new String[20];
-    String[] eventDescriptions_Screenshow=new String[20];
+    String[] profilePic = new String[20];
+    String[] userName = new String[20];
+    String[] userIDList = new String[20];
 
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
@@ -45,7 +43,13 @@ public class FindFriendsFrag extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     FirebaseDatabase database;
     DatabaseReference ref;
-    ArrayList<Event> evenList;
+    ArrayList<User> userList;
+    ArrayList<ExampleItem> exampleList = new ArrayList<>();;
+
+    //current User stuff
+    String[] friendArr;
+    User currUser = User.getInstance();
+    String userID = currUser.getUserId();
 
     private Button btnTEST;
 
@@ -55,16 +59,23 @@ public class FindFriendsFrag extends Fragment {
         final View view = inflater.inflate(R.layout.fragment1_find_friends, container, false);
         setHasOptionsMenu(true);
 
-        evenList = new ArrayList<>();
-        ref = FirebaseDatabase.getInstance().getReference("/EVENT");
+        mRecyclerView = view.findViewById(R.id.recyclerViewFindFriends);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this.getContext());
+        mAdapter = new ExampleAdapter(this.getContext(), exampleList, "friendSearch");
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+
+        userList = new ArrayList<>();
+        ref = FirebaseDatabase.getInstance().getReference("/USER");
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()){
-                    evenList.add(ds.getValue(Event.class));
+                    userList.add(ds.getValue(User.class));
                 }
-                if (evenList.size()!=0) retrieveData(view);
+                if (userList.size()!=0) retrieveData(view);
             }
 
             @Override
@@ -80,14 +91,18 @@ public class FindFriendsFrag extends Fragment {
 
         // fetching data to particular array
 
-        for (int i=0; i<evenList.size();i++) {
-            eventNames_Screenshow[i] = evenList.get(i).getName();
-            eventDescriptions_Screenshow[i] = evenList.get(i).getDescription();
-            images_Firestore[i] = evenList.get(i).getImage();
+        for (int i=0; i < userList.size();i++) {
+            userIDList[i] = userList.get(i).getUserId();
+            userName[i] = userList.get(i).getName();
+            profilePic[i] = userList.get(i).getProfileImage();
             // you can get other info like date and time as well
             //Bitmap my_image;
             //Picasso.get().load(evenList.get(i).getImage()).into(my_image);
-
+        }
+        for (int i=0; i < userList.size() ;i++) {
+            if(userList.get(i).getUserId().equals(userID)){
+                currUser = userList.get(i);
+            }
         }
 
         LoadDatatoDashBoard(view);
@@ -95,18 +110,41 @@ public class FindFriendsFrag extends Fragment {
     }
 
     public void LoadDatatoDashBoard(View view){
-        ArrayList<ExampleItem> exampleList = new ArrayList<>();
-        for (int i = 0; i < evenList.size(); i++) {
-            exampleList.add(new ExampleItem(eventNames_Screenshow[i], eventDescriptions_Screenshow[i], "", "", "", images_Firestore[i]));
+        friendArr = currUser.getFriendList().split(",");
+        User userCompare = new User();
+        /*for (int i = 0; i < userList.size(); i++)
+        {
+            if ()
+            {
+                userCompare = userList.get(j);
+                exampleList.add(new ExampleItem(userCompare.getName(), userCompare.getUserId(), "", "", userCompare.getProfileImage()));
+                mAdapter.notifyItemInserted(0);
+                // mAdapter.resetFull();
+                mRecyclerView.scrollToPosition(0);
+            }
+        }*/
+
+        boolean flag = false;
+
+        for (int i = 0; i < userList.size(); i++) {
+            flag = false;
+            for(int j = 0; j < friendArr.length; j++) {
+                if ((userList.get(i).getUserId().equals(friendArr[j]))
+                        || userList.get(i).getUserId().equals(currUser.getUserId())) {
+                    flag = true;
+                }
+            }
+            if (flag == false) {
+                userCompare = userList.get(i);
+                exampleList.add(new ExampleItem(userCompare.getName(), userCompare.getUserId(),
+                        "", "", "", userCompare.getProfileImage()));
+                mAdapter.notifyItemInserted(0);
+                mAdapter.resetFull();
+                mRecyclerView.scrollToPosition(0);
+            }
+
+
         }
-
-        mRecyclerView = view.findViewById(R.id.recyclerViewFindFriends);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this.getContext());
-        mAdapter = new ExampleAdapter(this.getContext(), exampleList, "friendSearch");
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
-
     }
 
     @Override

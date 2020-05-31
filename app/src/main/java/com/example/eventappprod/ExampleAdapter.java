@@ -194,6 +194,10 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     public void onClick(View view) {
                         // Get the clicked item label
                         String itemLabel = mExampleList.get(position).getName();
+                        String userID = mExampleList.get(position).getStartTime();
+
+                        String friend_list = userID + "," + currUser.getFriendList();
+                        ref.child(currUser.getUserId()).child("friendList").setValue(friend_list);
 
                         // Add the item on accept/button click
                         mExampleList.remove(position);
@@ -201,8 +205,6 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                         notifyItemRangeChanged(position,mExampleList.size());
                         exampleListFull = mExampleList;
                         Toast.makeText(context,"Followed : " + itemLabel, Toast.LENGTH_SHORT).show();
-
-                        //Todo: make the person add into their list below but for the other person too
                     }
                 });
 

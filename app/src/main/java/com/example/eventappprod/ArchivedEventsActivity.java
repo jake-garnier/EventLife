@@ -153,7 +153,7 @@ public class ArchivedEventsActivity extends AppCompatActivity {
                 if (evenList.get(j).getName().equals(array[i])) {
                     event = evenList.get(j);
                     exampleList.add(new ExampleItem(event.getName(), event.getStartTime(), event.getEndTime(),
-                            event.getDate(), event.getImage()));
+                            event.getDate(), event.getOwner() ,event.getImage()));
                 }
             }
         }
