@@ -6,38 +6,38 @@ public class User implements Serializable{
 
     private static User instance;
 
-    private String Name;
-    private String Email;
-    private String Password;
-    private String Biointro;
-    private String UserId;
+    private String name;
+    private String email;
+    private String password;
+    private String biointro;
+    private String userId;
 
     // optinal field, user will go to profile to edit
-    private String ProfileImage;
-    private String BackgroundImage;
-    private String College;
-    private String Group;
+    private String profileImage;
+    private String backgroundImage;
+    private String college;
+    private String group;
 
     // filled during user's action on app
     private String RSVPEvents;
-    private String CreatedEvents;
-    private String NotifiedEvent;
+    private String createdEvents;
+    private String notifiedEvent;
     private String friendList;
 
     public User() {
-        Name = "";
-        Email =  "";
-        Password = "";
-        Biointro =  "";
-        ProfileImage =  "";
-        BackgroundImage =  "";
-        College  =  "";
-        Group =  "";
+        name = "";
+        email =  "";
+        password = "";
+        biointro =  "";
+        profileImage =  "";
+        backgroundImage =  "";
+        college  =  "";
+        group =  "";
         RSVPEvents =  "";
-        CreatedEvents =  "";
-        NotifiedEvent =  "";
+        createdEvents =  "";
+        notifiedEvent =  "";
         friendList  =  "";
-        UserId = "";
+        userId = "";
 
     }
 
@@ -45,18 +45,18 @@ public class User implements Serializable{
     public User(String aname, String aemail, String userID, String apass, String abio,
                 String aima, String back, String acol, String agroup,
                 String arsvp, String acreated, String anotified, String afriendlist) {
-        Name = aname;
-        Email = aemail;
-        UserId = "";
-        Password = apass;
-        Biointro = abio;
-        ProfileImage = aima;
-        BackgroundImage = back;
-        College  = acol;
-        Group = agroup;
+        name = aname;
+        email = aemail;
+        userId = "";
+        password = apass;
+        biointro = abio;
+        profileImage = aima;
+        backgroundImage = back;
+        college  = acol;
+        group = agroup;
         RSVPEvents = arsvp;
-        CreatedEvents = acreated;
-        NotifiedEvent = anotified;
+        createdEvents = acreated;
+        notifiedEvent = anotified;
         friendList  = afriendlist;
         //numberofFriend =0;
     }
@@ -69,18 +69,18 @@ public class User implements Serializable{
     }
 
     public User copy(User another){
-        Name = another.Name;
-        Email = another.Email;
-        UserId = another.UserId;
-        Password = another.Password;
-        Biointro = another.Biointro;
-        ProfileImage = another.ProfileImage;
-        BackgroundImage = another.BackgroundImage;
-        College  = another.College;
-        Group = another.Group;
+        name = another.name;
+        email = another.email;
+        userId = another.userId;
+        password = another.password;
+        biointro = another.biointro;
+        profileImage = another.profileImage;
+        backgroundImage = another.backgroundImage;
+        college  = another.college;
+        group = another.group;
         RSVPEvents = another. RSVPEvents;
-        CreatedEvents = another.CreatedEvents;
-        NotifiedEvent = another.NotifiedEvent;
+        createdEvents = another.createdEvents;
+        notifiedEvent = another.notifiedEvent;
         friendList  = another.friendList ;
         return instance;
     }
@@ -88,44 +88,44 @@ public class User implements Serializable{
 
 
     public String getName(){
-        return Name;
+        return name;
     }
     public void setName(String n){
-        Name = n;
+        name = n;
     }
 
     public String getEmail(){
-        return Email;
+        return email;
     }
     public void setEmail(String e){
-        Email = e;
+        email = e;
     }
 
-    public String getUserId(){return UserId;}
-    public void setUserId(String set){UserId = set;}
+    public String getUserId(){return userId;}
+    public void setUserId(String set){userId = set;}
 
-    public String getPassword(){ return Password; }
-    public void setPassword(String p){ Password = p; }
+    public String getPassword(){ return password; }
+    public void setPassword(String p){ password = p; }
 
-    public String getBiointro(){ return Biointro; }
-    public void setBiointro(String bio){ Biointro = bio; }
+    public String getBiointro(){ return biointro; }
+    public void setBiointro(String bio){ biointro = bio; }
 
-    public String getProfileImage(){ return ProfileImage; }
-    public void setProfileImage(String i){ ProfileImage = i; }
+    public String getProfileImage(){ return profileImage; }
+    public void setProfileImage(String i){ profileImage = i; }
 
-    public String getBackgroundImage(){ return BackgroundImage; }
-    public void setBackgroundImage(String i){ BackgroundImage = i; }
+    public String getBackgroundImage(){ return backgroundImage; }
+    public void setBackgroundImage(String i){ backgroundImage = i; }
 
-    public String getCollege(){ return College; }
-    public void setCollege(String col){ College =col; }
+    public String getCollege(){ return college; }
+    public void setCollege(String col){ college =col; }
 
     public String getGroup(){
-        return Group;
+        return group;
     }
-    public void setGroup(String g){ Group = g; }
+    public void setGroup(String g){ group = g; }
 
-    public String getCreatedEvents(){ return CreatedEvents; }
-    public void addCreatedEvents(String favo){ CreatedEvents = CreatedEvents.concat(favo+ "$"); // use '$' to parse the event since
+    public String getCreatedEvents(){ return createdEvents; }
+    public void addCreatedEvents(String favo){ createdEvents = createdEvents.concat(favo+ "$"); // use '$' to parse the event since
         // Real-time Firebase database can store data under String objects only
     }
 
@@ -139,9 +139,9 @@ public class User implements Serializable{
         // Real-time Firebase database can store data under String objects only
     }
 
-    public String getNotifiedEvent(){ return NotifiedEvent; }
+    public String getNotifiedEvent(){ return notifiedEvent; }
     public void addNotifiedEvent(String noti){
-        NotifiedEvent = NotifiedEvent.concat(noti+ ",");// use '$' to parse the events since
+        notifiedEvent = notifiedEvent.concat(noti+ ",");// use '$' to parse the events since
         // Real-time Firebase database can store data under String objects only
     }
 

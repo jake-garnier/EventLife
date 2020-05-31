@@ -221,8 +221,17 @@ public class DashBoard<user> extends AppCompatActivity {
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
 
         for (int i = 0; i<evenList.size(); i++) {
-            exampleList.add(new ExampleItem(eventNames_Screenshow[i], eventStartTime_Screenshow[i],
-                    eventEndTime_Screenshow[i], eventDate_Screenshow[i], images_Firestore[i]));
+            if(i<9)
+            {
+                exampleList.add(new ExampleItem(eventNames_Screenshow[i], eventStartTime_Screenshow[i],
+                        eventEndTime_Screenshow[i], eventDate_Screenshow[i], images_Firestore[i]));
+            }else
+            {
+                exampleList.add(new ExampleItem(eventNames_Screenshow[5], eventStartTime_Screenshow[i],
+                        eventEndTime_Screenshow[i], eventDate_Screenshow[i], images_Firestore[i]));
+            }
+
+
         }
 
         mRecyclerView = findViewById(R.id.recyclerView);
