@@ -168,6 +168,7 @@ public class FriendsListActivity extends AppCompatActivity {
                                     mAdapter.notifyItemRangeChanged(0,exampleList.size());
                                     mAdapter.notifyItemInserted(0);
                                     mRecyclerView.scrollToPosition(0);
+                                    mAdapter.resetFull();
                                     added = 1;
                                     //break;
                                 }
@@ -219,7 +220,9 @@ public class FriendsListActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+
                 mAdapter.getFilter().filter(newText);
+
                 return false;
             }
         });
@@ -252,6 +255,7 @@ public class FriendsListActivity extends AppCompatActivity {
                     user = userList.get(j);
                     exampleList.add(0, new ExampleItem(user.getName(), user.getUserId(), "", "", user.getProfileImage()));
                     mAdapter.notifyItemInserted(0);
+                    mAdapter.resetFull();
                     mRecyclerView.scrollToPosition(0);
                 }
             }
