@@ -23,6 +23,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
@@ -45,9 +46,6 @@ public class FriendsListActivity extends AppCompatActivity {
     //Firebase variables
     private DatabaseReference ref;
 
-    //add context for the app
-    private Context mContext;
-
     //https://www.youtube.com/watch?v=Nw9JF55LDzE
     //https://www.youtube.com/watch?v=18VcnYN5_LM
     //Event Feed String Arrays
@@ -55,14 +53,14 @@ public class FriendsListActivity extends AppCompatActivity {
     String[] friendsList = new String[20];
     String[] userName = new String[20];
     String[] userIDArr = new String[20];
-    //int[] images = {R.drawable.friend2, R.drawable.friend2, R.drawable.friend4, R.drawable.friend4, R.drawable.friend5, R.drawable.friend6, R.drawable.friend6, R.drawable.samoyed, R.drawable.khosla};
+
 
     //private FriendsList
-    private ArrayList<ExampleItem> friendList;
     private ArrayList<User> userList;
     ArrayList<ExampleItem> exampleList;
 
-
+    //add context for the app
+    private Context mContext;
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
     private ExampleAdapter mAdapter;
@@ -81,9 +79,21 @@ public class FriendsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends_list);
 
+        //set context at very top
+        mContext = getApplicationContext();
+
         testUser = new User();
         //create list to make the cards
         exampleList = new ArrayList<>();
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.friendListRecycler);
+
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        mAdapter = new ExampleAdapter(mContext, exampleList, "friend");
+        mRecyclerView.setAdapter(mAdapter);
 
         //release the user info
         //Intent ib = getIntent();
@@ -123,38 +133,6 @@ public class FriendsListActivity extends AppCompatActivity {
         mButtonAdd = findViewById(R.id.addFriendBtn);
        // friendList = new ArrayList<ExampleItem>();
 
-/*
-        User user = new User();
-        for (int i = 0; i < array.length;i++)
-        {
-            for (int j = 0; j < userList.size();j++)
-            {
-                if(userList.get(i).getUserId().equals(array[i]))
-                {
-                    user = userList.get(i);
-                    friendList.add(new ExampleItem(0, array[i], user.getUserId(),user.getProfileImage()));
-                }
-            }
-
-
-        }
-        */
-
-        //friendList.add(new ExampleItem(images[1], friendNames[1], friendBios[1], ""));
-
-
-        //Thus, somehow inject database information into these arrays?
-        /*friendNames = getResources().getStringArray(R.array.friendNames_feed);
-        friendBios = getResources().getStringArray(R.array.friendBios_feed);
-        friendList = new ArrayList<>();
-        for (int i = 0; i < friendNames.length; i++) {
-
-            //friendList.add(new ExampleItem(images[i], friendNames[i], ""));
-
-            friendList.add(new ExampleItem(images[i], friendNames[i], friendBios[i], ""));
-
-        }*/
-
        //
         mButtonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,16 +161,11 @@ public class FriendsListActivity extends AppCompatActivity {
                                 //checks if the user exists in the database or not (aka spelling errors)
                                 if (userList.get(i).getUserId().equals(friendAdd)) {
                                     currUser.addFriend(friendAdd);
-                                    ref.child(userID).child("friendList").setValue(currUser.getFriendList(),
-                                            new DatabaseReference.CompletionListener(){
-                                                @Override
-                                                public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-
-                                                }
-                                            });
+                                    ref.child(userID).child("friendList").setValue(currUser.getFriendList());
                                     //create the ExampleItem and insert that into the friendsList
-                                    exampleList.add(0, new ExampleItem(0, userList.get(i).getName(), userList.get(i).getUserId(), userList.get(i).getProfileImage()));
+                                    exampleList.add(0, new ExampleItem(userList.get(i).getName(), userList.get(i).getUserId(), "", "", userList.get(i).getProfileImage()));
                                     //create a new row for that friend
+                                    mAdapter.notifyItemRangeChanged(0,exampleList.size());
                                     mAdapter.notifyItemInserted(0);
                                     mRecyclerView.scrollToPosition(0);
                                     added = 1;
@@ -201,13 +174,13 @@ public class FriendsListActivity extends AppCompatActivity {
                             }
 
                             if (added == 1) {
-                                Toast.makeText(mContext, "Added : " + friendAdd, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(FriendsListActivity.this, "Added : " + friendAdd, Toast.LENGTH_SHORT).show();
                                 added = 0;
                             } else {
-                                Toast.makeText(mContext, friendAdd + " : Does not exist", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(FriendsListActivity.this, friendAdd + " : Does not exist", Toast.LENGTH_SHORT).show();
                             }
                         }
-
+                        dialog.cancel();
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -273,21 +246,16 @@ public class FriendsListActivity extends AppCompatActivity {
     public void LoadDatatoFriendsList(){
         array = currUser.getFriendList().split(",");
         User user = new User();
-        //ArrayList<ExampleItem> exampleList = new ArrayList<>();
         for(int i = 0; i < array.length; i++ ) {
             for(int j = 0; j < userList.size(); j++) {
                 if(userList.get(j).getUserId().equals(array[i])){
                     user = userList.get(j);
-                    exampleList.add(0, new ExampleItem(0, user.getName(), user.getUserId(), user.getProfileImage()));
+                    exampleList.add(0, new ExampleItem(user.getName(), user.getUserId(), "", "", user.getProfileImage()));
+                    mAdapter.notifyItemInserted(0);
+                    mRecyclerView.scrollToPosition(0);
                 }
             }
         }
 
-        mRecyclerView = findViewById(R.id.friendListRecycler);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new ExampleAdapter(this, exampleList, "friend");
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
     }
 }

@@ -8,19 +8,10 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-
-
-import android.graphics.Bitmap;
-import android.net.Uri;
-
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-
 
 import android.net.Uri;
 
@@ -29,16 +20,12 @@ import android.graphics.Color;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -47,10 +34,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -62,16 +45,13 @@ public class DashBoard<user> extends AppCompatActivity {
     private static final String CHANNEL_ID = "Channel1";
 
 
-    String[] eventNames;
-    String[] eventDescriptions;
-    int[] images = {R.drawable.revelle, R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
 
     String[] images_Firestore = new String[20];
     String[] eventNames_Screenshow = new String[20];
-    String[] eventDescriptions_Screenshow=new String[20];
+    String[] eventStartTime_Screenshow=new String[20];
+    String[] eventEndTime_Screenshow=new String[20];
+    String[] eventDate_Screenshow=new String[20];
 
-    int[] im;
-    Uri[] myuri;
 
 
     //Recycler View Needed for Event Feed
@@ -82,7 +62,7 @@ public class DashBoard<user> extends AppCompatActivity {
     DatabaseReference ref;
     DatabaseReference userref;
 
-    ArrayList<Event> evenList;
+    ArrayList<Event> evenList = new ArrayList<>();
     User currUser  = User.getInstance();
     private ArrayList<User> userList;
 
@@ -98,11 +78,10 @@ public class DashBoard<user> extends AppCompatActivity {
         //Intent ib = getIntent();
         //currUser = (User) ib.getSerializableExtra("LoginDash");
 
-        userList = new ArrayList<User>();
         userref = FirebaseDatabase.getInstance().getReference("/USER");
 
         //Getting the updated user
-        userref.addValueEventListener(new ValueEventListener() {
+        /*userref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
@@ -121,11 +100,7 @@ public class DashBoard<user> extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(DashBoard.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
             }
-        });
-
-
-
-
+        });*/
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "EventLife";
@@ -139,18 +114,9 @@ public class DashBoard<user> extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
         }
 
-        evenList = new ArrayList<>();
+
         ref = FirebaseDatabase.getInstance().getReference("/EVENT");
-        eventNames = getResources().getStringArray(R.array.eventNames_feed);
-        eventDescriptions = getResources().getStringArray(R.array.eventNames_description);
-
-        for(int i=0;i<images.length;++i)
-        {
-            images_Firestore[i] = "";
-            eventNames_Screenshow[i] = eventNames[i];
-            eventDescriptions_Screenshow[i]=eventDescriptions[i];
-        }
-
+        //eventNames_Screenshow = getResources().getStringArray(R.array.eventNames_feed);
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -166,9 +132,6 @@ public class DashBoard<user> extends AppCompatActivity {
                 Toast.makeText(DashBoard.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
             }
         });
-
-        //Logic for displaying the event-feed
-        //Thus, somehow inject database information into these arrays?
 
         //Initialize and assign variable
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -201,9 +164,6 @@ public class DashBoard<user> extends AppCompatActivity {
                     case R.id.profile:
 
                         Intent intent = new Intent(getApplicationContext(), Profile.class);
-                        //intent.putExtra("DashProfile", currUser);
-
-
                         startActivity(intent);
                         overridePendingTransition(0, 0);
                         return true;
@@ -245,15 +205,12 @@ public class DashBoard<user> extends AppCompatActivity {
     public void retrieveData(){
 
         // fetching data to particular array
-
         for (int i=0; i<evenList.size();i++) {
             eventNames_Screenshow[i] = evenList.get(i).getName();
-            eventDescriptions_Screenshow[i] = evenList.get(i).getDescription();
+            eventStartTime_Screenshow[i] = evenList.get(i).getStartTime();
+            eventEndTime_Screenshow[i] = evenList.get(i).getEndTime();
+            eventDate_Screenshow[i] = evenList.get(i).getDate();
             images_Firestore[i] = evenList.get(i).getImage();
-            // you can get other info like date and time as well
-            //Bitmap my_image;
-            //Picasso.get().load(evenList.get(i).getImage()).into(my_image);
-
         }
 
         LoadDatatoDashBoard();
@@ -263,15 +220,18 @@ public class DashBoard<user> extends AppCompatActivity {
     public void LoadDatatoDashBoard(){
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
 
-        for (int i = 0; i < evenList.size(); i++) {
+        for (int i = 0; i<evenList.size(); i++) {
             if(i<9)
             {
-                exampleList.add(new ExampleItem(images[i],eventNames_Screenshow[i], eventDescriptions_Screenshow[i], images_Firestore[i]));
+                exampleList.add(new ExampleItem(eventNames_Screenshow[i], eventStartTime_Screenshow[i],
+                        eventEndTime_Screenshow[i], eventDate_Screenshow[i], images_Firestore[i]));
             }else
             {
-                exampleList.add(new ExampleItem(images[6],eventNames_Screenshow[i], eventDescriptions_Screenshow[i], images_Firestore[i]));
-
+                exampleList.add(new ExampleItem(eventNames_Screenshow[5], eventStartTime_Screenshow[i],
+                        eventEndTime_Screenshow[i], eventDate_Screenshow[i], images_Firestore[i]));
             }
+
+
         }
 
         mRecyclerView = findViewById(R.id.recyclerView);
