@@ -155,7 +155,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                         //add the event to the user
                         String userRSVP = currUser.getRSVPEvents();
                         String rsvp = itemLabel + "," + currUser.getRSVPEvents();
-                        //currUser.addRSVPEvent(rsvp + itemLabel);
+                        currUser.addRSVPEvent(rsvp + itemLabel);
                         ref.child(currUser.getUserId()).child("rsvpevents").setValue(rsvp);
                         // Remove the item on remove/button click
                         mExampleList.remove(position);
@@ -259,7 +259,10 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             return 1;
         } else if(this.cardType.equals("friendSearch")) {
            return 2;
-        } if(this.cardType.equals("friend")) {
+        } else if (this.cardType.equals("RSVP")) {
+            return 14;
+        }
+        if(this.cardType.equals("friend")) {
             return 3;
         }
         return 1;
