@@ -24,14 +24,19 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 public class Profile extends AppCompatActivity {
 
@@ -52,6 +57,8 @@ public class Profile extends AppCompatActivity {
     private String userID;
     private int update = 0;
     User currUser  = User.getInstance();
+    private ArrayList<User> userList;
+
 
     // authorization
     private FirebaseAuth firebaseAuth;
@@ -61,6 +68,11 @@ public class Profile extends AppCompatActivity {
     StorageReference imagePath;
     FirebaseStorage  storage;
     private DatabaseReference ref;
+
+    String[] profileImages = new String[20];
+    String[] friendsList = new String[20];
+    String[] userName = new String[20];
+    String[] userIDArr = new String[20];
 
 
     //all the intents
@@ -89,15 +101,34 @@ public class Profile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        ref = FirebaseDatabase.getInstance().getReference("/USER");
 
 
 
-                //release the user info
-        //Intent ib = getIntent();
-        //currUser = (User) ib.getSerializableExtra("DashProfile");
-        //friendlist to profile
-        //friendlisttoprofile
-        //friendIntent = (User).
+        userList = new ArrayList<>();
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    userList.add(ds.getValue(User.class));
+                }
+                if (userList.size()!=0) retrieveData();
+                for (int i = 0; i < userList.size();i++)
+                {
+                    if(userList.get(i).getUserId().equals(userID))
+                    {
+                        currUser = userList.get(i);
+                    }
+                }
+
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(Profile.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
 
@@ -117,7 +148,7 @@ public class Profile extends AppCompatActivity {
         Picasso.get().load(currUser.getProfileImage()).into(profilePic);
         Picasso.get().load(currUser.getBackgroundImage()).into(backgroundPic);
         //create reference to the user
-        ref = FirebaseDatabase.getInstance().getReference("/USER");
+        //ref = FirebaseDatabase.getInstance().getReference("/USER");
 
         //Button Stuff
         updatePicButton = findViewById(R.id.updatePicBtn);
@@ -299,4 +330,20 @@ public class Profile extends AppCompatActivity {
 
         }
     }
+    public void retrieveData(){
+
+        // fetching data to particular array
+
+        for (int i=0; i<userList.size();i++) {
+            userName[i] = userList.get(i).getName();
+            userIDArr[i] = userList.get(i).getUserId();
+            friendsList[i] = userList.get(i).getFriendList();
+            profileImages[i] = userList.get(i).getProfileImage();
+            // you can get other info like date and time as well
+            //Bitmap my_image;
+            //Picasso.get().load(evenList.get(i).getImage()).into(my_image);
+
+        }
+    }
 }
+

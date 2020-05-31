@@ -226,6 +226,17 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     public void onClick(View view) {
                         // Get the clicked item label
                         String itemLabel = mExampleList.get(position).getName();
+                        //User ID
+                        String userID = mExampleList.get(position).getStartTime();
+
+
+                        currUser.removeFriend(userID);
+                        String userFriendlist = currUser.getFriendList();
+                        ref.child(currUser.getUserId()).child("friendList").setValue(userFriendlist);
+
+                        //String rsvp = itemLabel + "," + currUser.getRSVPEvents();
+                        //currUser.addRSVPEvent(rsvp + itemLabel);
+                        //ref.child(currUser.getUserId()).child("rsvpevents").setValue(rsvp);
 
                         // Remove the item on remove/button click
                         mExampleList.remove(position);
