@@ -204,14 +204,21 @@ public class DashBoard<user> extends AppCompatActivity {
 
     public void retrieveData(){
 
-        // fetching data to particular array
-        for (int i=0; i<evenList.size();i++) {
-            eventNames_Screenshow[i] = evenList.get(i).getName();
-            eventStartTime_Screenshow[i] = evenList.get(i).getStartTime();
-            eventEndTime_Screenshow[i] = evenList.get(i).getEndTime();
-            eventDate_Screenshow[i] = evenList.get(i).getDate();
-            images_Firestore[i] = evenList.get(i).getImage();
-            creator[i] = evenList.get(i).getOwner().replace(",","");
+        // Blank event for the button
+        eventNames_Screenshow[0] = "";
+        eventStartTime_Screenshow[0] = "";
+        eventEndTime_Screenshow[0] = "";
+        eventDate_Screenshow[0] = "";
+        images_Firestore[0] = "";
+        creator[0] = "";
+
+        for (int i=1; i<evenList.size();i++) {
+            eventNames_Screenshow[i] = evenList.get(i-1).getName();
+            eventStartTime_Screenshow[i] = evenList.get(i-1).getStartTime();
+            eventEndTime_Screenshow[i] = evenList.get(i-1).getEndTime();
+            eventDate_Screenshow[i] = evenList.get(i-1).getDate();
+            images_Firestore[i] = evenList.get(i-1).getImage();
+            creator[i] = evenList.get(i-1).getOwner().replace(",","");
         }
 
         LoadDatatoDashBoard();

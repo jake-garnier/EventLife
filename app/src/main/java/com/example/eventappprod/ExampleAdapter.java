@@ -130,12 +130,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
                 ExampleItem currItem = mExampleList.get(position);
 
-//                if(currItem.getImg_firestore()== "")
-//                {
-//                    holder.mImageView.setImageResource(currItem.getImageResource());
-//                }else {
                 Picasso.get().load(currItem.getImg_firestore()).into(holder.mImageView);
-//                }
 
                 holder.name.setText(currItem.getName());
                 holder.startTime.setText(currItem.getStartTime());
@@ -176,12 +171,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                 //todo: this part is done in the other user list
                 ExampleItem currItem = mExampleList.get(position);
 
-//                if(currItem.getImg_firestore()== "")
-//                {
-//                    holder.mImageView.setImageResource(currItem.getImageResource());
-//                }else {
                 Picasso.get().load(currItem.getImg_firestore()).into(holder.mImageView);
-//                }
 
                 holder.name.setText(currItem.getName());
                 holder.userId.setText(currItem.getStartTime());
@@ -219,12 +209,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             } else if(viewType == 3){ // Friends List
                 ExampleItem currItem = mExampleList.get(position);
 
-//                if(currItem.getImg_firestore()== "")
-//                {
-//                    holder.mImageView.setImageResource(currItem.getImageResource());
-//                }else {
                 Picasso.get().load(currItem.getImg_firestore()).into(holder.mImageView);
-            //}
 
                 holder.name.setText(currItem.getName());
                 holder.userId.setText(currItem.getStartTime());
