@@ -37,12 +37,12 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
     ImageView mainImageView;
     TextView title, description;
 
-    TextView Date, StartTime, EndTime, Location;
+    TextView Date, StartTime, EndTime, Location,CreatedBy;
     MapView GeoTag;
     GoogleMap map;
 
     String data1, data2;
-    String sTime, eTime, loca, date, image;
+    String sTime, eTime, loca, date, image, owner;
 
     int myImage;
     DatabaseReference ref;
@@ -67,6 +67,7 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
         StartTime = findViewById(R.id.tvStart);
         EndTime = findViewById(R.id.tvEnd);
         Location = findViewById(R.id.tvLocation);
+        CreatedBy =findViewById(R.id.tvCreatedBy);
 
         //Initialize these methods
         getData();
@@ -95,6 +96,7 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
                             eTime = myevent.getEndTime();
                             loca = myevent.getLocation();
                             image = myevent.getImage();
+                            owner = myevent.getOwner().replace(",","") ;
                         }
 
                     // after retrieving all data, then set data to the TextViews
@@ -130,6 +132,7 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
         StartTime.setText(sTime);
         EndTime.setText(eTime);
         Location.setText(loca);
+        CreatedBy.setText(owner);
     }
 
     @Override

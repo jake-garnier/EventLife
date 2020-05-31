@@ -5,6 +5,8 @@ import java.util.ArrayList;
 public class Event {
     private String ID;
     private String Name;
+
+    private String Owner;
     private String Date;
     private String Location;
 
@@ -22,14 +24,13 @@ public class Event {
 
     }
 
-
-
-    public Event(String id,String name, String date, String loca,
+    public Event(String id,String name,String owner, String date, String loca,
                  String stime, String etime, String tag, String des,
                  String usergo, String usermaybe, String usernot) {
         // mandatory fields for an event object
         ID = id;
         Name = name;
+        Owner = owner;
         Date = date;
         Location = loca;
         Tag =tag;
@@ -53,6 +54,11 @@ public class Event {
     public void setName(String n){
         Name = n;
     }
+
+    public String getOwner(){
+        return Owner;
+    }
+    public void setOwner(String o){Owner= o; }
 
     public String getDate(){
         return Date;
