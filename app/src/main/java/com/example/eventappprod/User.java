@@ -15,13 +15,10 @@ public class User implements Serializable{
     // optinal field, user will go to profile to edit
     private String ProfileImage;
     private String BackgroundImage;
-    private String College;
-    private String Group;
 
     // filled during user's action on app
     private String rsvpevents;
     private String createdEvents;
-    private String NotifiedEvent;
     private String friendList;
 
     public User() {
@@ -31,11 +28,8 @@ public class User implements Serializable{
         Biointro =  "";
         ProfileImage =  "";
         BackgroundImage =  "";
-        College  =  "";
-        Group =  "";
         rsvpevents =  "";
         createdEvents =  "";
-        NotifiedEvent =  "";
         friendList  =  "";
         UserId = "";
 
@@ -52,11 +46,8 @@ public class User implements Serializable{
         Biointro = abio;
         ProfileImage = aima;
         BackgroundImage = back;
-        College  = acol;
-        Group = agroup;
         rsvpevents = arsvp;
         createdEvents = acreated;
-        NotifiedEvent = anotified;
         friendList  = afriendlist;
         //numberofFriend =0;
     }
@@ -76,11 +67,8 @@ public class User implements Serializable{
         Biointro = another.Biointro;
         ProfileImage = another.ProfileImage;
         BackgroundImage = another.BackgroundImage;
-        College  = another.College;
-        Group = another.Group;
         rsvpevents = another. rsvpevents;
         createdEvents = another.createdEvents;
-        NotifiedEvent = another.NotifiedEvent;
         friendList  = another.friendList ;
         return instance;
     }
@@ -116,14 +104,6 @@ public class User implements Serializable{
     public String getBackgroundImage(){ return BackgroundImage; }
     public void setBackgroundImage(String i){ BackgroundImage = i; }
 
-    public String getCollege(){ return College; }
-    public void setCollege(String col){ College =col; }
-
-    public String getGroup(){
-        return Group;
-    }
-    public void setGroup(String g){ Group = g; }
-
     public String getCreatedEvents(){ return createdEvents; }
     public void addCreatedEvents(String favo){ createdEvents = favo + ", " + createdEvents; // use '$' to parse the event since
         // Real-time Firebase database can store data under String objects only
@@ -140,11 +120,6 @@ public class User implements Serializable{
         // Real-time Firebase database can store data under String objects only
     }
 
-    public String getNotifiedEvent(){ return NotifiedEvent; }
-    public void addNotifiedEvent(String noti){
-        NotifiedEvent = NotifiedEvent.concat(noti+ ",");// use '$' to parse the events since
-        // Real-time Firebase database can store data under String objects only
-    }
 
     public String getFriendList(){ return friendList; }
     public void addFriend(String f){
