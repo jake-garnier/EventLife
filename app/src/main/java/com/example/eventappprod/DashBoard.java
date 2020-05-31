@@ -45,11 +45,14 @@ public class DashBoard<user> extends AppCompatActivity {
     private static final String CHANNEL_ID = "Channel1";
 
 
+
     String[] images_Firestore = new String[20];
     String[] eventNames_Screenshow = new String[20];
     String[] eventStartTime_Screenshow=new String[20];
     String[] eventEndTime_Screenshow=new String[20];
     String[] eventDate_Screenshow=new String[20];
+
+
 
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
@@ -59,7 +62,7 @@ public class DashBoard<user> extends AppCompatActivity {
     DatabaseReference ref;
     DatabaseReference userref;
 
-    ArrayList<Event> evenList;
+    ArrayList<Event> evenList = new ArrayList<>();
     User currUser  = User.getInstance();
     private ArrayList<User> userList;
 
@@ -75,7 +78,6 @@ public class DashBoard<user> extends AppCompatActivity {
         //Intent ib = getIntent();
         //currUser = (User) ib.getSerializableExtra("LoginDash");
 
-        userList = new ArrayList<User>();
         userref = FirebaseDatabase.getInstance().getReference("/USER");
 
         //Getting the updated user
@@ -112,9 +114,9 @@ public class DashBoard<user> extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
         }
 
-        evenList = new ArrayList<>();
+
         ref = FirebaseDatabase.getInstance().getReference("/EVENT");
-        eventNames_Screenshow = getResources().getStringArray(R.array.eventNames_feed);
+        //eventNames_Screenshow = getResources().getStringArray(R.array.eventNames_feed);
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -162,8 +164,6 @@ public class DashBoard<user> extends AppCompatActivity {
                     case R.id.profile:
 
                         Intent intent = new Intent(getApplicationContext(), Profile.class);
-                        //intent.putExtra("DashProfile", currUser);
-
                         startActivity(intent);
                         overridePendingTransition(0, 0);
                         return true;
