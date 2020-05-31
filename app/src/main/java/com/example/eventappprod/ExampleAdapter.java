@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +38,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         public Button mUnfollowButton;
         public Button mRSVPButton;
         public Button mFollowButton;
+        public RelativeLayout mRelativeLayout;
 
         public ExampleViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -49,6 +51,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             mUnfollowButton = itemView.findViewById(R.id.unfollowButton);
             mRSVPButton = itemView.findViewById(R.id.RSVPButton);
             mFollowButton = itemView.findViewById(R.id.acceptButton);
+            mRelativeLayout = itemView.findViewById(R.id.friendsRL);
 
         }
     }
