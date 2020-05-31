@@ -101,7 +101,7 @@ public class ArchivedEventsActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recyclerViewArchive);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new ExampleAdapter(this, exampleList, "nobutton");
+        mAdapter = new ExampleAdapter(this, exampleList, "RSVP");
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
     }

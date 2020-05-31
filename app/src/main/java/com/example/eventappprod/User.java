@@ -138,6 +138,10 @@ public class User implements Serializable{
         rsvpevents = past + "," + rsvpevents; // use '$' to parse the event since
         // Real-time Firebase database can store data under String objects only
     }
+    public void removeRSVPEvent(String past){
+        rsvpevents = rsvpevents.replace(past+",", ""); // use '$' to parse the event since
+        // Real-time Firebase database can store data under String objects only
+    }
 
     public String getNotifiedEvent(){ return notifiedEvent; }
     public void addNotifiedEvent(String noti){
