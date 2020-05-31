@@ -108,7 +108,7 @@ public class PreviousEventsActivity extends AppCompatActivity {
 
 
     public void LoadDatatoCreatedEvents(){
-        ArrayList<ExampleItem> exampleList = new ArrayList<>();
+        //ArrayList<ExampleItem> exampleList = new ArrayList<>();
         Event event = new Event();
         array = currUser.getCreatedEvents().split(",");
         for (int i = 0; i<array.length; i++) {
@@ -117,13 +117,11 @@ public class PreviousEventsActivity extends AppCompatActivity {
                     event = evenList.get(j);
                     exampleList.add(0,new ExampleItem(event.getName(), event.getStartTime(), event.getEndTime(),
                             event.getDate(), event.getImage()));
-
-
                 }
             }
         }
-            mAdapter.notifyItemInserted(1);
-            mRecyclerView.scrollToPosition(0);
+          //  mAdapter.notifyItemInserted(1);
+          //  mRecyclerView.scrollToPosition(0);
 //        mRecyclerView = findViewById(R.id.recyclerView);
 //        mRecyclerView.setHasFixedSize(true);
 //        mLayoutManager = new LinearLayoutManager(this);
