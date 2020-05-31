@@ -245,7 +245,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         // The first card is always the
         if(position == 0 && this.cardType.equals("event")) {
             return 0;
-        } else if(this.cardType.equals("event")){
+        } else if(this.cardType.equals("event") || this.cardType.equals("previous")){ // todo:delete this
             return 1;
         } else if(this.cardType.equals("friendSearch")) {
            return 2;

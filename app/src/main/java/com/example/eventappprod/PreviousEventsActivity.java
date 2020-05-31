@@ -69,7 +69,7 @@ public class PreviousEventsActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new ExampleAdapter(this, exampleList, "event");
+        mAdapter = new ExampleAdapter(this, exampleList, "previous");
         mRecyclerView.setAdapter(mAdapter);
 
 
