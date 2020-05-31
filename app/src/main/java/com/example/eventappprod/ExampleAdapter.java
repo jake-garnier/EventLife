@@ -263,7 +263,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             return 0;
         } else if (mExampleList.get(position).getCreator().equals(currUser.getUserId())) {
             return 4;
-        }else if(this.cardType.equals("event")){
+        } else if(this.cardType.equals("event") || this.cardType.equals("previous")){
             return 1;
         } else if(this.cardType.equals("friendSearch")) {
            return 2;

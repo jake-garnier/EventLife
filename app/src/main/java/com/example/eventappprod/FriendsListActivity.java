@@ -148,7 +148,6 @@ public class FriendsListActivity extends AppCompatActivity {
                 input.setInputType(InputType.TYPE_CLASS_TEXT);
                 builder.setView(input);
 
-
                 // Set up the buttons
                 builder.setPositiveButton(R.string.project_id, new DialogInterface.OnClickListener() {
                     //todo: this happens in the other person's friends list with a notification heh
@@ -260,6 +259,7 @@ public class FriendsListActivity extends AppCompatActivity {
                 }
             }
         }
+
 
     }
 }
