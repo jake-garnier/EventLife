@@ -51,6 +51,7 @@ public class DashBoard<user> extends AppCompatActivity {
     String[] eventStartTime_Screenshow=new String[20];
     String[] eventEndTime_Screenshow=new String[20];
     String[] eventDate_Screenshow=new String[20];
+    String[] creator=new String[20];
 
 
 
@@ -210,6 +211,7 @@ public class DashBoard<user> extends AppCompatActivity {
             eventEndTime_Screenshow[i] = evenList.get(i).getEndTime();
             eventDate_Screenshow[i] = evenList.get(i).getDate();
             images_Firestore[i] = evenList.get(i).getImage();
+            creator[i] = evenList.get(i).getOwner().replace(",","");
         }
 
         LoadDatatoDashBoard();
@@ -223,11 +225,11 @@ public class DashBoard<user> extends AppCompatActivity {
             if(i<9)
             {
                 exampleList.add(new ExampleItem(eventNames_Screenshow[i], eventStartTime_Screenshow[i],
-                        eventEndTime_Screenshow[i], eventDate_Screenshow[i], images_Firestore[i]));
+                        eventEndTime_Screenshow[i], eventDate_Screenshow[i], creator[i], images_Firestore[i]));
             }else
             {
                 exampleList.add(new ExampleItem(eventNames_Screenshow[5], eventStartTime_Screenshow[i],
-                        eventEndTime_Screenshow[i], eventDate_Screenshow[i], images_Firestore[i]));
+                        eventEndTime_Screenshow[i], eventDate_Screenshow[i], creator[i], images_Firestore[i]));
             }
 
 

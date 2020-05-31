@@ -47,6 +47,8 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         public Button mUnfollowButton;
         public Button mRSVPButton;
         public Button mFollowButton;
+        public Button mEditButton;
+        public Button mDeleteButton;
         public RelativeLayout mRelativeLayout;
 
         public ExampleViewHolder(@NonNull View itemView) {
@@ -63,6 +65,8 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             mUnfollowButton = itemView.findViewById(R.id.unfollowButton);
             mRSVPButton = itemView.findViewById(R.id.RSVPButton);
             mFollowButton = itemView.findViewById(R.id.acceptButton);
+            mEditButton = itemView.findViewById(R.id.EDITButton);
+            mDeleteButton = itemView.findViewById(R.id.DELETEButton);
             mRelativeLayout = itemView.findViewById(R.id.friendsRL);
 
         }
@@ -96,8 +100,12 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_friend_request_row, parent, false);
             ExampleViewHolder evh = new ExampleViewHolder(v);
             return evh;
-        } else {
+        } else if(viewType == 3){
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_friend_row, parent, false);
+            ExampleViewHolder evh = new ExampleViewHolder(v);
+            return evh;
+        } else {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_row_i_created, parent, false);
             ExampleViewHolder evh = new ExampleViewHolder(v);
             return evh;
         }
@@ -208,7 +216,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     }
                 });
 
-            } else { // Friends List
+            } else if(viewType == 3){ // Friends List
                 ExampleItem currItem = mExampleList.get(position);
 
 //                if(currItem.getImg_firestore()== "")
@@ -237,15 +245,40 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                         //Todo: add the part where they wont see that person anymore.
                     }
                 });
+            } else {
+                ExampleItem currItem = mExampleList.get(position);
+
+                Picasso.get().load(currItem.getImg_firestore()).into(holder.mImageView);
+
+                holder.name.setText(currItem.getName());
+                holder.startTime.setText(currItem.getStartTime());
+                holder.endTime.setText(currItem.getEndTime());
+                holder.date.setText(currItem.getDate());
+
+                holder.mEditButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //TODO: for khanh
+                    }
+                });
+
+                holder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //TODO: for khanh
+                    }
+                });
             }
 }
 
     @Override
     public int getItemViewType (int position) {
         // The first card is always the
-        if(position == 0 && this.cardType.equals("event")) {
+        if (position == 0 && this.cardType.equals("event")) {
             return 0;
-        } else if(this.cardType.equals("event")){
+        } else if (mExampleList.get(position).getCreator().equals(currUser.getUserId())) {
+            return 4;
+        }else if(this.cardType.equals("event")){
             return 1;
         } else if(this.cardType.equals("friendSearch")) {
            return 2;

@@ -163,7 +163,7 @@ public class FriendsListActivity extends AppCompatActivity {
                                     currUser.addFriend(friendAdd);
                                     ref.child(userID).child("friendList").setValue(currUser.getFriendList());
                                     //create the ExampleItem and insert that into the friendsList
-                                    exampleList.add(0, new ExampleItem(userList.get(i).getName(), userList.get(i).getUserId(), "", "", userList.get(i).getProfileImage()));
+                                    exampleList.add(0, new ExampleItem(userList.get(i).getName(), userList.get(i).getUserId(), "", "", "", userList.get(i).getProfileImage()));
                                     //create a new row for that friend
                                     mAdapter.notifyItemRangeChanged(0,exampleList.size());
                                     mAdapter.notifyItemInserted(0);
@@ -253,7 +253,7 @@ public class FriendsListActivity extends AppCompatActivity {
             for(int j = 0; j < userList.size(); j++) {
                 if(userList.get(j).getUserId().equals(array[i])){
                     user = userList.get(j);
-                    exampleList.add(0, new ExampleItem(user.getName(), user.getUserId(), "", "", user.getProfileImage()));
+                    exampleList.add(0, new ExampleItem(user.getName(), user.getUserId(), "", "", "", user.getProfileImage()));
                     mAdapter.notifyItemInserted(0);
                     mAdapter.resetFull();
                     mRecyclerView.scrollToPosition(0);

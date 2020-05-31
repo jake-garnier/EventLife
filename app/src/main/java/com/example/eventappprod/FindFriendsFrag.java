@@ -97,7 +97,7 @@ public class FindFriendsFrag extends Fragment {
     public void LoadDatatoDashBoard(View view){
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
         for (int i = 0; i < evenList.size(); i++) {
-            exampleList.add(new ExampleItem(eventNames_Screenshow[i], eventDescriptions_Screenshow[i], "", "", images_Firestore[i]));
+            exampleList.add(new ExampleItem(eventNames_Screenshow[i], eventDescriptions_Screenshow[i], "", "", "", images_Firestore[i]));
         }
 
         mRecyclerView = view.findViewById(R.id.recyclerViewFindFriends);
