@@ -1,4 +1,3 @@
-
 package com.example.eventappprod;
 
 import androidx.annotation.NonNull;
@@ -44,15 +43,14 @@ public class DashBoard<user> extends AppCompatActivity {
     private static final String TAG = "PostDetailActivity";
     private static final String CHANNEL_ID = "Channel1";
 
-
-
     String[] images_Firestore = new String[20];
     String[] eventNames_Screenshow = new String[20];
     String[] eventStartTime_Screenshow=new String[20];
     String[] eventEndTime_Screenshow=new String[20];
     String[] eventDate_Screenshow=new String[20];
+    String[] creator=new String[20];
 
-
+    String[] friendList = new String[20];
 
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
@@ -95,7 +93,6 @@ public class DashBoard<user> extends AppCompatActivity {
                     }
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(DashBoard.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
@@ -118,13 +115,25 @@ public class DashBoard<user> extends AppCompatActivity {
         ref = FirebaseDatabase.getInstance().getReference("/EVENT");
         //eventNames_Screenshow = getResources().getStringArray(R.array.eventNames_feed);
 
+        friendList = currUser.getFriendList().split(",");
+
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                evenList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()){
-                    evenList.add(ds.getValue(Event.class));
+                    for(String friend : friendList) {
+                        if (ds.child("owner").getValue().equals(friend + ",")) {
+                            evenList.add(ds.getValue(Event.class));
+                        }
+                    }
+                    if(ds.child("owner").getValue().equals(currUser.getUserId() + ",")) {
+                        evenList.add(ds.getValue(Event.class));
+                    }
                 }
-                if (evenList.size()!=0) retrieveData();
+                if (evenList.size()!=0){
+                    retrieveData();
+                }
             }
 
             @Override
@@ -198,19 +207,26 @@ public class DashBoard<user> extends AppCompatActivity {
             }
         });
 
-
         return true;
     }
 
     public void retrieveData(){
 
-        // fetching data to particular array
-        for (int i=0; i<evenList.size();i++) {
-            eventNames_Screenshow[i] = evenList.get(i).getName();
-            eventStartTime_Screenshow[i] = evenList.get(i).getStartTime();
-            eventEndTime_Screenshow[i] = evenList.get(i).getEndTime();
-            eventDate_Screenshow[i] = evenList.get(i).getDate();
-            images_Firestore[i] = evenList.get(i).getImage();
+        // Blank event for the button
+        eventNames_Screenshow[0] = "";
+        eventStartTime_Screenshow[0] = "";
+        eventEndTime_Screenshow[0] = "";
+        eventDate_Screenshow[0] = "";
+        images_Firestore[0] = "";
+        creator[0] = "";
+
+        for (int i=1; i<evenList.size();i++) {
+            eventNames_Screenshow[i] = evenList.get(i-1).getName();
+            eventStartTime_Screenshow[i] = evenList.get(i-1).getStartTime();
+            eventEndTime_Screenshow[i] = evenList.get(i-1).getEndTime();
+            eventDate_Screenshow[i] = evenList.get(i-1).getDate();
+            images_Firestore[i] = evenList.get(i-1).getImage();
+            creator[i] = evenList.get(i-1).getOwner().replace(",","");
         }
 
         LoadDatatoDashBoard();
@@ -221,15 +237,10 @@ public class DashBoard<user> extends AppCompatActivity {
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
 
         for (int i = 0; i<evenList.size(); i++) {
-            if(i<9)
-            {
-                exampleList.add(new ExampleItem(eventNames_Screenshow[i], eventStartTime_Screenshow[i],
-                        eventEndTime_Screenshow[i], eventDate_Screenshow[i], images_Firestore[i]));
-            }else
-            {
-                exampleList.add(new ExampleItem(eventNames_Screenshow[5], eventStartTime_Screenshow[i],
-                        eventEndTime_Screenshow[i], eventDate_Screenshow[i], images_Firestore[i]));
-            }
+
+            exampleList.add(new ExampleItem(eventNames_Screenshow[i], eventStartTime_Screenshow[i],
+                    eventEndTime_Screenshow[i], eventDate_Screenshow[i], creator[i], images_Firestore[i]));
+
 
 
         }
@@ -240,25 +251,25 @@ public class DashBoard<user> extends AppCompatActivity {
         mAdapter = new ExampleAdapter(this, exampleList, "event");
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        addNotification();
+//        addNotification();
     }
 
-    private void addNotification() {
-        Intent intent = new Intent(this, EventActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-        for(int i=0; i<evenList.size(); i++) {
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                    .setSmallIcon(R.drawable.notification_icon)
-                    .setContentTitle(evenList.get(i).getName())
-                    .setContentText(evenList.get(i).getStartTime())
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    // Set the intent that will fire when the user taps the notification
-                    .setContentIntent(pendingIntent)
-                    .setAutoCancel(true);
-            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-            notificationManager.notify(i, builder.build());
-        }
-    }
+//    private void addNotification() {
+//        Intent intent = new Intent(this, EventActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+//        for(int i=0; i<evenList.size(); i++) {
+//            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+//                    .setSmallIcon(R.drawable.notification_icon)
+//                    .setContentTitle(evenList.get(i).getName())
+//                    .setContentText(evenList.get(i).getStartTime())
+//                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+//                    // Set the intent that will fire when the user taps the notification
+//                    .setContentIntent(pendingIntent)
+//                    .setAutoCancel(true);
+//            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+//            notificationManager.notify(i, builder.build());
+//        }
+//    }
 
 }

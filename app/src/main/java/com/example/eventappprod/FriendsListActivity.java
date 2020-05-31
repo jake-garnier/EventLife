@@ -148,7 +148,6 @@ public class FriendsListActivity extends AppCompatActivity {
                 input.setInputType(InputType.TYPE_CLASS_TEXT);
                 builder.setView(input);
 
-
                 // Set up the buttons
                 builder.setPositiveButton(R.string.project_id, new DialogInterface.OnClickListener() {
                     //todo: this happens in the other person's friends list with a notification heh
@@ -163,11 +162,12 @@ public class FriendsListActivity extends AppCompatActivity {
                                     currUser.addFriend(friendAdd);
                                     ref.child(userID).child("friendList").setValue(currUser.getFriendList());
                                     //create the ExampleItem and insert that into the friendsList
-                                    exampleList.add(0, new ExampleItem(userList.get(i).getName(), userList.get(i).getUserId(), "", "", userList.get(i).getProfileImage()));
+                                    exampleList.add(0, new ExampleItem(userList.get(i).getName(), userList.get(i).getUserId(), "", "", "", userList.get(i).getProfileImage()));
                                     //create a new row for that friend
                                     mAdapter.notifyItemRangeChanged(0,exampleList.size());
                                     mAdapter.notifyItemInserted(0);
                                     mRecyclerView.scrollToPosition(0);
+                                    mAdapter.resetFull();
                                     added = 1;
                                     //break;
                                 }
@@ -219,7 +219,9 @@ public class FriendsListActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+
                 mAdapter.getFilter().filter(newText);
+
                 return false;
             }
         });
@@ -250,12 +252,14 @@ public class FriendsListActivity extends AppCompatActivity {
             for(int j = 0; j < userList.size(); j++) {
                 if(userList.get(j).getUserId().equals(array[i])){
                     user = userList.get(j);
-                    exampleList.add(0, new ExampleItem(user.getName(), user.getUserId(), "", "", user.getProfileImage()));
+                    exampleList.add(0, new ExampleItem(user.getName(), user.getUserId(), "", "", "", user.getProfileImage()));
                     mAdapter.notifyItemInserted(0);
+                    mAdapter.resetFull();
                     mRecyclerView.scrollToPosition(0);
                 }
             }
         }
+
 
     }
 }

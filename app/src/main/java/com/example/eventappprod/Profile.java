@@ -131,10 +131,6 @@ public class Profile extends AppCompatActivity {
         });
 
 
-
-
-
-
         //user's profile
         profilePic = findViewById(R.id.profilePicture);
         backgroundPic = findViewById(R.id.background);

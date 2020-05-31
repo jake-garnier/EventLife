@@ -52,7 +52,8 @@ public class CreateEventActivity extends AppCompatActivity {
     StorageReference imagePath;
     FirebaseStorage storage;
     private DatabaseReference ref;
-    FirebaseUser curruser = FirebaseAuth.getInstance().getCurrentUser();
+    User curruser = User.getInstance();
+    //FirebaseUser curruser = FirebaseAuth.getInstance().getCurrentUser();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -269,7 +270,7 @@ public class CreateEventActivity extends AppCompatActivity {
 
             // store image uploaded to the event object
             event.setImage(RealTimeImagePath);
-
+            User curruser = User.getInstance();
             // to point to an user
             String userId = curruser.getEmail().substring(0, curruser.getEmail().indexOf("@"));
             event.setOwner(userId+",");
@@ -278,9 +279,10 @@ public class CreateEventActivity extends AppCompatActivity {
 
             // creator must go to the event UserGoing list since he is the host
             ref.child("/EVENT").child(EventName).child("userGoing").setValue(userId+ ",");
-
+            //User curruser = User.getInstance();
+            String c =curruser.getCreatedEvents();
             // also, the event will go to the user's createdEvent list
-            ref.child("/USER").child(userId).child("createdEvents").setValue(EventName+ ",");
+            ref.child("/USER").child(userId).child("createdEvents").setValue(EventName+ "," + c);
 
             // back to Dashboard
             startActivity(new Intent(getApplicationContext(), DashBoard.class));

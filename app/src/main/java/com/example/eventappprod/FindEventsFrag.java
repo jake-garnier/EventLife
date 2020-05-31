@@ -88,7 +88,7 @@ public class FindEventsFrag extends Fragment {
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
         for (int i = 0; i < evenList.size(); i++) {
             exampleList.add(new ExampleItem(eventNames_Screenshow[i], eventStartTime_Screenshow[i],
-                    eventEndTime_Screenshow[i], eventDate_Screenshow[i], images_Firestore[i]));
+                    eventEndTime_Screenshow[i], eventDate_Screenshow[i], "", images_Firestore[i]));
         }
 
         mRecyclerView = view.findViewById(R.id.recyclerViewFindEvents);
