@@ -16,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -27,6 +29,10 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     private ArrayList<ExampleItem> exampleListFull;
     Context context;
     private String cardType;
+    User currUser  = User.getInstance();
+    private DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/USER");
+
+
 
     public static class ExampleViewHolder extends RecyclerView.ViewHolder{
         public ImageView mImageView;
@@ -136,7 +142,11 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     public void onClick(View view) {
                         // Get the clicked item label
                         String itemLabel = mExampleList.get(position).getText1();
-
+                        //add the event to the user
+                        String userRSVP = currUser.getRSVPEvents();
+                        String rsvp = itemLabel + "," + currUser.getRSVPEvents();
+                        //currUser.addRSVPEvent(rsvp + itemLabel);
+                        ref.child(currUser.getUserId()).child("rsvpevents").setValue(rsvp);
                         // Remove the item on remove/button click
                         mExampleList.remove(position);
                         notifyItemRemoved(position);

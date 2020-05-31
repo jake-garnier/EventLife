@@ -102,7 +102,7 @@ public class DashBoard<user> extends AppCompatActivity {
         userref = FirebaseDatabase.getInstance().getReference("/USER");
 
         //Getting the updated user
-        userref.addValueEventListener(new ValueEventListener() {
+        /*userref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
@@ -121,7 +121,7 @@ public class DashBoard<user> extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(DashBoard.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
 
 
 

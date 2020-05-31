@@ -19,7 +19,7 @@ public class User implements Serializable{
     private String Group;
 
     // filled during user's action on app
-    private String RSVPEvents;
+    private String rsvpevents;
     private String CreatedEvents;
     private String NotifiedEvent;
     private String friendList;
@@ -33,7 +33,7 @@ public class User implements Serializable{
         BackgroundImage =  "";
         College  =  "";
         Group =  "";
-        RSVPEvents =  "";
+        rsvpevents =  "";
         CreatedEvents =  "";
         NotifiedEvent =  "";
         friendList  =  "";
@@ -54,7 +54,7 @@ public class User implements Serializable{
         BackgroundImage = back;
         College  = acol;
         Group = agroup;
-        RSVPEvents = arsvp;
+        rsvpevents = arsvp;
         CreatedEvents = acreated;
         NotifiedEvent = anotified;
         friendList  = afriendlist;
@@ -78,7 +78,7 @@ public class User implements Serializable{
         BackgroundImage = another.BackgroundImage;
         College  = another.College;
         Group = another.Group;
-        RSVPEvents = another. RSVPEvents;
+        rsvpevents = another. rsvpevents;
         CreatedEvents = another.CreatedEvents;
         NotifiedEvent = another.NotifiedEvent;
         friendList  = another.friendList ;
@@ -133,9 +133,10 @@ public class User implements Serializable{
         FavoriteEvent = FavoriteEvent.replace(e, "");
     }*/
 
-    public String getRSVPEvents(){ return RSVPEvents; }
+    public String getRSVPEvents(){ return rsvpevents; }
     public void addRSVPEvent(String past){
-        RSVPEvents = RSVPEvents.concat(past+ ","); // use '$' to parse the event since
+        rsvpevents = past + "," + rsvpevents;
+                //RSVPEvents.concat(past+ ","); // use '$' to parse the event since
         // Real-time Firebase database can store data under String objects only
     }
 
