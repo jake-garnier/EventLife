@@ -208,7 +208,7 @@ public class FriendsListActivity extends AppCompatActivity {
                                 Toast.makeText(FriendsListActivity.this, friendAdd + " : Does not exist", Toast.LENGTH_SHORT).show();
                             }
                         }
-
+                        dialog.cancel();
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
