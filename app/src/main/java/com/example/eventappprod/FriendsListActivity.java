@@ -83,6 +83,7 @@ public class FriendsListActivity extends AppCompatActivity {
         //set context at very top
         mContext = getApplicationContext();
 
+        testUser = new User();
         //create list to make the cards
         exampleList = new ArrayList<>();
 
@@ -196,7 +197,7 @@ public class FriendsListActivity extends AppCompatActivity {
                                     currUser.addFriend(friendAdd);
                                     ref.child(userID).child("friendList").setValue(currUser.getFriendList());
                                     //create the ExampleItem and insert that into the friendsList
-                                    exampleList.add(0, new ExampleItem(0, userList.get(i).getName(), userList.get(i).getUserId(), userList.get(i).getProfileImage()));
+                                    exampleList.add(0, new ExampleItem(userList.get(i).getName(), userList.get(i).getUserId(), "", "", userList.get(i).getProfileImage()));
                                     //create a new row for that friend
                                     mAdapter.notifyDataSetChanged();
                                     mAdapter.notifyItemInserted(0);
@@ -284,7 +285,7 @@ public class FriendsListActivity extends AppCompatActivity {
             for(int j = 0; j < userList.size(); j++) {
                 if(userList.get(j).getUserId().equals(array[i])){
                     user = userList.get(j);
-                    exampleList.add(0, new ExampleItem(0, user.getName(), user.getUserId(), user.getProfileImage()));
+                    exampleList.add(0, new ExampleItem(user.getName(), user.getUserId(), "", "", user.getProfileImage()));
                     mAdapter.notifyDataSetChanged();
                     mAdapter.notifyItemInserted(0);
                 }
