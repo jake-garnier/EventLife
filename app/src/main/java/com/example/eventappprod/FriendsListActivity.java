@@ -55,10 +55,9 @@ public class FriendsListActivity extends AppCompatActivity {
     String[] friendsList = new String[20];
     String[] userName = new String[20];
     String[] userIDArr = new String[20];
-    //int[] images = {R.drawable.friend2, R.drawable.friend2, R.drawable.friend4, R.drawable.friend4, R.drawable.friend5, R.drawable.friend6, R.drawable.friend6, R.drawable.samoyed, R.drawable.khosla};
+
 
     //private FriendsList
-    private ArrayList<ExampleItem> friendList;
     private ArrayList<User> userList;
     ArrayList<ExampleItem> exampleList;
 
@@ -81,9 +80,16 @@ public class FriendsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends_list);
 
-        testUser = new User();
         //create list to make the cards
         exampleList = new ArrayList<>();
+
+        mRecyclerView = findViewById(R.id.friendListRecycler);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mContext = getApplicationContext();
+        mAdapter = new ExampleAdapter(mContext, exampleList, "friend");
+        mRecyclerView.setAdapter(mAdapter);
 
         //release the user info
         //Intent ib = getIntent();
@@ -183,16 +189,11 @@ public class FriendsListActivity extends AppCompatActivity {
                                 //checks if the user exists in the database or not (aka spelling errors)
                                 if (userList.get(i).getUserId().equals(friendAdd)) {
                                     currUser.addFriend(friendAdd);
-                                    ref.child(userID).child("friendList").setValue(currUser.getFriendList(),
-                                            new DatabaseReference.CompletionListener(){
-                                                @Override
-                                                public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-
-                                                }
-                                            });
+                                    ref.child(userID).child("friendList").setValue(currUser.getFriendList());
                                     //create the ExampleItem and insert that into the friendsList
                                     exampleList.add(0, new ExampleItem(0, userList.get(i).getName(), userList.get(i).getUserId(), userList.get(i).getProfileImage()));
                                     //create a new row for that friend
+                                    mAdapter.notifyDataSetChanged();
                                     mAdapter.notifyItemInserted(0);
                                     mRecyclerView.scrollToPosition(0);
                                     added = 1;
@@ -201,10 +202,10 @@ public class FriendsListActivity extends AppCompatActivity {
                             }
 
                             if (added == 1) {
-                                Toast.makeText(mContext, "Added : " + friendAdd, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(FriendsListActivity.this, "Added : " + friendAdd, Toast.LENGTH_SHORT).show();
                                 added = 0;
                             } else {
-                                Toast.makeText(mContext, friendAdd + " : Does not exist", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(FriendsListActivity.this, friendAdd + " : Does not exist", Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -279,15 +280,11 @@ public class FriendsListActivity extends AppCompatActivity {
                 if(userList.get(j).getUserId().equals(array[i])){
                     user = userList.get(j);
                     exampleList.add(0, new ExampleItem(0, user.getName(), user.getUserId(), user.getProfileImage()));
+                    mAdapter.notifyDataSetChanged();
+                    mAdapter.notifyItemInserted(0);
                 }
             }
         }
 
-        mRecyclerView = findViewById(R.id.friendListRecycler);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new ExampleAdapter(this, exampleList, "friend");
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
     }
 }

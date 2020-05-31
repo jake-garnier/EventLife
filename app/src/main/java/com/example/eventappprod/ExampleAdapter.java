@@ -163,7 +163,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     @Override
                     public void onClick(View view) {
 
-                        Intent intent = new Intent(context, EventActivity.class);
+                        Intent intent = new Intent(context, FriendsListActivity.class);
                         //Extras are what we are passing from the adapter --> EventActivity (the event page)
                         //Inside EventActivity we will use these intents to pull information
                         intent.putExtra("data1", mExampleList.get(position).getText1());
