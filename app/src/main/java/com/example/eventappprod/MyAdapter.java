@@ -14,10 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.common.util.ArrayUtils;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -102,8 +99,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             //This is what talks to the XML files
-            name = itemView.findViewById((R.id.event_names_txt));
-            description = itemView.findViewById((R.id.event_desc_txt));
+            name = itemView.findViewById((R.id.firendCardName));
+            description = itemView.findViewById((R.id.friendCardUserId));
             myImg = itemView.findViewById(R.id.myImageView);
             mainLayout = itemView.findViewById(R.id.mainLayout);
         }

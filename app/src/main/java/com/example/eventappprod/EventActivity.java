@@ -32,17 +32,15 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
-public class EventActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class EventActivity extends AppCompatActivity {
 
     ImageView mainImageView;
     TextView title, description;
 
-    TextView Date, StartTime, EndTime, Location,CreatedBy;
-    MapView GeoTag;
-    GoogleMap map;
+    TextView Date, StartTime, EndTime, Location, CreatedBy;
 
-    String data1, data2;
-    String sTime, eTime, loca, date, image, owner;
+    String data1;
+    String desc, sTime, eTime, loca, date, image, owner;
 
     int myImage;
     DatabaseReference ref;
@@ -63,6 +61,7 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
         title = findViewById(R.id.eventFormName);
         description = findViewById(R.id.eventFormDescription);
 
+        description = findViewById(R.id.tvDescription);
         Date = findViewById(R.id.tvDate);
         StartTime = findViewById(R.id.tvStart);
         EndTime = findViewById(R.id.tvEnd);
@@ -78,7 +77,9 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
 
     //This is what will check and grab the information and load it in
     private void getData(){
-        if(getIntent().hasExtra("images") && getIntent().hasExtra("data1") && getIntent().hasExtra("data2")){
+        if(getIntent().hasExtra("data1")){
+            //&& getIntent().hasExtra("data2")
+            //getIntent().hasExtra("images") &&
             data1 = getIntent().getStringExtra("data1");
 
             // make sure event name is not null
@@ -91,6 +92,7 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
 
                         Event myevent = (Event) dataSnapshot.child(data1).getValue(Event.class);
                         if (myevent!=null) {
+                            desc = myevent.getDescription();
                             date = myevent.getDate();
                             sTime = myevent.getStartTime();
                             eTime = myevent.getEndTime();
@@ -109,7 +111,7 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
                 }
             });
 
-            data2 = getIntent().getStringExtra("data2");
+//            data2 = getIntent().getStringExtra("data2");
             //myImage = getIntent().getIntExtra("images", 1);
         }
         else{
@@ -121,7 +123,7 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
     //This is actually what displays the information (pushing the data from the intent --> variables from XML)
     private void setData(){
         title.setText(data1);
-        description.setText(data2);
+        description.setText(desc);
         //mainImageView.setImageResource(myImage);
         //mainImageView.setImageURI(Uri.parse(image));
         //Picasso.get().load(image).into(mainImageView);
@@ -134,11 +136,11 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
         Location.setText(loca);
         CreatedBy.setText(owner);
     }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
-        map.getUiSettings().setMyLocationButtonEnabled(false);
-        map.setMyLocationEnabled(true);
-    }
+//
+//    @Override
+//    public void onMapReady(GoogleMap googleMap) {
+//        map = googleMap;
+//        map.getUiSettings().setMyLocationButtonEnabled(false);
+//        map.setMyLocationEnabled(true);
+//    }
 }
