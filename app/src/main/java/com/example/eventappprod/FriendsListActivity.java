@@ -65,7 +65,6 @@ public class FriendsListActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private ExampleAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private RelativeLayout mRelativeLayout;
     User currUser  = User.getInstance();
 
     int added = 0;
@@ -87,7 +86,6 @@ public class FriendsListActivity extends AppCompatActivity {
         //create list to make the cards
         exampleList = new ArrayList<>();
 
-        mRelativeLayout = (RelativeLayout) findViewById(R.id.friendsRL);
         mRecyclerView = (RecyclerView) findViewById(R.id.friendListRecycler);
 
         mRecyclerView.setHasFixedSize(true);
@@ -135,38 +133,6 @@ public class FriendsListActivity extends AppCompatActivity {
         mButtonAdd = findViewById(R.id.addFriendBtn);
        // friendList = new ArrayList<ExampleItem>();
 
-/*
-        User user = new User();
-        for (int i = 0; i < array.length;i++)
-        {
-            for (int j = 0; j < userList.size();j++)
-            {
-                if(userList.get(i).getUserId().equals(array[i]))
-                {
-                    user = userList.get(i);
-                    friendList.add(new ExampleItem(0, array[i], user.getUserId(),user.getProfileImage()));
-                }
-            }
-
-
-        }
-        */
-
-        //friendList.add(new ExampleItem(images[1], friendNames[1], friendBios[1], ""));
-
-
-        //Thus, somehow inject database information into these arrays?
-        /*friendNames = getResources().getStringArray(R.array.friendNames_feed);
-        friendBios = getResources().getStringArray(R.array.friendBios_feed);
-        friendList = new ArrayList<>();
-        for (int i = 0; i < friendNames.length; i++) {
-
-            //friendList.add(new ExampleItem(images[i], friendNames[i], ""));
-
-            friendList.add(new ExampleItem(images[i], friendNames[i], friendBios[i], ""));
-
-        }*/
-
        //
         mButtonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,7 +165,7 @@ public class FriendsListActivity extends AppCompatActivity {
                                     //create the ExampleItem and insert that into the friendsList
                                     exampleList.add(0, new ExampleItem(userList.get(i).getName(), userList.get(i).getUserId(), "", "", userList.get(i).getProfileImage()));
                                     //create a new row for that friend
-                                    mAdapter.notifyDataSetChanged();
+                                    mAdapter.notifyItemRangeChanged(0,exampleList.size());
                                     mAdapter.notifyItemInserted(0);
                                     mRecyclerView.scrollToPosition(0);
                                     added = 1;
@@ -280,14 +246,13 @@ public class FriendsListActivity extends AppCompatActivity {
     public void LoadDatatoFriendsList(){
         array = currUser.getFriendList().split(",");
         User user = new User();
-        //ArrayList<ExampleItem> exampleList = new ArrayList<>();
         for(int i = 0; i < array.length; i++ ) {
             for(int j = 0; j < userList.size(); j++) {
                 if(userList.get(j).getUserId().equals(array[i])){
                     user = userList.get(j);
                     exampleList.add(0, new ExampleItem(user.getName(), user.getUserId(), "", "", user.getProfileImage()));
-                    mAdapter.notifyDataSetChanged();
                     mAdapter.notifyItemInserted(0);
+                    mRecyclerView.scrollToPosition(0);
                 }
             }
         }
