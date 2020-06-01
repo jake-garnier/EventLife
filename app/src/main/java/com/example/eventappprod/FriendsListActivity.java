@@ -107,18 +107,25 @@ public class FriendsListActivity extends AppCompatActivity {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                ArrayList<User> newUserList = new ArrayList<>();
+
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    userList.add(ds.getValue(User.class));
+                    newUserList.add(ds.getValue(User.class));
                 }
 
-                for (int i = 0; i < userList.size();i++)
+                for (int i = 0; i < newUserList.size();i++)
                 {
-                    if(userList.get(i).getUserId().equals(userID))
+                    if(newUserList.get(i).getUserId().equals(userID))
                     {
-                       currUser = userList.get(i);
+                       currUser = newUserList.get(i);
                     }
                 }
-                if (userList.size()!=0) retrieveData();
+
+                if (newUserList.size()!=0) {
+                    userList = newUserList;
+                    retrieveData();
+                }
             }
 
 

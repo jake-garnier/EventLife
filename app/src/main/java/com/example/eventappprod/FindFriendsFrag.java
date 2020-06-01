@@ -72,10 +72,14 @@ public class FindFriendsFrag extends Fragment {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<User> newUserList = new ArrayList<>();
                 for (DataSnapshot ds : dataSnapshot.getChildren()){
-                    userList.add(ds.getValue(User.class));
+                    newUserList.add(ds.getValue(User.class));
                 }
-                if (userList.size()!=0) retrieveData(view);
+                if (newUserList.size()!=0) {
+                    userList = newUserList;
+                    retrieveData(view);
+                }
             }
 
             @Override
