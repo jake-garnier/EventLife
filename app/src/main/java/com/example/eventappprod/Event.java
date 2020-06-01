@@ -112,6 +112,9 @@ public class Event {
         userGoing = g + "," + userGoing;// use '$' to parse the users since
         // Real-time Firebase database can store data under String objects only
     }
+    public void removeUserGoing(String g) {
+        userGoing = userGoing.replace(g+",", "");
+    }
 
     public String getUserMaybeGoing(){
         return userMaybeGoing;
