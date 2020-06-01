@@ -43,14 +43,14 @@ public class DashBoard<user> extends AppCompatActivity {
     private static final String TAG = "PostDetailActivity";
     private static final String CHANNEL_ID = "Channel1";
 
-    String[] images_Firestore = new String[20];
-    String[] eventNames_Screenshow = new String[20];
-    String[] eventStartTime_Screenshow=new String[20];
-    String[] eventEndTime_Screenshow=new String[20];
-    String[] eventDate_Screenshow=new String[20];
-    String[] creator=new String[20];
+    ArrayList<String> images_Firestore = new ArrayList<>();
+    ArrayList<String> eventNames_Screenshow = new ArrayList<>();
+    ArrayList<String> eventStartTime_Screenshow = new ArrayList<>();
+    ArrayList<String> eventEndTime_Screenshow = new ArrayList<>();
+    ArrayList<String> eventDate_Screenshow = new ArrayList<>();
+    ArrayList<String> creator = new ArrayList<>();
 
-    String[] friendList = new String[20];
+    ArrayList<String> friendList = new ArrayList<>();
 
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
@@ -72,38 +72,7 @@ public class DashBoard<user> extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
 
-
         userref = FirebaseDatabase.getInstance().getReference("/USER");
-        ref = FirebaseDatabase.getInstance().getReference("/EVENT");
-        //eventNames_Screenshow = getResources().getStringArray(R.array.eventNames_feed);
-
-        friendList = currUser.getFriendList().split(",");
-
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                evenList.clear();
-                for (DataSnapshot ds : dataSnapshot.getChildren()){
-                    for(String friend : friendList) {
-                        if (ds.child("owner").getValue().equals(friend + ",")) {
-                            evenList.add(ds.getValue(Event.class));
-                        }
-                    }
-                    if(ds.child("owner").getValue().equals(currUser.getUserId() + ",")) {
-                        evenList.add(ds.getValue(Event.class));
-                    }
-                }
-                if (evenList.size()!=0){
-                    retrieveData();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(DashBoard.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
-            }
-        });
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "EventLife";
@@ -121,25 +90,31 @@ public class DashBoard<user> extends AppCompatActivity {
         ref = FirebaseDatabase.getInstance().getReference("/EVENT");
         //eventNames_Screenshow = getResources().getStringArray(R.array.eventNames_feed);
 
-        friendList = currUser.getFriendList().split(",");
+        String[] list = currUser.getFriendList().split(",");
+
+        for(int i = 0; i < list.length; i++) {
+            friendList.add(list[i]);
+        }
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 evenList.clear();
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    if(ds.child("owner").getValue().equals(currUser.getUserId() + ",")) {
+                        evenList.add(ds.getValue(Event.class));
+                    }
+                }
                 for (DataSnapshot ds : dataSnapshot.getChildren()){
                     for(String friend : friendList) {
                         if (ds.child("owner").getValue().equals(friend + ",")) {
                             evenList.add(ds.getValue(Event.class));
                         }
                     }
-                    if(ds.child("owner").getValue().equals(currUser.getUserId() + ",")) {
-                        evenList.add(ds.getValue(Event.class));
-                    }
                 }
-                if (evenList.size()!=0){
-                    retrieveData();
-                }
+                //if (evenList.size()!=0){
+                retrieveData();
+                //}
             }
 
             @Override
@@ -219,20 +194,24 @@ public class DashBoard<user> extends AppCompatActivity {
     public void retrieveData(){
 
         // Blank event for the button
-        eventNames_Screenshow[0] = "";
-        eventStartTime_Screenshow[0] = "";
-        eventEndTime_Screenshow[0] = "";
-        eventDate_Screenshow[0] = "";
-        images_Firestore[0] = "";
-        creator[0] = "";
+        eventNames_Screenshow.add("");
+        eventStartTime_Screenshow.add("");
+        eventEndTime_Screenshow.add("");
+        eventDate_Screenshow.add("");
+        images_Firestore.add("");
+        creator.add("");
 
-        for (int i=1; i<evenList.size();i++) {
-            eventNames_Screenshow[i] = evenList.get(i-1).getName();
-            eventStartTime_Screenshow[i] = evenList.get(i-1).getStartTime();
-            eventEndTime_Screenshow[i] = evenList.get(i-1).getEndTime();
-            eventDate_Screenshow[i] = evenList.get(i-1).getDate();
-            images_Firestore[i] = evenList.get(i-1).getImage();
-            creator[i] = evenList.get(i-1).getOwner();
+        if(evenList.size() == 0) {
+            evenList.add(null);
+        }
+
+        for (int i=1; i<evenList.size()+1;i++) {
+            eventNames_Screenshow.add(i, evenList.get(i-1).getName());
+            eventStartTime_Screenshow.add(i, evenList.get(i-1).getStartTime());
+            eventEndTime_Screenshow.add(i, evenList.get(i-1).getEndTime());
+            eventDate_Screenshow.add(i, evenList.get(i-1).getDate());
+            images_Firestore.add(i, evenList.get(i-1).getImage());
+            creator.add(evenList.get(i-1).getOwner());
         }
 
         LoadDatatoDashBoard();
@@ -242,16 +221,18 @@ public class DashBoard<user> extends AppCompatActivity {
     public void LoadDatatoDashBoard(){
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
 
-        for (int i = 0; i<evenList.size(); i++) {
+        for (int i = 0; i<evenList.size()+1; i++) {
 
-            exampleList.add(new ExampleItem(eventNames_Screenshow[i], eventStartTime_Screenshow[i],
-                    eventEndTime_Screenshow[i], eventDate_Screenshow[i], creator[i], images_Firestore[i]));
+            exampleList.add(new ExampleItem(eventNames_Screenshow.get(i), eventStartTime_Screenshow.get(i),
+                    eventEndTime_Screenshow.get(i), eventDate_Screenshow.get(i), creator.get(i), images_Firestore.get(i)));
+
+
 
         }
 
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(DashBoard.this);
+        mLayoutManager = new LinearLayoutManager(this);
         mAdapter = new ExampleAdapter(this, exampleList, "event");
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
