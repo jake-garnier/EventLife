@@ -54,6 +54,9 @@ public class DashBoard<user> extends AppCompatActivity {
     ArrayList<String> friendList = new ArrayList<>();
     ArrayList<String> rsvpEvents = new ArrayList<>();
 
+    String[] list = new String[20];
+    String[] rsvp = new String[20];
+
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
     private ExampleAdapter mAdapter;
@@ -92,21 +95,25 @@ public class DashBoard<user> extends AppCompatActivity {
         ref = FirebaseDatabase.getInstance().getReference("/EVENT");
         //eventNames_Screenshow = getResources().getStringArray(R.array.eventNames_feed);
 
-        String[] list = currUser.getFriendList().split(",");
-
-        for(int i = 0; i < list.length; i++) {
-            friendList.add(list[i]);
-        }
-
-        String[] rsvp = currUser.getRSVPEvents().split(",");
-
-        for(int i = 0; i < rsvp.length; i++) {
-            rsvpEvents.add(rsvp[i]);
-        }
-
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                friendList.clear();
+
+                list = currUser.getFriendList().split(",");
+
+                for(int i = 0; i < list.length; i++) {
+                    friendList.add(list[i]);
+                }
+
+                rsvpEvents.clear();
+
+                rsvp = currUser.getRSVPEvents().split(",");
+
+                for(int i = 0; i < rsvp.length; i++) {
+                    rsvpEvents.add(rsvp[i]);
+                }
 
                 evenList.clear();
 

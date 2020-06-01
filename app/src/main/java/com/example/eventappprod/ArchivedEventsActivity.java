@@ -132,7 +132,6 @@ public class ArchivedEventsActivity extends AppCompatActivity {
     }
 
     public void retrieveData(){
-
         // fetching data to particular array
         for (int i=0; i<evenList.size();i++) {
             eventNames_Screenshow[i] = evenList.get(i).getName();
