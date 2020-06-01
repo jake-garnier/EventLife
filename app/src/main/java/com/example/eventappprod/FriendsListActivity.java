@@ -161,22 +161,31 @@ public class FriendsListActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         friendAdd = input.getText().toString();
+                        boolean flag = false;
                         if(userList.size()!=0)
                         {
                             for (int i = 0; i < userList.size(); i++) {
-                                //checks if the user exists in the database or not (aka spelling errors)
-                                if (userList.get(i).getUserId().equals(friendAdd)) {
-                                    currUser.addFriend(friendAdd);
-                                    ref.child(userID).child("friendList").setValue(currUser.getFriendList());
-                                    //create the ExampleItem and insert that into the friendsList
-                                    exampleList.add(0, new ExampleItem(userList.get(i).getName(), userList.get(i).getUserId(), "", "", "", userList.get(i).getProfileImage()));
-                                    //create a new row for that friend
-                                    mAdapter.notifyItemRangeChanged(0,exampleList.size());
-                                    mAdapter.notifyItemInserted(0);
-                                    mRecyclerView.scrollToPosition(0);
-                                    mAdapter.resetFull();
-                                    added = 1;
-                                    //break;
+                                flag = false;
+                                for (int j = 0; j < array.length;j++) {
+                                    //checks if the user exists in the database or not (aka spelling errors)
+                                    if ((userList.get(i).getUserId().equals(array[j]))
+                                            || userList.get(i).getUserId().equals(currUser.getUserId())) {
+                                        flag = true;
+                                    }
+                                    if (userList.get(i).getUserId().equals(friendAdd) && flag == false)
+                                    {
+                                        currUser.addFriend(friendAdd);
+                                        ref.child(userID).child("friendList").setValue(currUser.getFriendList());
+                                        //create the ExampleItem and insert that into the friendsList
+                                        exampleList.add(0, new ExampleItem(userList.get(i).getName(), userList.get(i).getUserId(), "", "", "", userList.get(i).getProfileImage()));
+                                        //create a new row for that friend
+                                        mAdapter.notifyItemRangeChanged(0, exampleList.size());
+                                        mAdapter.notifyItemInserted(0);
+                                        mRecyclerView.scrollToPosition(0);
+                                        mAdapter.resetFull();
+                                        added = 1;
+                                        break;
+                                    }
                                 }
                             }
 
@@ -184,7 +193,7 @@ public class FriendsListActivity extends AppCompatActivity {
                                 Toast.makeText(FriendsListActivity.this, "Added : " + friendAdd, Toast.LENGTH_SHORT).show();
                                 added = 0;
                             } else {
-                                Toast.makeText(FriendsListActivity.this, friendAdd + " : Does not exist", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(FriendsListActivity.this, friendAdd + " : Does not exist or Already added", Toast.LENGTH_SHORT).show();
                             }
                         }
                         dialog.cancel();
