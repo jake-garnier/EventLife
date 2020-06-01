@@ -362,7 +362,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     //Todo: add the part where they wont see that person anymore.
                 }
             });
-        } else {
+        } else if (viewType==4){
             ExampleItem currItem = mExampleList.get(position);
 
             Picasso.get().load(currItem.getImg_firestore()).into(holder.mImageView);
@@ -397,8 +397,8 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             return 0;
         } else if(this.cardType.equals("empty")) {
             return 0;
-        }else if (mExampleList.get(position).getCreator().replace(",", "").equals(currUser.getUserId())) {
-            return 4;
+//        }else if (mExampleList.get(position).getCreator().replace(",", "").equals(currUser.getUserId())) {
+//            return 4;
         } else if (this.cardType.equals("event") || this.cardType.equals("previous")) {
             return 1;
         } else if (this.cardType.equals("friendSearch")) {
