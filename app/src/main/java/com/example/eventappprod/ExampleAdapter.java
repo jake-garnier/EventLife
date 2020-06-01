@@ -59,15 +59,8 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         public Button mRSVPButton;
         public Button mFollowButton;
         public Button mEditButton;
-        public RelativeLayout mRelativeLayout;
-
-        public TextView dName;
-        public TextView dStartTime;
-        public TextView dEndTime;
-        public TextView dDate;
-        public ImageView dImageView;
         public Button mDeleteButton;
-        public ConstraintLayout deleteLayout;
+        public RelativeLayout mRelativeLayout;
 
         public ExampleViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -84,16 +77,9 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             mRSVPButton = itemView.findViewById(R.id.RSVPButton);
             mFollowButton = itemView.findViewById(R.id.acceptButton);
             mEditButton = itemView.findViewById(R.id.EDITButton);
+            mDeleteButton = itemView.findViewById(R.id.DELETEButton);
             mRelativeLayout = itemView.findViewById(R.id.friendsRL);
 
-            //Get reference from rsvp stuff
-            mDeleteButton = itemView.findViewById(R.id.dButton);
-            dName = itemView.findViewById(R.id.dName);
-            dStartTime = itemView.findViewById(R.id.dStartTime);
-            dEndTime = itemView.findViewById(R.id.dEndTime);
-            dDate = itemView.findViewById(R.id.dDate);
-            deleteLayout = itemView.findViewById(R.id.deleteLayout);
-            dImageView = itemView.findViewById(R.id.dImageView);
         }
     }
 
@@ -128,10 +114,6 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             return evh;
         } else if (viewType == 3) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_friend_row, parent, false);
-            ExampleViewHolder evh = new ExampleViewHolder(v);
-            return evh;
-        } else if (viewType == 14) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rsvp_event_row, parent, false);
             ExampleViewHolder evh = new ExampleViewHolder(v);
             return evh;
         } else {
@@ -208,14 +190,14 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                 public void onClick(View view) {
 
                     // Get the clicked item label
-                    String personGoing = currUser.getUserId();
+
                     Event event = eventList.get(0);
                     peopleGoing = event.getUserGoing();
-
+                    //add the event to the user
                     String userRSVP = currUser.getRSVPEvents();
                     String rsvp = itemLabel + "," + currUser.getRSVPEvents();
 
-
+                    String personGoing = currUser.getUserId();
                     String usersGoing = personGoing + "," + peopleGoing;
 
 
@@ -230,60 +212,6 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     notifyItemRemoved(position);
                     notifyItemRangeChanged(position, mExampleList.size());
                     Toast.makeText(context, "Saved in RSVP : " + itemLabel, Toast.LENGTH_SHORT).show();
-                }
-            });
-        } else if (viewType == 14) { // Event list
-
-            final ExampleItem currItem = mExampleList.get(position);
-
-            Picasso.get().load(currItem.getImg_firestore()).into(holder.dImageView);
-
-            holder.dName.setText(currItem.getName());
-            holder.dStartTime.setText(currItem.getStartTime());
-            holder.dEndTime.setText(currItem.getEndTime());
-            holder.dDate.setText(currItem.getDate());
-
-            //This is what allows each card to be clicked and load up a new activity containing the information that goes with that card
-            holder.deleteLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    Intent intent = new Intent(context, EventActivity.class);
-                    //Extras are what we are passing from the adapter --> EventActivity (the event page)
-                    //Inside EventActivity we will use these intents to pull information
-                    intent.putExtra("data1", mExampleList.get(position).getName());
-
-                    context.startActivity(intent);
-                }
-            });
-            holder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    // Get the clicked item label
-                    String personGoing = currUser.getUserId();
-
-                    Event event = eventList.get(0);
-                    peopleGoing = event.getUserGoing();
-
-
-
-                    String removedPerson = peopleGoing.replace(personGoing+",", "");
-
-                    String userRSVP = currUser.getRSVPEvents();
-                    String removeEvent = userRSVP.replace(event.getName()+",", "");
-
-
-                    ref.child(currUser.getUserId()).child("rsvpevents").setValue(removeEvent);
-
-                    eventRef.child(itemLabel).child("userGoing").setValue(removedPerson);
-
-                    // Remove the item on remove/button click
-                    mExampleList.remove(position);
-                    notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, mExampleList.size());
-                    Toast.makeText(context, "Declined : " + itemLabel, Toast.LENGTH_SHORT).show();
-
                 }
             });
         } else if (viewType == 2) { // Friend Search
