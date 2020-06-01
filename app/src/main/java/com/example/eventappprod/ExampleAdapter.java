@@ -33,16 +33,20 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     private ArrayList<ExampleItem> exampleListFull;
     Context context;
     private String cardType;
-    User currUser  = User.getInstance();
+    User currUser = User.getInstance();
     String peopleGoing;
 
     private DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/USER");
     private DatabaseReference eventRef = FirebaseDatabase.getInstance().getReference("/EVENT");
 
+    String word[] = new String[20];
+    String[] userGoing = new String[20];
+    String[] eventTitle = new String[20];
+    String[] eventOwner = new String[20];
+    ArrayList<Event> eventList = new ArrayList<>();
 
 
-
-    public static class ExampleViewHolder extends RecyclerView.ViewHolder{
+    public static class ExampleViewHolder extends RecyclerView.ViewHolder {
         public ImageView mImageView;
         public TextView name;
         public TextView startTime;
@@ -80,7 +84,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     }
 
 
-    public ExampleAdapter(Context ct, ArrayList<ExampleItem> exampleList, String type){
+    public ExampleAdapter(Context ct, ArrayList<ExampleItem> exampleList, String type) {
         context = ct;
         mExampleList = exampleList;
         //Deep copy of mExampleList;
@@ -93,22 +97,22 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     //Creates the View holder from our my_row layout
     public ExampleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // The view type 0 is the create event button card type
-        if(viewType == 0) {
+        if (viewType == 0) {
             LayoutInflater inflater = LayoutInflater.from(context);
             View v = inflater.inflate(R.layout.my_button_row, parent, false);
             ExampleViewHolder evh = new ExampleViewHolder(v);
             return evh;
             // The view type 1 is the regular event card type
-        } else if(viewType == 1) {
+        } else if (viewType == 1) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_row, parent, false);
             ExampleViewHolder evh = new ExampleViewHolder(v);
             return evh;
             // Thw view type 2 is for the friend card type
-        } else if(viewType == 2){
+        } else if (viewType == 2) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_friend_request_row, parent, false);
             ExampleViewHolder evh = new ExampleViewHolder(v);
             return evh;
-        } else if(viewType == 3){
+        } else if (viewType == 3) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_friend_row, parent, false);
             ExampleViewHolder evh = new ExampleViewHolder(v);
             return evh;
@@ -117,211 +121,218 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             ExampleViewHolder evh = new ExampleViewHolder(v);
             return evh;
         }
+
     }
 
     @Override
     public void onBindViewHolder(@NonNull ExampleViewHolder holder, final int position) {
 
-            int viewType = getItemViewType(position);
+        final String itemLabel = mExampleList.get(position).getName();
 
-            //The first card is always the create event button
-            if(viewType == 0) {
-
-                holder.createEvent.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(context, CreateEventActivity.class);
-                        context.startActivity(intent);
+        eventRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                eventList.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    if (ds.child("name").getValue().equals(itemLabel)) {
+                        eventList.add(ds.getValue(Event.class));
                     }
-                });
-            } else if(viewType == 1){ // Event list
-
-                final ExampleItem currItem = mExampleList.get(position);
-
-                Picasso.get().load(currItem.getImg_firestore()).into(holder.mImageView);
-
-                holder.name.setText(currItem.getName());
-                holder.startTime.setText(currItem.getStartTime());
-                holder.endTime.setText(currItem.getEndTime());
-                holder.date.setText(currItem.getDate());
-
-                //This is what allows each card to be clicked and load up a new activity containing the information that goes with that card
-                holder.mainLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        Intent intent = new Intent(context, EventActivity.class);
-                        //Extras are what we are passing from the adapter --> EventActivity (the event page)
-                        //Inside EventActivity we will use these intents to pull information
-                        intent.putExtra("data1", mExampleList.get(position).getName());
-
-                        context.startActivity(intent);
-                    }
-                });
-                holder.mRSVPButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        // Get the clicked item label
-                        final String itemLabel = mExampleList.get(position).getName();
-
-                        eventRef.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for (DataSnapshot ds : dataSnapshot.getChildren()){
-                                        if (ds.child("name").getValue().equals(itemLabel)){
-                                            peopleGoing = (ds.getValue(Event.class)).getUserGoing();
-                                            break;
-                                        }
-                                    }
-                                }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                //Toast.makeText(DashBoard.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-                        //add the event to the user
-                        String userRSVP = currUser.getRSVPEvents();
-                        String rsvp = itemLabel + "," + currUser.getRSVPEvents();
-
-                        String personGoing = currUser.getUserId();
-                        String usersGoing = personGoing + "," + peopleGoing;
-
-
-                        currUser.addRSVPEvent(rsvp + itemLabel);
-                        ref.child(currUser.getUserId()).child("rsvpevents").setValue(rsvp);
-
-                        eventRef.child(itemLabel).child("userGoing").setValue(usersGoing);
-
-
-                        // Remove the item on remove/button click
-                        mExampleList.remove(position);
-                        notifyItemRemoved(position);
-                        notifyItemRangeChanged(position,mExampleList.size());
-                        Toast.makeText(context,"Saved in RSVP : " + itemLabel, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }  else if(viewType == 2){ // Friend Search
-                //todo: this part is done in the other user list
-                ExampleItem currItem = mExampleList.get(position);
-
-                Picasso.get().load(currItem.getImg_firestore()).into(holder.mImageView);
-
-                holder.name.setText(currItem.getName());
-                holder.userId.setText(currItem.getStartTime());
-
-                //This is what allows each card to be clicked and load up a new activity containing the information that goes with that card
-                holder.mainLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        Intent intent = new Intent(context, FriendsListActivity.class);
-                        //Extras are what we are passing from the adapter --> EventActivity (the event page)
-                        //Inside EventActivity we will use these intents to pull information
-                        intent.putExtra("data1", mExampleList.get(position).getName());
-
-                        context.startActivity(intent);
-                    }
-                });
-               holder.mFollowButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // Get the clicked item label
-                        String itemLabel = mExampleList.get(position).getName();
-                        String userID = mExampleList.get(position).getStartTime();
-
-                        String friend_list = userID + "," + currUser.getFriendList();
-                        ref.child(currUser.getUserId()).child("friendList").setValue(friend_list);
-
-                        // Add the item on accept/button click
-                        mExampleList.remove(position);
-                        notifyItemRemoved(position);
-                        notifyItemRangeChanged(position,mExampleList.size());
-                        exampleListFull = mExampleList;
-                        Toast.makeText(context,"Followed : " + itemLabel, Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            } else if(viewType == 3){ // Friends List
-                ExampleItem currItem = mExampleList.get(position);
-
-                Picasso.get().load(currItem.getImg_firestore()).into(holder.mImageView);
-
-                holder.name.setText(currItem.getName());
-                holder.userId.setText(currItem.getStartTime());
-
-                //UnfollowButton used here
-                holder.mUnfollowButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // Get the clicked item label
-                        String itemLabel = mExampleList.get(position).getName();
-                        //User ID
-                        String userID = mExampleList.get(position).getStartTime();
-
-
-                        currUser.removeFriend(userID);
-                        String userFriendlist = currUser.getFriendList();
-                        ref.child(currUser.getUserId()).child("friendList").setValue(userFriendlist);
-
-                        //String rsvp = itemLabel + "," + currUser.getRSVPEvents();
-                        //currUser.addRSVPEvent(rsvp + itemLabel);
-                        //ref.child(currUser.getUserId()).child("rsvpevents").setValue(rsvp);
-
-                        // Remove the item on remove/button click
-                        mExampleList.remove(position);
-                        notifyItemRemoved(position);
-                        notifyItemRangeChanged(position,mExampleList.size());
-                        Toast.makeText(context,"Unfollowed : " + itemLabel, Toast.LENGTH_SHORT).show();
-
-                        //Todo: add the part where they wont see that person anymore.
-                    }
-                });
-            } else {
-                ExampleItem currItem = mExampleList.get(position);
-
-                Picasso.get().load(currItem.getImg_firestore()).into(holder.mImageView);
-
-                holder.name.setText(currItem.getName());
-                holder.startTime.setText(currItem.getStartTime());
-                holder.endTime.setText(currItem.getEndTime());
-                holder.date.setText(currItem.getDate());
-
-                holder.mEditButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //TODO: for khanh
-                    }
-                });
-
-                holder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //TODO: for khanh
-                    }
-                });
+                }
+                if (eventList.size() != 0) {
+                    retrieveData();
+                }
             }
-}
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                //Toast.makeText(DashBoard.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        int viewType = getItemViewType(position);
+
+        //The first card is always the create event button
+        if (viewType == 0) {
+
+            holder.createEvent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, CreateEventActivity.class);
+                    context.startActivity(intent);
+                }
+            });
+        } else if (viewType == 1) { // Event list
+
+            final ExampleItem currItem = mExampleList.get(position);
+
+            Picasso.get().load(currItem.getImg_firestore()).into(holder.mImageView);
+
+            holder.name.setText(currItem.getName());
+            holder.startTime.setText(currItem.getStartTime());
+            holder.endTime.setText(currItem.getEndTime());
+            holder.date.setText(currItem.getDate());
+
+            //This is what allows each card to be clicked and load up a new activity containing the information that goes with that card
+            holder.mainLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent intent = new Intent(context, EventActivity.class);
+                    //Extras are what we are passing from the adapter --> EventActivity (the event page)
+                    //Inside EventActivity we will use these intents to pull information
+                    intent.putExtra("data1", mExampleList.get(position).getName());
+
+                    context.startActivity(intent);
+                }
+            });
+            holder.mRSVPButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    // Get the clicked item label
+
+                    Event event = eventList.get(0);
+                    peopleGoing = event.getUserGoing();
+                    //add the event to the user
+                    String userRSVP = currUser.getRSVPEvents();
+                    String rsvp = itemLabel + "," + currUser.getRSVPEvents();
+
+                    String personGoing = currUser.getUserId();
+                    String usersGoing = personGoing + "," + peopleGoing;
+
+
+                    currUser.addRSVPEvent(rsvp + itemLabel);
+                    ref.child(currUser.getUserId()).child("rsvpevents").setValue(rsvp);
+
+                    eventRef.child(itemLabel).child("userGoing").setValue(usersGoing);
+
+
+                    // Remove the item on remove/button click
+                    mExampleList.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, mExampleList.size());
+                    Toast.makeText(context, "Saved in RSVP : " + itemLabel, Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else if (viewType == 2) { // Friend Search
+            //todo: this part is done in the other user list
+            ExampleItem currItem = mExampleList.get(position);
+
+            Picasso.get().load(currItem.getImg_firestore()).into(holder.mImageView);
+
+            holder.name.setText(currItem.getName());
+            holder.userId.setText(currItem.getStartTime());
+
+            //This is what allows each card to be clicked and load up a new activity containing the information that goes with that card
+            holder.mainLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent intent = new Intent(context, FriendsListActivity.class);
+                    //Extras are what we are passing from the adapter --> EventActivity (the event page)
+                    //Inside EventActivity we will use these intents to pull information
+                    intent.putExtra("data1", mExampleList.get(position).getName());
+
+                    context.startActivity(intent);
+                }
+            });
+            holder.mFollowButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Get the clicked item label
+                    String itemLabel = mExampleList.get(position).getName();
+                    String userID = mExampleList.get(position).getStartTime();
+
+                    String friend_list = userID + "," + currUser.getFriendList();
+                    ref.child(currUser.getUserId()).child("friendList").setValue(friend_list);
+
+                    // Add the item on accept/button click
+                    mExampleList.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, mExampleList.size());
+                    exampleListFull = mExampleList;
+                    Toast.makeText(context, "Followed : " + itemLabel, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        } else if (viewType == 3) { // Friends List
+            ExampleItem currItem = mExampleList.get(position);
+
+            Picasso.get().load(currItem.getImg_firestore()).into(holder.mImageView);
+
+            holder.name.setText(currItem.getName());
+            holder.userId.setText(currItem.getStartTime());
+
+            //UnfollowButton used here
+            holder.mUnfollowButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Get the clicked item label
+                    String itemLabel = mExampleList.get(position).getName();
+                    //User ID
+                    String userID = mExampleList.get(position).getStartTime();
+
+
+                    currUser.removeFriend(userID);
+                    String userFriendlist = currUser.getFriendList();
+                    ref.child(currUser.getUserId()).child("friendList").setValue(userFriendlist);
+
+                    //String rsvp = itemLabel + "," + currUser.getRSVPEvents();
+                    //currUser.addRSVPEvent(rsvp + itemLabel);
+                    //ref.child(currUser.getUserId()).child("rsvpevents").setValue(rsvp);
+
+                    // Remove the item on remove/button click
+                    mExampleList.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, mExampleList.size());
+                    Toast.makeText(context, "Unfollowed : " + itemLabel, Toast.LENGTH_SHORT).show();
+
+                    //Todo: add the part where they wont see that person anymore.
+                }
+            });
+        } else {
+            ExampleItem currItem = mExampleList.get(position);
+
+            Picasso.get().load(currItem.getImg_firestore()).into(holder.mImageView);
+
+            holder.name.setText(currItem.getName());
+            holder.startTime.setText(currItem.getStartTime());
+            holder.endTime.setText(currItem.getEndTime());
+            holder.date.setText(currItem.getDate());
+
+            holder.mEditButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //TODO: for khanh
+                }
+            });
+
+            holder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //TODO: for khanh
+                }
+            });
+        }
+    }
 
     @Override
-    public int getItemViewType (int position) {
+    public int getItemViewType(int position) {
         // The first card is always the
         //String creator = mExampleList.get(position).getCreator();
         //String currentUser = currUser.getUserId();
         if (position == 0 && this.cardType.equals("event")) {
             return 0;
-        } else if (mExampleList.get(position).getCreator().replace(",","").equals(currUser.getUserId())){
+        } else if (mExampleList.get(position).getCreator().replace(",", "").equals(currUser.getUserId())) {
             return 4;
-        } else if(this.cardType.equals("event") || this.cardType.equals("previous")){
+        } else if (this.cardType.equals("event") || this.cardType.equals("previous")) {
             return 1;
-        } else if(this.cardType.equals("friendSearch")) {
-           return 2;
+        } else if (this.cardType.equals("friendSearch")) {
+            return 2;
         } else if (this.cardType.equals("RSVP")) {
             return 14;
         }
-        if(this.cardType.equals("friend")) {
+        if (this.cardType.equals("friend")) {
             return 3;
         }
         return 1;
@@ -343,19 +354,19 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             ArrayList<ExampleItem> filteredList = new ArrayList<>();
 
             //Show all results bc we aren't filtering anything
-            if(charSequence == null || charSequence.length() == 0){
+            if (charSequence == null || charSequence.length() == 0) {
                 filteredList.addAll(exampleListFull);
-            } else{
+            } else {
                 String filterPattern = charSequence.toString().toLowerCase().trim();
 
                 //Searches for query in text1 and text2
                 int i = 0;
-                for(ExampleItem item : exampleListFull) {
+                for (ExampleItem item : exampleListFull) {
                     if (i == 0 && cardType.equals("event")) { // The item is the button and always should be added
                         filteredList.add(item);
                     } else {
                         if (item.getName().toLowerCase().contains(filterPattern)
-                            || item.getStartTime().contains(filterPattern)) {
+                                || item.getStartTime().contains(filterPattern)) {
                             filteredList.add(item);
                         }
                     }
@@ -371,12 +382,20 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
             mExampleList.clear();
-            mExampleList.addAll((List)filterResults.values);
+            mExampleList.addAll((List) filterResults.values);
             notifyDataSetChanged();
         }
     };
 
     public void resetFull() {
         exampleListFull = new ArrayList<>(mExampleList);
+    }
+
+    public void retrieveData() {
+        for (int i = 0; i < eventList.size() ; i++) {
+            userGoing[i] = eventList.get(i).getUserGoing();
+            eventTitle[i] = eventList.get(i).getName();
+            eventOwner[i] = eventList.get(i).getOwner();
+        }
     }
 }
