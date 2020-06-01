@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -51,6 +53,7 @@ public class EventActivity extends AppCompatActivity {
     Drawable drawable;
 
     Button AttendeesButton;
+    Event myevent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,9 +83,30 @@ public class EventActivity extends AppCompatActivity {
 
         AttendeesButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
+                AlertDialog.Builder builder = new AlertDialog.Builder(EventActivity.this);
+                String peopleGoing = myevent.getUserGoing();
+                String array[] = peopleGoing.split(",");
+                //String person = "";
+                builder.setTitle("Friends Going:");
+                builder.setItems(array, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
+                    }
+                });
+                //builder.setTitle("Friends Going: \n" + person);
+                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
             }
+
         });
 
 
@@ -103,7 +127,7 @@ public class EventActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                    // Toast.makeText(EventActivity.this, "Debug purpose", Toast.LENGTH_SHORT).show();
 
-                        Event myevent = (Event) dataSnapshot.child(data1).getValue(Event.class);
+                        myevent = (Event) dataSnapshot.child(data1).getValue(Event.class);
                         if (myevent!=null) {
                             desc = myevent.getDescription();
                             date = myevent.getDate();
