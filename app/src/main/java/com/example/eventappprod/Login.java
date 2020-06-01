@@ -65,8 +65,8 @@ public class Login extends AppCompatActivity {
 
                 email = mEmail.getText().toString().trim();
                 password = mPassword.getText().toString().trim();
-//                email = "kcpham@ucsd.edu";
-//                password = "hahahaha";
+//                email = "cpp001@ucsd.edu";
+//                password = "caseypham";
                 //email = "nkt002@ucsd.edu";
                 //password = "qwer1234";
 
