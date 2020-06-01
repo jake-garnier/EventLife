@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.renderscript.Allocation;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -76,6 +77,13 @@ public class EventActivity extends AppCompatActivity {
         //Initialize these methods
         getData();
         //setData();
+
+        AttendeesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
 
     }

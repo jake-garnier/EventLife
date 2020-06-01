@@ -1,10 +1,8 @@
 package com.example.eventappprod;
 
-import java.util.ArrayList;
-
 public class Event {
     private String ID;
-    private String Name;
+    private String name;
 
     private String Owner;
     private String Date;
@@ -29,7 +27,7 @@ public class Event {
                  String usergo, String usermaybe, String usernot) {
         // mandatory fields for an event object
         ID = id;
-        Name = name;
+        this.name = name;
         Owner = owner;
         Date = date;
         Location = loca;
@@ -49,10 +47,10 @@ public class Event {
     public void setId(String id){ ID = id; }
 
     public String getName(){
-        return Name;
+        return name;
     }
     public void setName(String n){
-        Name = n;
+        name = n;
     }
 
     public String getOwner(){
