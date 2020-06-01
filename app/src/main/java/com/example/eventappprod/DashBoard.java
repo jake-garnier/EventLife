@@ -35,6 +35,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class DashBoard<user> extends AppCompatActivity {
     //https://www.youtube.com/watch?v=Nw9JF55LDzE
@@ -226,25 +227,35 @@ public class DashBoard<user> extends AppCompatActivity {
         mAdapter = new ExampleAdapter(this, exampleList, "event");
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-//        addNotification();
+        addNotification();
     }
 
-//    private void addNotification() {
-//        Intent intent = new Intent(this, EventActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-//        for(int i=0; i<evenList.size(); i++) {
-//            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-//                    .setSmallIcon(R.drawable.notification_icon)
-//                    .setContentTitle(evenList.get(i).getName())
-//                    .setContentText(evenList.get(i).getStartTime())
-//                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-//                    // Set the intent that will fire when the user taps the notification
-//                    .setContentIntent(pendingIntent)
-//                    .setAutoCancel(true);
-//            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-//            notificationManager.notify(i, builder.build());
-//        }
-//    }
+
+    private void addNotification() {
+        Calendar currcalendar = Calendar.getInstance();
+
+        String sDate = currcalendar.get(Calendar.YEAR) + "-"
+                + currcalendar.get(Calendar.MONTH)
+                + "-" + currcalendar.get(Calendar.DAY_OF_MONTH)
+                + " at " + currcalendar.get(Calendar.HOUR_OF_DAY)
+                + ":" + currcalendar.get(Calendar.MINUTE);
+
+        Intent intent = new Intent(this, EventActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        for(int i=0; i<evenList.size(); i++) {
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setSmallIcon(R.drawable.notification_icon)
+                    .setContentTitle(evenList.get(i).getName())
+                    .setContentText(evenList.get(i).getStartTime())
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    // Set the intent that will fire when the user taps the notification
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true);
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+            notificationManager.notify(i, builder.build());
+        }
+    }
+
 
 }
