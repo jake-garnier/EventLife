@@ -327,8 +327,10 @@ public class CreateEventActivity extends AppCompatActivity {
 
             String url = uri.toString();
             String filename = url.substring(url.lastIndexOf("/")+1);
+            Date currentime= Calendar.getInstance().getTime();
+            String unique_time = currentime.toString();
 
-            imagePath = FirebaseStorage.getInstance().getReference().child("/EVENT").child(filename);
+            imagePath = FirebaseStorage.getInstance().getReference().child("/EVENT").child(unique_time + filename);
             //  put the picture to put in Image box
 
             imagePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
