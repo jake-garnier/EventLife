@@ -201,9 +201,6 @@ public class DashBoard<user> extends AppCompatActivity {
         images_Firestore.add("");
         creator.add("");
 
-        if(evenList.size() == 0) {
-            evenList.add(null);
-        }
 
         for (int i=1; i<evenList.size()+1;i++) {
             eventNames_Screenshow.add(i, evenList.get(i-1).getName());
@@ -214,26 +211,29 @@ public class DashBoard<user> extends AppCompatActivity {
             creator.add(evenList.get(i-1).getOwner());
         }
 
+
         LoadDatatoDashBoard();
 
     }
 
     public void LoadDatatoDashBoard(){
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
+        for (int i = 0; i < evenList.size() + 1; i++) {
 
-        for (int i = 0; i<evenList.size()+1; i++) {
-
-            exampleList.add(new ExampleItem(eventNames_Screenshow.get(i), eventStartTime_Screenshow.get(i),
-                    eventEndTime_Screenshow.get(i), eventDate_Screenshow.get(i), creator.get(i), images_Firestore.get(i)));
-
+            exampleList.add(new ExampleItem(eventNames_Screenshow.get(i), eventStartTime_Screenshow.get(i), eventEndTime_Screenshow.get(i), eventDate_Screenshow.get(i), creator.get(i), images_Firestore.get(i)));
 
 
         }
 
+
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new ExampleAdapter(this, exampleList, "event");
+        if(evenList.size() == 0) {
+            mAdapter = new ExampleAdapter(this, exampleList, "");
+        } else {
+            mAdapter = new ExampleAdapter(this, exampleList, "event");
+        }
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 //        addNotification();
