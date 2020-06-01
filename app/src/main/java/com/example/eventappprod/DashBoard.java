@@ -226,7 +226,7 @@ public class DashBoard<user> extends AppCompatActivity {
             eventEndTime_Screenshow[i] = evenList.get(i-1).getEndTime();
             eventDate_Screenshow[i] = evenList.get(i-1).getDate();
             images_Firestore[i] = evenList.get(i-1).getImage();
-            creator[i] = evenList.get(i-1).getOwner().replace(",","");
+            creator[i] = evenList.get(i-1).getOwner();
         }
 
         LoadDatatoDashBoard();
