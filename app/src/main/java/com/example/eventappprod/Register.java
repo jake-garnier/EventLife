@@ -119,9 +119,8 @@ public class Register extends AppCompatActivity {
                                                 "https://firebasestorage.googleapis.com/v0/b/event-b161b.appspot.com/o/EVENT%2F285871589?alt=media&token=0a2f3f7e-e6f8-4b44-ac9b-b15d0669ecd1","", "", "", "Welcome to EventLife,", "", "kcpham,");
                                         usercount++;
                                         String userRef = Integer.toString(usercount);
-                                        //String userID = fullName + "/" + email.substring(0, email.indexOf("@"));
-                                        //ref.child(userRef).setValue(u);
-                                        String userID = email.substring(0, email.indexOf("@"));//+"@ucsd,edu";
+
+                                        String userID = email.substring(0, email.indexOf("@"));
         //                                profileName.setText(userID);
                                         u.setUserId(userID);
                                         ref.child("/USER").child(userID).setValue(u);
