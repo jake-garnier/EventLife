@@ -156,7 +156,7 @@ public class FriendsListActivity extends AppCompatActivity {
                 builder.setView(input);
 
                 // Set up the buttons
-                builder.setPositiveButton(R.string.project_id, new DialogInterface.OnClickListener() {
+                builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     //todo: this happens in the other person's friends list with a notification heh
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -175,7 +175,7 @@ public class FriendsListActivity extends AppCompatActivity {
                                     if (userList.get(i).getUserId().equals(friendAdd) && flag == false)
                                     {
                                         currUser.addFriend(friendAdd);
-                                        ref.child(userID).child("friendList").setValue(currUser.getFriendList());
+                                        //ref.child(userID).child("friendList").setValue(currUser.getFriendList());
                                         //create the ExampleItem and insert that into the friendsList
                                         exampleList.add(0, new ExampleItem(userList.get(i).getName(), userList.get(i).getUserId(), "", "", "", userList.get(i).getProfileImage()));
                                         //create a new row for that friend
@@ -214,9 +214,13 @@ public class FriendsListActivity extends AppCompatActivity {
                 builder.show();
             }
         });
-
     }
 
+    @Override
+    protected void onPause(){
+        super.onPause();
+        ref.child(userID).child("friendList").setValue(currUser.getFriendList());
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
