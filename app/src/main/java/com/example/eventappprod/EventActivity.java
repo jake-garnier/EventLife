@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.renderscript.Allocation;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +49,8 @@ public class EventActivity extends AppCompatActivity {
 
     Drawable drawable;
 
+    Button AttendeesButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +70,8 @@ public class EventActivity extends AppCompatActivity {
         EndTime = findViewById(R.id.tvEnd);
         Location = findViewById(R.id.tvLocation);
         CreatedBy =findViewById(R.id.tvCreatedBy);
+
+        AttendeesButton = findViewById(R.id.eventFormGuests);
 
         //Initialize these methods
         getData();

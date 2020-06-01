@@ -17,8 +17,11 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -31,7 +34,11 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     Context context;
     private String cardType;
     User currUser  = User.getInstance();
+    String peopleGoing;
+
     private DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/USER");
+    private DatabaseReference eventRef = FirebaseDatabase.getInstance().getReference("/EVENT");
+
 
 
 
@@ -71,6 +78,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
         }
     }
+
 
     public ExampleAdapter(Context ct, ArrayList<ExampleItem> exampleList, String type){
         context = ct;
@@ -128,7 +136,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                 });
             } else if(viewType == 1){ // Event list
 
-                ExampleItem currItem = mExampleList.get(position);
+                final ExampleItem currItem = mExampleList.get(position);
 
                 Picasso.get().load(currItem.getImg_firestore()).into(holder.mImageView);
 
@@ -153,13 +161,41 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                 holder.mRSVPButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+
                         // Get the clicked item label
-                        String itemLabel = mExampleList.get(position).getName();
+                        final String itemLabel = mExampleList.get(position).getName();
+
+                        eventRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot ds : dataSnapshot.getChildren()){
+                                        if (ds.child("name").getValue().equals(itemLabel)){
+                                            peopleGoing = (ds.getValue(Event.class)).getUserGoing();
+                                            break;
+                                        }
+                                    }
+                                }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                //Toast.makeText(DashBoard.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
                         //add the event to the user
                         String userRSVP = currUser.getRSVPEvents();
                         String rsvp = itemLabel + "," + currUser.getRSVPEvents();
+
+                        String personGoing = currUser.getUserId();
+                        String usersGoing = personGoing + "," + peopleGoing;
+
+
                         currUser.addRSVPEvent(rsvp + itemLabel);
                         ref.child(currUser.getUserId()).child("rsvpevents").setValue(rsvp);
+
+                        eventRef.child(itemLabel).child("userGoing").setValue(usersGoing);
+
+
                         // Remove the item on remove/button click
                         mExampleList.remove(position);
                         notifyItemRemoved(position);
