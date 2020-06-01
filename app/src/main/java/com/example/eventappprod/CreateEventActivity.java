@@ -237,7 +237,6 @@ public class CreateEventActivity extends AppCompatActivity {
 
                 if(!RealTimeImagePath.isEmpty() && create)
                 {
-                    Toast.makeText(CreateEventActivity.this, "Debug adding purpose", Toast.LENGTH_LONG).show();
                     addEvent();
                     Toast.makeText(CreateEventActivity.this, "Event created", Toast.LENGTH_LONG).show();
                     startActivity(new Intent(getApplicationContext(), DashBoard.class));
