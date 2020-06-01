@@ -74,6 +74,35 @@ public class DashBoard<user> extends AppCompatActivity {
 
 
         userref = FirebaseDatabase.getInstance().getReference("/USER");
+        ref = FirebaseDatabase.getInstance().getReference("/EVENT");
+        //eventNames_Screenshow = getResources().getStringArray(R.array.eventNames_feed);
+
+        friendList = currUser.getFriendList().split(",");
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                evenList.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren()){
+                    for(String friend : friendList) {
+                        if (ds.child("owner").getValue().equals(friend + ",")) {
+                            evenList.add(ds.getValue(Event.class));
+                        }
+                    }
+                    if(ds.child("owner").getValue().equals(currUser.getUserId() + ",")) {
+                        evenList.add(ds.getValue(Event.class));
+                    }
+                }
+                if (evenList.size()!=0){
+                    retrieveData();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(DashBoard.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
