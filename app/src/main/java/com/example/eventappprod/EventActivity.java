@@ -36,6 +36,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 public class EventActivity extends AppCompatActivity {
 
     ImageView mainImageView;
@@ -54,11 +56,55 @@ public class EventActivity extends AppCompatActivity {
 
     Button AttendeesButton;
     Event myevent;
+    private ArrayList<User> userList;
+    User currUser  = User.getInstance();
+    private String userID;
+
+    String[] profileImages = new String[20];
+    String[] friendsList = new String[20];
+    String[] userName = new String[20];
+    String[] userIDArr = new String[20];
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
+
+        ref = FirebaseDatabase.getInstance().getReference("/USER");
+        userID = currUser.getEmail().substring(0, currUser.getEmail().indexOf("@"));
+
+        //create user list and update info inside current user from database
+        userList = new ArrayList<>();
+        ref.addValueEventListener(new ValueEventListener() {
+                                      @Override
+                                      public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                          ArrayList<User> newUserList = new ArrayList<>();
+
+                                          for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                              newUserList.add(ds.getValue(User.class));
+                                          }
+
+                                          for (int i = 0; i < newUserList.size(); i++) {
+                                              if (newUserList.get(i).getUserId().equals(userID)) {
+                                                  currUser = newUserList.get(i);
+                                              }
+                                          }
+
+                                          if (newUserList.size() != 0) {
+                                              //userList = newUserList;
+                                              retrieveData();
+                                          }
+                                      }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(EventActivity.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
 
         ref = database.getInstance().getReference("/EVENT");
 
@@ -87,10 +133,30 @@ public class EventActivity extends AppCompatActivity {
             {
                 AlertDialog.Builder builder = new AlertDialog.Builder(EventActivity.this);
                 String peopleGoing = myevent.getUserGoing();
+                //people going to the event
                 String array[] = peopleGoing.split(",");
+
+                //friends going to the event
+                String friends_going = currUser.getFriendList();
+                String userFriends[] = friends_going.split(",");
+                String friends = "";
+
+                //user object
+                User user = new User();
+                for(int i = 0; i < userFriends.length; i++ ) {
+                    for(int j = 0; j < array.length; j++) {
+                        //if the user is the same as the array
+                        if(userFriends[i].equals(array[j])){
+                            friends = userFriends[i] + "," + friends;
+                        }
+                    }
+                }
+
+                String final_array[] = friends.split(",");
+
                 //String person = "";
                 builder.setTitle("Friends Going:");
-                builder.setItems(array, new DialogInterface.OnClickListener() {
+                builder.setItems(final_array, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -173,6 +239,35 @@ public class EventActivity extends AppCompatActivity {
         Location.setText(loca);
         CreatedBy.setText(owner);
     }
+    public void retrieveData(){
+
+        // fetching data to particular array
+
+        for (int i=0; i<userList.size();i++) {
+            userName[i] = userList.get(i).getName();
+            userIDArr[i] = userList.get(i).getUserId();
+            friendsList[i] = userList.get(i).getFriendList();
+            profileImages[i] = userList.get(i).getProfileImage();
+            // you can get other info like date and time as well
+            //Bitmap my_image;
+            //Picasso.get().load(evenList.get(i).getImage()).into(my_image);
+            LoadDatatoFriendsList();
+        }
+    }
+    public void LoadDatatoFriendsList() {
+        String[] array = currUser.getFriendList().split(",");
+        User user = new User();
+        for (int i = 0; i < array.length; i++) {
+            for (int j = 0; j < userList.size(); j++) {
+                if (userList.get(j).getUserId().equals(array[i])) {
+                    user = userList.get(j);
+                    //exampleList.add(new ExampleItem(user.getName(), user.getUserId(), "", "", "", user.getProfileImage()));
+                    //mAdapter.notifyItemInserted(0);
+                    //mAdapter.resetFull();
+                    //mRecyclerView.scrollToPosition(0);
+                }
+            }
+        }
 //
 //    @Override
 //    public void onMapReady(GoogleMap googleMap) {
@@ -180,4 +275,6 @@ public class EventActivity extends AppCompatActivity {
 //        map.getUiSettings().setMyLocationButtonEnabled(false);
 //        map.setMyLocationEnabled(true);
 //    }
+
+    }
 }
