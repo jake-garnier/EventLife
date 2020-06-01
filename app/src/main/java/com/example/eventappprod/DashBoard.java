@@ -35,6 +35,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class DashBoard<user> extends AppCompatActivity {
     //https://www.youtube.com/watch?v=Nw9JF55LDzE
@@ -51,6 +52,7 @@ public class DashBoard<user> extends AppCompatActivity {
     ArrayList<String> creator = new ArrayList<>();
 
     ArrayList<String> friendList = new ArrayList<>();
+    ArrayList<String> rsvpEvents = new ArrayList<>();
 
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
@@ -96,10 +98,18 @@ public class DashBoard<user> extends AppCompatActivity {
             friendList.add(list[i]);
         }
 
+        String[] rsvp = currUser.getRSVPEvents().split(",");
+
+        for(int i = 0; i < rsvp.length; i++) {
+            rsvpEvents.add(rsvp[i]);
+        }
+
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                 evenList.clear();
+
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     if(ds.child("owner").getValue().equals(currUser.getUserId() + ",")) {
                         evenList.add(ds.getValue(Event.class));
@@ -112,9 +122,22 @@ public class DashBoard<user> extends AppCompatActivity {
                         }
                     }
                 }
-                //if (evenList.size()!=0){
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    for(String event : rsvpEvents) {
+                        if(ds.child("name").getValue().equals(event)) {
+                            Iterator<Event> it = evenList.iterator();
+                            while(it.hasNext()) {
+                                Event test = it.next();
+                                if(test.getName().equals(ds.child("name").getValue())) {
+                                    it.remove();
+                                }
+                            }
+                        }
+                    }
+                }
+
                 retrieveData();
-                //}
+
             }
 
             @Override
