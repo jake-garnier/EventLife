@@ -215,7 +215,6 @@ public class FriendsListActivity extends AppCompatActivity {
             }
         });
     }
-
     @Override
     protected void onPause(){
         super.onPause();
