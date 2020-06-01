@@ -33,11 +33,14 @@ public class FindEventsFrag extends Fragment {
     String[] eventEndTime_Screenshow=new String[20];
     String[] eventDate_Screenshow=new String[20];
 
+    String[] friendList = new String[20];
+
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
     private ExampleAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     DatabaseReference ref;
+    User currUser  = User.getInstance();
     ArrayList<Event> evenList;
 
     @Nullable
@@ -49,13 +52,28 @@ public class FindEventsFrag extends Fragment {
         evenList = new ArrayList<>();
         ref = FirebaseDatabase.getInstance().getReference("/EVENT");
 
+        friendList = currUser.getFriendList().split(",");
+
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()){
-                    evenList.add(ds.getValue(Event.class));
+                evenList.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    boolean flag = true;
+                    for (String friend : friendList) {
+                        if (ds.child("owner").getValue().equals(friend + ","))
+                            flag = false;
+                    }
+
+                    if (ds.child("owner").getValue().equals(currUser.getUserId() + ","))
+                        flag = false;
+
+                    if(flag)
+                        evenList.add(ds.getValue(Event.class));
                 }
-                if (evenList.size()!=0) retrieveData(view);
+                if (evenList.size() != 0) {
+                    retrieveData(view);
+                }
             }
 
             @Override

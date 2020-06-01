@@ -72,32 +72,9 @@ public class DashBoard<user> extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
 
-        //Use the  User.getInstance() get the current user don't use the Intent
-        //Intent ib = getIntent();
-        //currUser = (User) ib.getSerializableExtra("LoginDash");
 
         userref = FirebaseDatabase.getInstance().getReference("/USER");
 
-        //Getting the updated user
-        /*userref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    userList.add(ds.getValue(User.class));
-                }
-                for (int i = 0; i < userList.size();i++)
-                {
-                    if(userList.get(i).getUserId().equals(currUser.getUserId()))
-                    {
-                        currUser = userList.get(i);
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(DashBoard.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
-            }
-        });*/
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "EventLife";
@@ -241,13 +218,11 @@ public class DashBoard<user> extends AppCompatActivity {
             exampleList.add(new ExampleItem(eventNames_Screenshow[i], eventStartTime_Screenshow[i],
                     eventEndTime_Screenshow[i], eventDate_Screenshow[i], creator[i], images_Firestore[i]));
 
-
-
         }
 
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(DashBoard.this);
         mAdapter = new ExampleAdapter(this, exampleList, "event");
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);

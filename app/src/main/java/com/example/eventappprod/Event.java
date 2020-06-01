@@ -111,7 +111,7 @@ public class Event {
         return userGoing;
     }
     public void addUserGoing(String g){
-        userGoing = userGoing.concat(g+ "$");// use '$' to parse the users since
+        userGoing = g + "," + userGoing;// use '$' to parse the users since
         // Real-time Firebase database can store data under String objects only
     }
 
