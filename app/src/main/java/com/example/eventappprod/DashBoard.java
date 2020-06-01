@@ -230,7 +230,7 @@ public class DashBoard<user> extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         if(evenList.size() == 0) {
-            mAdapter = new ExampleAdapter(this, exampleList, "");
+            mAdapter = new ExampleAdapter(this, exampleList, "empty");
         } else {
             mAdapter = new ExampleAdapter(this, exampleList, "event");
         }

@@ -323,7 +323,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         //String currentUser = currUser.getUserId();
         if (position == 0 && this.cardType.equals("event")) {
             return 0;
-        } else if(this.cardType.equals("")) {
+        } else if(this.cardType.equals("empty")) {
             return 0;
         } else if (mExampleList.get(position).getCreator().replace(",", "").equals(currUser.getUserId())) {
             return 4;
