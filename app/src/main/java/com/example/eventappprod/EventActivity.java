@@ -155,8 +155,8 @@ public class EventActivity extends AppCompatActivity {
                 String final_array[] = friends.split(",");
 
                 //String person = "";
-                builder.setTitle("Friends Going:");
-                builder.setItems(final_array, new DialogInterface.OnClickListener() {
+                builder.setTitle("Attendees:");
+                builder.setItems(array, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
