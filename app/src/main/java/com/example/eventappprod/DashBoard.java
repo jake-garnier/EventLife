@@ -54,9 +54,6 @@ public class DashBoard<user> extends AppCompatActivity {
     ArrayList<String> friendList = new ArrayList<>();
     ArrayList<String> rsvpEvents = new ArrayList<>();
 
-    String[] list = new String[20];
-    String[] rsvp = new String[20];
-
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
     private ExampleAdapter mAdapter;
@@ -71,6 +68,11 @@ public class DashBoard<user> extends AppCompatActivity {
 
     FirebaseUser currentuser = FirebaseAuth.getInstance().getCurrentUser();
     String email = currentuser.getEmail();
+
+    String[] list = new String[currUser.getFriendList().length()];
+    String[] rsvp = new String[currUser.getRSVPEvents().length()];
+
+    boolean dataChange;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +96,7 @@ public class DashBoard<user> extends AppCompatActivity {
 
         ref = FirebaseDatabase.getInstance().getReference("/EVENT");
         //eventNames_Screenshow = getResources().getStringArray(R.array.eventNames_feed);
+
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
