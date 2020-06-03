@@ -69,6 +69,7 @@ public class DashBoard<user> extends AppCompatActivity {
     ArrayList<Event> evenList = new ArrayList<>();
     User currUser  = User.getInstance();
     private ArrayList<User> userList;
+    ArrayList<User> newUserList;
 
     FirebaseUser currentuser = FirebaseAuth.getInstance().getCurrentUser();
     String email = currentuser.getEmail();
@@ -92,15 +93,20 @@ public class DashBoard<user> extends AppCompatActivity {
         setContentView(R.layout.activity_dash_board);
 
         userref = FirebaseDatabase.getInstance().getReference("/USER");
+        newUserList = new ArrayList<>();
 
         userref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                ArrayList<User> newUserList = new ArrayList<>();
-
+                newUserList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     newUserList.add(ds.getValue(User.class));
+                }
+
+                if (newUserList.size() != 0) {
+                    userList = newUserList;
+                    retrieveData();
                 }
 
                 for (int i = 0; i < newUserList.size(); i++) {
@@ -109,10 +115,6 @@ public class DashBoard<user> extends AppCompatActivity {
                     }
                 }
 
-                if (newUserList.size() != 0) {
-                    userList = newUserList;
-                    retrieveData();
-                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -331,6 +333,12 @@ public class DashBoard<user> extends AppCompatActivity {
     }
 
     public void retrieveData(){
+        eventNames_Screenshow.clear();
+        eventStartTime_Screenshow.clear();
+        eventEndTime_Screenshow.clear();
+        eventDate_Screenshow.clear();
+        images_Firestore.clear();
+        creator.clear();
 
         // Blank event for the button
         eventNames_Screenshow.add("");
@@ -346,7 +354,7 @@ public class DashBoard<user> extends AppCompatActivity {
             eventEndTime_Screenshow.add(i, evenList.get(i-1).getEndTime());
             eventDate_Screenshow.add(i, evenList.get(i-1).getDate());
             images_Firestore.add(i, evenList.get(i-1).getImage());
-            creator.add(evenList.get(i-1).getOwner());
+            creator.add(i,evenList.get(i-1).getOwner());
         }
 
         for (int i=0; i<userList.size();i++) {

@@ -143,6 +143,12 @@ public class ArchivedEventsActivity extends AppCompatActivity {
 
     public void retrieveData(){
         // fetching data to particular array
+        eventNames_Screenshow.clear();
+        eventStartTime_Screenshow.clear();
+        eventEndTime_Screenshow.clear();
+        eventDate_Screenshow.clear();
+        images_Firestore.clear();
+        creator.clear();
         for (int i=0; i<evenList.size();i++) {
             eventNames_Screenshow.add(i, evenList.get(i).getName());
             eventStartTime_Screenshow.add(evenList.get(i).getStartTime());
