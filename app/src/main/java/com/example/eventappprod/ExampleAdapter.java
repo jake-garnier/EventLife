@@ -213,7 +213,16 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
                     // Get the clicked item label
                     String personGoing = currUser.getUserId();
-                    Event event = eventList.get(0);
+
+                    String itemLabel = mExampleList.get(position).getName();
+                    Event event = new Event();
+
+                    for(int i = 0; i < eventList.size(); i++) {
+                        if(eventList.get(i).getName().equals(itemLabel)) {
+                            event = eventList.get(i);
+                        }
+                    }
+
                     peopleGoing = event.getUserGoing();
 
                     String userRSVP = currUser.getRSVPEvents();
