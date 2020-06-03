@@ -155,6 +155,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 rsvp = currUser.getRSVPEvents().split(",");
                 eventList.clear();
+                dEventList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     for(String rsvpEvent : rsvp) {
                         if(ds.child("name").getValue().equals(rsvpEvent)) {
