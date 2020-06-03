@@ -50,11 +50,12 @@ public class EventActivity extends AppCompatActivity {
 
     int myImage;
     DatabaseReference ref;
+    DatabaseReference userRef;
     FirebaseDatabase database;
 
     Drawable drawable;
 
-    Button AttendeesButton;
+    Button AttendeesButton, RSVPButton;
     Event myevent;
     private ArrayList<User> userList;
     User currUser  = User.getInstance();
@@ -73,31 +74,33 @@ public class EventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event);
 
         ref = FirebaseDatabase.getInstance().getReference("/USER");
+        userRef = FirebaseDatabase.getInstance().getReference("/EVENT");
+
         userID = currUser.getEmail().substring(0, currUser.getEmail().indexOf("@"));
 
         //create user list and update info inside current user from database
         userList = new ArrayList<>();
         ref.addValueEventListener(new ValueEventListener() {
-                                      @Override
-                                      public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                          ArrayList<User> newUserList = new ArrayList<>();
+                ArrayList<User> newUserList = new ArrayList<>();
 
-                                          for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                                              newUserList.add(ds.getValue(User.class));
-                                          }
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    newUserList.add(ds.getValue(User.class));
+                }
 
-                                          for (int i = 0; i < newUserList.size(); i++) {
-                                              if (newUserList.get(i).getUserId().equals(userID)) {
-                                                  currUser = newUserList.get(i);
-                                              }
-                                          }
+                for (int i = 0; i < newUserList.size(); i++) {
+                    if (newUserList.get(i).getUserId().equals(userID)) {
+                        currUser = newUserList.get(i);
+                    }
+                }
 
-                                          if (newUserList.size() != 0) {
-                                              //userList = newUserList;
-                                              retrieveData();
-                                          }
-                                      }
+                if (newUserList.size() != 0) {
+                    //userList = newUserList;
+                    retrieveData();
+                }
+            }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(EventActivity.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
@@ -107,6 +110,7 @@ public class EventActivity extends AppCompatActivity {
 
 
         ref = database.getInstance().getReference("/EVENT");
+        userRef = database.getInstance().getReference("/USER");
 
 
         //Make references that connect the XML <--> the Java variables
@@ -122,11 +126,11 @@ public class EventActivity extends AppCompatActivity {
         CreatedBy =findViewById(R.id.tvCreatedBy);
 
         AttendeesButton = findViewById(R.id.eventFormGuests);
+        RSVPButton = findViewById(R.id.eventFormRSVP);
 
         //Initialize these methods
         getData();
         //setData();
-
         AttendeesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -175,6 +179,44 @@ public class EventActivity extends AppCompatActivity {
 
         });
 
+        RSVPButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                //people going to the event
+                String peopleGoing = myevent.getUserGoing();
+                //store in array since database only stores strings
+                String array[] = peopleGoing.split(",");
+                boolean alreadyGoing = false;
+                for (int i = 0; i < array.length; i++) {
+                    if (array[i].equals(currUser.getUserId())) {
+                        alreadyGoing = true;
+                    }
+                }
+                if (alreadyGoing == true) {
+                    Toast.makeText(EventActivity.this, "You have already RSVP'd for this event!", Toast.LENGTH_SHORT).show();
+                }
+                else if (alreadyGoing == false) {
+                    //grab currentr user name
+                    String personGoing = currUser.getUserId();
+                    // grab all their list of RSVP events
+                    String userRSVP = currUser.getRSVPEvents();
+                    // add new event onto list
+                    String rsvp = myevent.getName() + "," + currUser.getRSVPEvents();
+
+                    // add new user onto event's going list
+                    String usersGoing = personGoing + "," + peopleGoing;
+                    currUser.addRSVPEvent(rsvp + myevent.getName());
+                    // update info in database
+
+                    //ref is event path and eventRef is also event path omg im dumb
+                    System.out.println("blah " + myevent.getName());
+                    ref.child(myevent.getName()).child("userGoing").setValue(usersGoing);
+                    userRef.child(currUser.getUserId()).child("rsvpevents").setValue(rsvp);
+                    Toast.makeText(EventActivity.this, "Saved in RSVP: " + myevent.getName(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
     }
 
@@ -191,18 +233,18 @@ public class EventActivity extends AppCompatActivity {
             ref.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                   // Toast.makeText(EventActivity.this, "Debug purpose", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(EventActivity.this, "Debug purpose", Toast.LENGTH_SHORT).show();
 
-                        myevent = (Event) dataSnapshot.child(data1).getValue(Event.class);
-                        if (myevent!=null) {
-                            desc = myevent.getDescription();
-                            date = myevent.getDate();
-                            sTime = myevent.getStartTime();
-                            eTime = myevent.getEndTime();
-                            loca = myevent.getLocation();
-                            image = myevent.getImage();
-                            owner = myevent.getOwner().replace(",","") ;
-                        }
+                    myevent = (Event) dataSnapshot.child(data1).getValue(Event.class);
+                    if (myevent!=null) {
+                        desc = myevent.getDescription();
+                        date = myevent.getDate();
+                        sTime = myevent.getStartTime();
+                        eTime = myevent.getEndTime();
+                        loca = myevent.getLocation();
+                        image = myevent.getImage();
+                        owner = myevent.getOwner().replace(",","") ;
+                    }
 
                     // after retrieving all data, then set data to the TextViews
                     setData();

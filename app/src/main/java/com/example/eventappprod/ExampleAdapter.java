@@ -234,13 +234,10 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     String rsvp = itemLabel + "," + currUser.getRSVPEvents();
 
 
-                    String usersGoing = personGoing + "," + peopleGoing;
-
-
                     currUser.addRSVPEvent(rsvp + itemLabel);
                     ref.child(currUser.getUserId()).child("rsvpevents").setValue(rsvp);
 
-                    eventRef.child(itemLabel).child("userGoing").setValue(usersGoing);
+                    eventRef.child(itemLabel).child("userGoing").setValue(peopleGoing);
 
 
                     // Remove the item on remove/button click
@@ -291,8 +288,6 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
                     //Event event = eventList.get(0);
                     peopleGoing = event.getUserGoing();
-
-
 
                     String removedPerson = peopleGoing.replace(personGoing+",", "");
 
