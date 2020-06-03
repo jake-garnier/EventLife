@@ -7,9 +7,11 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.net.Uri;
@@ -19,10 +21,12 @@ import android.graphics.Color;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -72,12 +76,50 @@ public class DashBoard<user> extends AppCompatActivity {
     String[] friends = new String[currUser.getFriendList().length()];
     String[] rsvp = new String[currUser.getRSVPEvents().length()];
 
+    //friends stuff
+    String friendAdd;
+    int added = 0;
+    private String[] array;
+    String userID = currUser.getUserId();
+    String[] userName = new String[20];
+    String[] userIDArr = new String[20];
+    String[] friendsList = new String[20];
+    String[] profileImages = new String[20];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
 
         userref = FirebaseDatabase.getInstance().getReference("/USER");
+
+        userref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                ArrayList<User> newUserList = new ArrayList<>();
+
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    newUserList.add(ds.getValue(User.class));
+                }
+
+                for (int i = 0; i < newUserList.size(); i++) {
+                    if (newUserList.get(i).getUserId().equals(userID)) {
+                        currUser = newUserList.get(i);
+                    }
+                }
+
+                if (newUserList.size() != 0) {
+                    userList = newUserList;
+                    retrieveData();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(DashBoard.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "EventLife";
@@ -193,6 +235,79 @@ public class DashBoard<user> extends AppCompatActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.add_friend_button) {
+            // do something here
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Friend Request? Add their Username below and zoom!");
+
+            // Set up the input
+            final EditText input = new EditText(this);
+            // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+            input.setPaddingRelative(40,20,20,20);
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            builder.setView(input);
+
+            // Set up the buttons
+            builder.setPositiveButton("ZOOM", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    friendAdd = input.getText().toString();
+                    boolean flag = false;
+                    if(userList.size()!=0)
+                    {
+                        for (int i = 0; i < userList.size(); i++) {
+                            flag = false;
+                            for (int j = 0; j < array.length;j++) {
+                                //checks if the user exists in the database or not (aka spelling errors)
+                                if ((userList.get(i).getUserId().equals(array[j]))
+                                        || userList.get(i).getUserId().equals(currUser.getUserId())) {
+                                    flag = true;
+                                }
+                                if (userList.get(i).getUserId().equals(friendAdd) && flag == false)
+                                {
+                                    currUser.addFriend(friendAdd);
+                                    //ref.child(userID).child("friendList").setValue(currUser.getFriendList());
+                                    //create the ExampleItem and insert that into the friendsList
+                                    //create a new row for that friend
+                                    added = 1;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (added == 1) {
+                            Toast.makeText(DashBoard.this, "Added : " + friendAdd, Toast.LENGTH_SHORT).show();
+                            added = 0;
+                        } else {
+                            Toast.makeText(DashBoard.this, friendAdd + " : Does not exist or Already added", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    dialog.cancel();
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            builder.show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        userref.child(currUser.getUserId()).child("friendList").setValue(currUser.getFriendList());
+    }
+
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.example_menu, menu);
@@ -225,7 +340,6 @@ public class DashBoard<user> extends AppCompatActivity {
         images_Firestore.add("");
         creator.add("");
 
-
         for (int i=1; i<evenList.size()+1;i++) {
             eventNames_Screenshow.add(i, evenList.get(i-1).getName());
             eventStartTime_Screenshow.add(i, evenList.get(i-1).getStartTime());
@@ -235,7 +349,17 @@ public class DashBoard<user> extends AppCompatActivity {
             creator.add(evenList.get(i-1).getOwner());
         }
 
+        for (int i=0; i<userList.size();i++) {
+            userName[i] = userList.get(i).getName();
+            userIDArr[i] = userList.get(i).getUserId();
+            friendsList[i] = userList.get(i).getFriendList();
+            profileImages[i] = userList.get(i).getProfileImage();
+            // you can get other info like date and time as well
+            //Bitmap my_image;
+            //Picasso.get().load(evenList.get(i).getImage()).into(my_image);
 
+        }
+        array = currUser.getFriendList().split(",");
         LoadDatatoDashBoard();
 
     }
@@ -243,10 +367,7 @@ public class DashBoard<user> extends AppCompatActivity {
     public void LoadDatatoDashBoard(){
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
         for (int i = 0; i < evenList.size() + 1; i++) {
-
             exampleList.add(new ExampleItem(eventNames_Screenshow.get(i), eventStartTime_Screenshow.get(i), eventEndTime_Screenshow.get(i), eventDate_Screenshow.get(i), creator.get(i), images_Firestore.get(i)));
-
-
         }
 
 
