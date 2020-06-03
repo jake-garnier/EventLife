@@ -44,6 +44,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     String[] eventTitle = new String[20];
     String[] eventOwner = new String[20];
     ArrayList<Event> eventList = new ArrayList<>();
+    ArrayList<Event> dEventList = new ArrayList<>();
     String[] rsvp = new String[currUser.getRSVPEvents().length()];
 
 
@@ -159,6 +160,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                         if(ds.child("name").getValue().equals(rsvpEvent)) {
                             eventList.add(ds.getValue(Event.class));
                         }
+                        dEventList.add(ds.getValue(Event.class));
                     }
                 }
 
@@ -215,7 +217,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     String personGoing = currUser.getUserId();
 
                     String itemLabel = mExampleList.get(position).getName();
-                    Event event = eventList.get(0);
+                    Event event = dEventList.get(0);
 
                    /* for(int i = 0; i < eventList.size(); i++) {
                         if(eventList.get(i).getName().equals(itemLabel)) {
