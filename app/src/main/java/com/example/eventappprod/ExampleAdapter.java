@@ -44,6 +44,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     String[] eventTitle = new String[20];
     String[] eventOwner = new String[20];
     ArrayList<Event> eventList = new ArrayList<>();
+    String[] rsvp = new String[currUser.getRSVPEvents().length()];
 
 
     public static class ExampleViewHolder extends RecyclerView.ViewHolder {
@@ -68,6 +69,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         public ImageView dImageView;
         public Button mDeleteButton;
         public ConstraintLayout deleteLayout;
+
 
         public ExampleViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -150,15 +152,17 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         eventRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                rsvp = currUser.getRSVPEvents().split(",");
                 eventList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    if (ds.child("name").getValue().equals(itemLabel)) {
-                        eventList.add(ds.getValue(Event.class));
+                    for(String rsvpEvent : rsvp) {
+                        if(ds.child("name").getValue().equals(rsvpEvent)) {
+                            eventList.add(ds.getValue(Event.class));
+                        }
                     }
                 }
-                if (eventList.size() != 0) {
-                    retrieveData();
-                }
+
+                retrieveData();
             }
 
             @Override
@@ -262,8 +266,16 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
                     // Get the clicked item label
                     String personGoing = currUser.getUserId();
+                    String itemLabel = mExampleList.get(position).getName();
+                    Event event = new Event();
 
-                    Event event = eventList.get(0);
+                    for(int i = 0; i < eventList.size(); i++) {
+                        if(eventList.get(i).getName().equals(itemLabel)) {
+                            event = eventList.get(i);
+                        }
+                    }
+
+                    //Event event = eventList.get(0);
                     peopleGoing = event.getUserGoing();
 
 

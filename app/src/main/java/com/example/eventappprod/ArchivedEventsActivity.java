@@ -79,11 +79,6 @@ public class ArchivedEventsActivity extends AppCompatActivity {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-               /* evenList.clear();
-                for (DataSnapshot ds : dataSnapshot.getChildren()){
-                    evenList.add(ds.getValue(Event.class));
-                }
-                if (evenList.size()!=0) retrieveData();*/
                 rsvp = currUser.getRSVPEvents().split(",");
                 evenList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
@@ -162,19 +157,6 @@ public class ArchivedEventsActivity extends AppCompatActivity {
     }
 
     public void LoadDatatoRSVPEvents(){
-        /*Event event = new Event();
-        array = currUser.getRSVPEvents().split(",");
-        for (int i = 0; i<array.length; i++) {
-            for (int j = 0; j < evenList.size(); j++) {
-                if (evenList.get(j).getName().equals(array[i])) {
-                    event = evenList.get(j);
-                    System.out.println("blah " + event.getName());
-                    exampleList.add(new ExampleItem(event.getName(), event.getStartTime(), event.getEndTime(),
-                            event.getDate(), event.getOwner() ,event.getImage()));
-                }
-            }
-        }*/
-
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
         for (int i = 0; i < evenList.size(); i++) {
 
@@ -182,7 +164,6 @@ public class ArchivedEventsActivity extends AppCompatActivity {
 
 
         }
-
 
 
         mRecyclerView = findViewById(R.id.recyclerViewArchive);
