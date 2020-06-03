@@ -218,15 +218,14 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     String personGoing = currUser.getUserId();
 
                     String itemLabel = mExampleList.get(position).getName();
-                    Event event = dEventList.get(0);
+                    Event event = new Event();
 
-                   /* for(int i = 0; i < eventList.size(); i++) {
-                        if(eventList.get(i).getName().equals(itemLabel)) {
-                            event = eventList.get(i);
+                    for(int i = 0; i < dEventList.size(); i++) {
+                        if(dEventList.get(i).getName().equals(itemLabel)) {
+                            event = dEventList.get(i);
                         }
                     }
 
-                    */
 
                     peopleGoing = event.getUserGoing();
 
