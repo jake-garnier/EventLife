@@ -137,83 +137,82 @@ public class FriendsListActivity extends AppCompatActivity {
 
 
         //set the add button to the image button(code from the link above)
-        mButtonAdd = findViewById(R.id.addFriendBtn);
+        //mButtonAdd = findViewById(R.id.addFriendBtn);
        // friendList = new ArrayList<ExampleItem>();
 
-       //
-        mButtonAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(FriendsListActivity.this);
-                builder.setTitle("Found a Friend? Add their username below!");
+        // Bottom code is modeled off from https://stackoverflow.com/questions/10903754/input-text-dialog-android bless this guy
+        // handle button activities
+    }
 
-                // Set up the input
-                final EditText input = new EditText(FriendsListActivity.this);
-                //have padding
-                input.setPaddingRelative(40, 20, 20, 20);
-                // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-                input.setInputType(InputType.TYPE_CLASS_TEXT);
-                builder.setView(input);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
 
-                // Set up the buttons
-                builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                    //todo: this happens in the other person's friends list with a notification heh
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        friendAdd = input.getText().toString();
-                        boolean flag = false;
-                        if(userList.size()!=0)
-                        {
-                            for (int i = 0; i < userList.size(); i++) {
-                                flag = false;
-                                for (int j = 0; j < array.length;j++) {
-                                    //checks if the user exists in the database or not (aka spelling errors)
-                                    if ((userList.get(i).getUserId().equals(array[j]))
-                                            || userList.get(i).getUserId().equals(currUser.getUserId())) {
-                                        flag = true;
-                                    }
-                                    if (userList.get(i).getUserId().equals(friendAdd) && flag == false)
-                                    {
-                                        currUser.addFriend(friendAdd);
-                                        //ref.child(userID).child("friendList").setValue(currUser.getFriendList());
-                                        //create the ExampleItem and insert that into the friendsList
-                                        exampleList.add(0, new ExampleItem(userList.get(i).getName(), userList.get(i).getUserId(), "", "", "", userList.get(i).getProfileImage()));
-                                        //create a new row for that friend
-                                        mAdapter.notifyItemRangeChanged(0, exampleList.size());
-                                        mAdapter.notifyItemInserted(0);
-                                        mRecyclerView.scrollToPosition(0);
-                                        mAdapter.resetFull();
-                                        added = 1;
-                                        break;
-                                    }
+        if (id == R.id.add_friend_button) {
+            // do something here
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Friend Request? Add their Username below and zoom!");
+
+            // Set up the input
+            final EditText input = new EditText(this);
+            // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+            input.setPaddingRelative(40,20,20,20);
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            builder.setView(input);
+
+            // Set up the buttons
+            builder.setPositiveButton("ZOOM", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    friendAdd = input.getText().toString();
+                    boolean flag = false;
+                    if(userList.size()!=0)
+                    {
+                        for (int i = 0; i < userList.size(); i++) {
+                            flag = false;
+                            for (int j = 0; j < array.length;j++) {
+                                //checks if the user exists in the database or not (aka spelling errors)
+                                if ((userList.get(i).getUserId().equals(array[j]))
+                                        || userList.get(i).getUserId().equals(currUser.getUserId())) {
+                                    flag = true;
+                                }
+                                if (userList.get(i).getUserId().equals(friendAdd) && flag == false)
+                                {
+                                    currUser.addFriend(friendAdd);
+                                    //ref.child(userID).child("friendList").setValue(currUser.getFriendList());
+                                    //create the ExampleItem and insert that into the friendsList
+                                    exampleList.add(0, new ExampleItem(userList.get(i).getName(), userList.get(i).getUserId(), "", "", "", userList.get(i).getProfileImage()));
+                                    //create a new row for that friend
+                                    mAdapter.notifyItemRangeChanged(0, exampleList.size());
+                                    mAdapter.notifyItemInserted(0);
+                                    mRecyclerView.scrollToPosition(0);
+                                    mAdapter.resetFull();
+                                    added = 1;
+                                    break;
                                 }
                             }
-
-                            if (added == 1) {
-                                Toast.makeText(FriendsListActivity.this, "Added : " + friendAdd, Toast.LENGTH_SHORT).show();
-                                added = 0;
-                            } else {
-                                Toast.makeText(FriendsListActivity.this, friendAdd + " : Does not exist or Already added", Toast.LENGTH_SHORT).show();
-                            }
                         }
-                        dialog.cancel();
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
 
-                        //todo: delete
-                        friendAdd = input.getText().toString();
-                        //todo: delete later
-                        testUser.addFriend(friendAdd);
-                        dialog.cancel();
+                        if (added == 1) {
+                            Toast.makeText(FriendsListActivity.this, "Added : " + friendAdd, Toast.LENGTH_SHORT).show();
+                            added = 0;
+                        } else {
+                            Toast.makeText(FriendsListActivity.this, friendAdd + " : Does not exist or Already added", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                });
+                    dialog.cancel();
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
 
-                builder.show();
-            }
-        });
+            builder.show();
+        }
+        return super.onOptionsItemSelected(item);
     }
     @Override
     protected void onPause(){
