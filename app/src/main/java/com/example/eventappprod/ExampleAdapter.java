@@ -232,11 +232,13 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     String userRSVP = currUser.getRSVPEvents();
                     String rsvp = itemLabel + "," + currUser.getRSVPEvents();
 
+                    String usersGoing = personGoing + "," + peopleGoing;
+
 
                     currUser.addRSVPEvent(rsvp + itemLabel);
                     ref.child(currUser.getUserId()).child("rsvpevents").setValue(rsvp);
 
-                    eventRef.child(itemLabel).child("userGoing").setValue(peopleGoing);
+                    eventRef.child(itemLabel).child("userGoing").setValue(usersGoing);
 
 
                     // Remove the item on remove/button click
