@@ -46,11 +46,14 @@ public class ArchivedEventsActivity extends AppCompatActivity {
     User currUser  = User.getInstance();
     String[] array;
 
-    String[] images_Firestore = new String[20];
-    String[] eventNames_Screenshow = new String[20];
-    String[] eventStartTime_Screenshow=new String[20];
-    String[] eventEndTime_Screenshow=new String[20];
-    String[] eventDate_Screenshow=new String[20];
+    ArrayList<String> images_Firestore = new ArrayList<>();
+    ArrayList<String> eventNames_Screenshow = new ArrayList<>();
+    ArrayList<String> eventStartTime_Screenshow=new ArrayList<>();
+    ArrayList<String> eventEndTime_Screenshow=new ArrayList<>();
+    ArrayList<String> eventDate_Screenshow=new ArrayList<>();
+    ArrayList<String> creator = new ArrayList<>();
+
+    String[] rsvp = new String[currUser.getRSVPEvents().length()];
 
 
     @Override
@@ -76,11 +79,23 @@ public class ArchivedEventsActivity extends AppCompatActivity {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                evenList.clear();
+               /* evenList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()){
                     evenList.add(ds.getValue(Event.class));
                 }
-                if (evenList.size()!=0) retrieveData();
+                if (evenList.size()!=0) retrieveData();*/
+                rsvp = currUser.getRSVPEvents().split(",");
+                evenList.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    for(String rsvpEvent : rsvp) {
+                        if(ds.child("name").getValue().equals(rsvpEvent)) {
+                            evenList.add(ds.getValue(Event.class));
+                        }
+                    }
+                }
+
+                retrieveData();
+
             }
 
             @Override
@@ -134,11 +149,12 @@ public class ArchivedEventsActivity extends AppCompatActivity {
     public void retrieveData(){
         // fetching data to particular array
         for (int i=0; i<evenList.size();i++) {
-            eventNames_Screenshow[i] = evenList.get(i).getName();
-            eventStartTime_Screenshow[i] = evenList.get(i).getStartTime();
-            eventEndTime_Screenshow[i] = evenList.get(i).getEndTime();
-            eventDate_Screenshow[i] = evenList.get(i).getDate();
-            images_Firestore[i] = evenList.get(i).getImage();
+            eventNames_Screenshow.add(i, evenList.get(i).getName());
+            eventStartTime_Screenshow.add(evenList.get(i).getStartTime());
+            eventEndTime_Screenshow.add(evenList.get(i).getEndTime());
+            eventDate_Screenshow.add(evenList.get(i).getDate());
+            images_Firestore.add(evenList.get(i).getImage());
+            creator.add(evenList.get(i).getOwner());
         }
 
         LoadDatatoRSVPEvents();
@@ -146,22 +162,33 @@ public class ArchivedEventsActivity extends AppCompatActivity {
     }
 
     public void LoadDatatoRSVPEvents(){
-        Event event = new Event();
+        /*Event event = new Event();
         array = currUser.getRSVPEvents().split(",");
         for (int i = 0; i<array.length; i++) {
             for (int j = 0; j < evenList.size(); j++) {
                 if (evenList.get(j).getName().equals(array[i])) {
                     event = evenList.get(j);
+                    System.out.println("blah " + event.getName());
                     exampleList.add(new ExampleItem(event.getName(), event.getStartTime(), event.getEndTime(),
                             event.getDate(), event.getOwner() ,event.getImage()));
                 }
             }
+        }*/
+
+        ArrayList<ExampleItem> exampleList = new ArrayList<>();
+        for (int i = 0; i < evenList.size(); i++) {
+
+            exampleList.add(new ExampleItem(eventNames_Screenshow.get(i), eventStartTime_Screenshow.get(i), eventEndTime_Screenshow.get(i), eventDate_Screenshow.get(i), creator.get(i), images_Firestore.get(i)));
+
+
         }
+
+
 
         mRecyclerView = findViewById(R.id.recyclerViewArchive);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
-        //mAdapter = new ExampleAdapter(this, exampleList, "RSVP");
+        mAdapter = new ExampleAdapter(this, exampleList, "RSVP");
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
     }

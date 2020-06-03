@@ -69,10 +69,8 @@ public class DashBoard<user> extends AppCompatActivity {
     FirebaseUser currentuser = FirebaseAuth.getInstance().getCurrentUser();
     String email = currentuser.getEmail();
 
-    String[] list = new String[currUser.getFriendList().length()];
+    String[] friends = new String[currUser.getFriendList().length()];
     String[] rsvp = new String[currUser.getRSVPEvents().length()];
-
-    boolean dataChange;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,42 +101,35 @@ public class DashBoard<user> extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 friendList.clear();
-
-                list = currUser.getFriendList().split(",");
-
-                for(int i = 0; i < list.length; i++) {
-                    friendList.add(list[i]);
+                friends = currUser.getFriendList().split(",");
+                for (String friend : friends) {
+                    friendList.add(friend);
                 }
 
                 rsvpEvents.clear();
-
                 rsvp = currUser.getRSVPEvents().split(",");
-
-                for(int i = 0; i < rsvp.length; i++) {
-                    rsvpEvents.add(rsvp[i]);
+                for (String rsvpEvent : rsvp) {
+                    rsvpEvents.add(rsvpEvent);
                 }
 
                 evenList.clear();
-
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    if(ds.child("owner").getValue().equals(currUser.getUserId() + ",")) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    if (ds.child("owner").getValue().equals(currUser.getUserId() + ",")) {
                         evenList.add(ds.getValue(Event.class));
                     }
-                }
-                for (DataSnapshot ds : dataSnapshot.getChildren()){
-                    for(String friend : friendList) {
+
+                    for (String friend : friendList) {
                         if (ds.child("owner").getValue().equals(friend + ",")) {
                             evenList.add(ds.getValue(Event.class));
                         }
                     }
-                }
-                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+
                     for(String event : rsvpEvents) {
                         if(ds.child("name").getValue().equals(event)) {
                             Iterator<Event> it = evenList.iterator();
                             while(it.hasNext()) {
-                                Event test = it.next();
-                                if(test.getName().equals(ds.child("name").getValue())) {
+                                Event eventIteration = it.next();
+                                if(eventIteration.getName().equals(ds.child("name").getValue())) {
                                     it.remove();
                                 }
                             }
