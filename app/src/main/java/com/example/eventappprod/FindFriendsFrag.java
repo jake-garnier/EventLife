@@ -5,7 +5,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -51,6 +55,12 @@ public class FindFriendsFrag extends Fragment {
     String[] friendArr;
     User currUser = User.getInstance();
     String userID = currUser.getUserId();
+
+    //friends stuff
+    String friendAdd;
+    int added = 0;
+    private String[] array;
+
 
     private Button btnTEST;
 
@@ -118,17 +128,6 @@ public class FindFriendsFrag extends Fragment {
     public void LoadDatatoDashBoard(View view){
         friendArr = currUser.getFriendList().split(",");
         User userCompare = new User();
-        /*for (int i = 0; i < userList.size(); i++)
-        {
-            if ()
-            {
-                userCompare = userList.get(j);
-                exampleList.add(new ExampleItem(userCompare.getName(), userCompare.getUserId(), "", "", userCompare.getProfileImage()));
-                mAdapter.notifyItemInserted(0);
-                // mAdapter.resetFull();
-                mRecyclerView.scrollToPosition(0);
-            }
-        }*/
 
         boolean flag = false;
 
@@ -151,6 +150,73 @@ public class FindFriendsFrag extends Fragment {
 
 
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.add_friend_button) {
+            // do something here
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Friend Request? Add their Username below and zoom!");
+
+            // Set up the input
+            final EditText input = new EditText(getActivity());
+            // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+            input.setPaddingRelative(40,20,20,20);
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            builder.setView(input);
+
+            // Set up the buttons
+            builder.setPositiveButton("ZOOM", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    friendAdd = input.getText().toString();
+                    boolean flag = false;
+                    if(userList.size()!=0)
+                    {
+                        for (int i = 0; i < userList.size(); i++) {
+                            flag = false;
+                            for (int j = 0; j < friendArr.length;j++) {
+                                //checks if the user exists in the database or not (aka spelling errors)
+                                if ((userList.get(i).getUserId().equals(friendArr[j]))
+                                        || userList.get(i).getUserId().equals(currUser.getUserId())) {
+                                    flag = true;
+                                }
+                                if (userList.get(i).getUserId().equals(friendAdd) && flag == false)
+                                {
+                                    currUser.addFriend(friendAdd);
+                                    ref.child(currUser.getUserId()).child("friendList").setValue(currUser.getFriendList());
+                                    //ref.child(userID).child("friendList").setValue(currUser.getFriendList());
+                                    //create the ExampleItem and insert that into the friendsList
+                                    //create a new row for that friend
+                                    added = 1;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (added == 1) {
+                            Toast.makeText(getActivity(), "Added : " + friendAdd, Toast.LENGTH_SHORT).show();
+                            added = 0;
+                        } else {
+                            Toast.makeText(getActivity(), friendAdd + " : Does not exist or Already added", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    dialog.cancel();
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            builder.show();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
