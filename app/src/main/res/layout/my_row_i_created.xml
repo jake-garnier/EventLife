@@ -46,10 +46,24 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
+                android:id="@+id/EDITButton"
+                android:layout_width="70dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="5dp"
+                android:backgroundTint="@color/white"
+                android:text="EDIT"
+                android:textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/myImageView" />
+
+            <Button
                 android:id="@+id/DELETEButton"
                 android:layout_width="70dp"
                 android:layout_height="36dp"
-                android:layout_marginTop="18dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="16dp"
                 android:backgroundTint="@color/white"
                 android:text="DELETE"
