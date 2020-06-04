@@ -45,6 +45,7 @@ public class FindFriendsFrag extends Fragment {
     DatabaseReference ref;
     ArrayList<User> userList;
     ArrayList<ExampleItem> exampleList = new ArrayList<>();;
+    ArrayList<User> newUserList;
 
     //current User stuff
     String[] friendArr;
@@ -68,11 +69,12 @@ public class FindFriendsFrag extends Fragment {
 
         userList = new ArrayList<>();
         ref = FirebaseDatabase.getInstance().getReference("/USER");
-
+        newUserList = new ArrayList<>();
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<User> newUserList = new ArrayList<>();
+                userList.clear();
+                newUserList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()){
                     newUserList.add(ds.getValue(User.class));
                 }

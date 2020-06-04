@@ -179,6 +179,7 @@ public class FriendsListActivity extends AppCompatActivity {
                                 if (userList.get(i).getUserId().equals(friendAdd) && flag == false)
                                 {
                                     currUser.addFriend(friendAdd);
+                                    ref.child(userID).child("friendList").setValue(currUser.getFriendList());
                                     //ref.child(userID).child("friendList").setValue(currUser.getFriendList());
                                     //create the ExampleItem and insert that into the friendsList
                                     exampleList.add(0, new ExampleItem(userList.get(i).getName(), userList.get(i).getUserId(), "", "", "", userList.get(i).getProfileImage()));
@@ -217,7 +218,7 @@ public class FriendsListActivity extends AppCompatActivity {
     @Override
     protected void onPause(){
         super.onPause();
-        ref.child(userID).child("friendList").setValue(currUser.getFriendList());
+
     }
 
     @Override

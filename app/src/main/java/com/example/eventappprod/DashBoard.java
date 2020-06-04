@@ -271,6 +271,7 @@ public class DashBoard<user> extends AppCompatActivity {
                                 if (userList.get(i).getUserId().equals(friendAdd) && flag == false)
                                 {
                                     currUser.addFriend(friendAdd);
+                                    userref.child(currUser.getUserId()).child("friendList").setValue(currUser.getFriendList());
                                     //ref.child(userID).child("friendList").setValue(currUser.getFriendList());
                                     //create the ExampleItem and insert that into the friendsList
                                     //create a new row for that friend
@@ -305,7 +306,7 @@ public class DashBoard<user> extends AppCompatActivity {
     @Override
     protected void onPause(){
         super.onPause();
-        userref.child(currUser.getUserId()).child("friendList").setValue(currUser.getFriendList());
+
     }
 
 
