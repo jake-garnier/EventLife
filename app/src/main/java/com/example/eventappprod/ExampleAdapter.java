@@ -91,7 +91,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             mUnfollowButton = itemView.findViewById(R.id.unfollowButton);
             mRSVPButton = itemView.findViewById(R.id.RSVPButton);
             mFollowButton = itemView.findViewById(R.id.acceptButton);
-            mEditButton = itemView.findViewById(R.id.EDITButton);
+            //mEditButton = itemView.findViewById(R.id.EDITButton);
             mRelativeLayout = itemView.findViewById(R.id.friendsRL);
             mCreatedDeleteButton = itemView.findViewById(R.id.DELETEButton);
 
