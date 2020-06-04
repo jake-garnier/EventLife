@@ -65,12 +65,25 @@ public class FindEventsFrag extends Fragment {
                             flag = false;
                     }
 
-                    if (ds.child("owner").getValue().equals(currUser.getUserId() + ","))
+                    if (ds.child("owner").getValue().equals(currUser.getUserId() + ",")) {
                         flag = false;
+                    }
 
-                    if(flag)
+
+                    String[] rsvpevents = currUser.getRSVPEvents().split(",");
+
+                    for(String e : rsvpevents) {
+
+                        if (ds.child("name").getValue().equals(e)) {
+                            flag = false;
+                        }
+
+                    }
+                    if(flag) {
                         evenList.add(ds.getValue(Event.class));
+                    }
                 }
+
                 if (evenList.size() != 0) {
                     retrieveData(view);
                 }
@@ -133,7 +146,9 @@ public class FindEventsFrag extends Fragment {
             }
             @Override
             public boolean onQueryTextChange(String newText) {
-                mAdapter.getFilter().filter(newText);
+                if(evenList.size() != 0) {
+                    mAdapter.getFilter().filter(newText);
+                }
                 return false;
             }
         });
