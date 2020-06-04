@@ -215,11 +215,7 @@ public class FriendsListActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    @Override
-    protected void onPause(){
-        super.onPause();
 
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

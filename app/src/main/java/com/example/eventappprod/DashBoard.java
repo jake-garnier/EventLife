@@ -303,11 +303,6 @@ public class DashBoard<user> extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onPause(){
-        super.onPause();
-
-    }
 
 
     @Override
