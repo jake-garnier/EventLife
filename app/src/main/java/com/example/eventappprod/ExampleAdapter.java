@@ -234,7 +234,6 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
                     peopleGoing = event.getUserGoing();
 
-                    String userRSVP = currUser.getRSVPEvents();
                     String rsvp = itemLabel + "," + currUser.getRSVPEvents();
 
                     String usersGoing = personGoing + "," + peopleGoing;
