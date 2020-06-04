@@ -122,7 +122,7 @@ public class Profile extends AppCompatActivity {
                         currUser = newUserList.get(i);
                     }
                 }
-
+                userList.clear();
                 if (newUserList.size()!=0) {
                     userList = newUserList;
                     retrieveData();

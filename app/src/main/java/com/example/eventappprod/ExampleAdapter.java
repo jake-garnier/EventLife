@@ -38,6 +38,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
     private DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/USER");
     private DatabaseReference eventRef = FirebaseDatabase.getInstance().getReference("/EVENT");
+    DatabaseReference eref = FirebaseDatabase.getInstance().getReference("/EVENT");
 
     String word[] = new String[20];
     String[] userGoing = new String[20];
@@ -421,14 +422,14 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
                 @Override
                 public void onClick(View v) {
-
                     eventLabel = mExampleList.get(position).getName();
                     //event ID
                     String eventID = mExampleList.get(position).getStartTime();
-                    eref.child(eventLabel).addValueEventListener(new ValueEventListener() {
+                    /*eref.child(eventLabel).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             e = dataSnapshot.getValue(Event.class);
+                            getData();
                         }
 
                         @Override
@@ -436,6 +437,14 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
                         }
                     });
+                     */
+                    Event e = new Event();
+
+                    for(int i = 0; i < dEventList.size(); i++) {
+                        if(dEventList.get(i).getName().equals(eventLabel)) {
+                            e = dEventList.get(i);
+                        }
+                    }
 
                     Intent intent = new Intent(context, CreateEventActivity.class);
                     //Extras are what we are passing from the adapter --> EventActivity (the event page)
@@ -453,8 +462,6 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                 //TODO: for khanh
                 // Get the clicked item label
 
-
-                DatabaseReference eref = FirebaseDatabase.getInstance().getReference("/EVENT");
                 //currUser.removeFriend(eventID);
 
 
@@ -611,4 +618,5 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             eventOwner[i] = eventList.get(i).getOwner();
         }
     }
+
 }
