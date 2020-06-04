@@ -86,7 +86,6 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             mUnfollowButton = itemView.findViewById(R.id.unfollowButton);
             mRSVPButton = itemView.findViewById(R.id.RSVPButton);
             mFollowButton = itemView.findViewById(R.id.acceptButton);
-            mEditButton = itemView.findViewById(R.id.EDITButton);
             mRelativeLayout = itemView.findViewById(R.id.friendsRL);
 
             //Get reference from rsvp stuff
@@ -394,19 +393,13 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             holder.endTime.setText(currItem.getEndTime());
             holder.date.setText(currItem.getDate());
 
-            /*holder.mEditButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //TODO: for khanh
-                }
-            });
 
-            holder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //TODO: for khanh
-                }
-            });*/
+//            holder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    //TODO
+//                }
+//            });
         }
     }
 
@@ -419,8 +412,8 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             return 0;
         } else if(this.cardType.equals("empty")) {
             return 0;
-//        }else if (mExampleList.get(position).getCreator().replace(",", "").equals(currUser.getUserId())) {
-//            return 4;
+        }else if (mExampleList.get(position).getCreator().replace(",", "").equals(currUser.getUserId())) {
+            return 4;
         } else if (this.cardType.equals("event") || this.cardType.equals("previous")) {
             return 1;
         } else if (this.cardType.equals("friendSearch")) {
