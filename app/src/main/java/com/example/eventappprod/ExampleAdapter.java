@@ -47,6 +47,10 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     ArrayList<Event> dEventList = new ArrayList<>();
     String[] rsvp = new String[currUser.getRSVPEvents().length()];
 
+    String eventLabel;
+
+    Event e;
+
 
     public static class ExampleViewHolder extends RecyclerView.ViewHolder {
         public ImageView mImageView;
@@ -62,6 +66,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         public Button mFollowButton;
         public Button mEditButton;
         public RelativeLayout mRelativeLayout;
+        public Button mCreatedDeleteButton;
 
         public TextView dName;
         public TextView dStartTime;
@@ -88,6 +93,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             mFollowButton = itemView.findViewById(R.id.acceptButton);
             mEditButton = itemView.findViewById(R.id.EDITButton);
             mRelativeLayout = itemView.findViewById(R.id.friendsRL);
+            mCreatedDeleteButton = itemView.findViewById(R.id.DELETEButton);
 
             //Get reference from rsvp stuff
             mDeleteButton = itemView.findViewById(R.id.dButton);
@@ -384,7 +390,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     //Todo: add the part where they wont see that person anymore.
                 }
             });
-        } else if (viewType==4){
+        } else if(viewType == 4) {
             ExampleItem currItem = mExampleList.get(position);
 
             Picasso.get().load(currItem.getImg_firestore()).into(holder.mImageView);
@@ -394,20 +400,132 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             holder.endTime.setText(currItem.getEndTime());
             holder.date.setText(currItem.getDate());
 
-            /*holder.mEditButton.setOnClickListener(new View.OnClickListener() {
+            //This is what allows each card to be clicked and load up a new activity containing the information that goes with that card
+            holder.mainLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    //TODO: for khanh
+                public void onClick(View view) {
+
+                    Intent intent = new Intent(context, EventActivity.class);
+                    //Extras are what we are passing from the adapter --> EventActivity (the event page)
+                    //Inside EventActivity we will use these intents to pull information
+                    intent.putExtra("data1", mExampleList.get(position).getName());
+
+                    context.startActivity(intent);
                 }
+
+
             });
 
-            holder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
+            holder.mEditButton.setOnClickListener(new View.OnClickListener() {
+
+
                 @Override
                 public void onClick(View v) {
-                    //TODO: for khanh
+
+                    eventLabel = mExampleList.get(position).getName();
+                    //event ID
+                    String eventID = mExampleList.get(position).getStartTime();
+                    eref.child(eventLabel).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            e = dataSnapshot.getValue(Event.class);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    Intent intent = new Intent(context, CreateEventActivity.class);
+                    //Extras are what we are passing from the adapter --> EventActivity (the event page)
+                    //Inside EventActivity we will use these intents to pull information
+//                        intent.putExtra("theStartTime", mExampleList.get(position).getName());
+//                        intent.putExtra("thename", mExampleList.get(position).getName());
+
+                    intent.putExtra("theStartTime", e.getName());
+                    intent.putExtra("thename", e.getStartTime());
+
+                    context.startActivity(intent);
                 }
-            });*/
+
+
+                //TODO: for khanh
+                // Get the clicked item label
+
+
+                DatabaseReference eref = FirebaseDatabase.getInstance().getReference("/EVENT");
+                //currUser.removeFriend(eventID);
+
+
+                Intent intent = new Intent(context, CreateEventActivity.class);
+                //Extras are what we are passing from the adapter --> EventActivity (the event page)
+                //Inside EventActivity we will use these intents to pull information
+//                    intent.putExtra("iname",e.getName());
+//                    intent.putExtra("iimage", e.getImage());
+////
+////                    context.startActivity(intent);
+
+
+
+
+            });
+
+
+
+            holder.mCreatedDeleteButton.setOnClickListener(new View.OnClickListener() {
+
+                //TODO: for khanh
+                // Get the clicked item label
+
+                @Override
+                public void onClick(View v) {
+                    //TODO: for DELETE
+                    // Get the clicked item label
+
+                    String eventLabel = mExampleList.get(position).getName();
+                    //event ID
+                    String eventID = mExampleList.get(position).getStartTime();
+                    DatabaseReference ere = FirebaseDatabase.getInstance().getReference("/EVENT");
+
+
+                    // Remove the item on remove/button click
+                    //nextstep = false;
+                    mExampleList.remove(position);
+                    notifyItemRemoved(position);
+
+                    String events = currUser.getCreatedEvents();
+                    String delete = events.replace(eventLabel+",", "");
+
+                    ref.child(currUser.getUserId()).child("createdEvents").setValue(delete);
+
+                    notifyItemRangeChanged(position, mExampleList.size());
+                    Toast.makeText(context, "Removed the event on Display: " + eventLabel, Toast.LENGTH_SHORT).show();
+
+                    removeEvent(eventLabel);
+
+                }
+            });
         }
+    }
+
+    public void removeEvent(String s){
+        eventRef.child(s).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Event e = dataSnapshot.getValue(Event.class);
+                if (e != null) {
+                    dataSnapshot.getRef().removeValue();
+                    //Toast.makeText(this, "Removed the event on Firebase: ", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -419,16 +537,15 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             return 0;
         } else if(this.cardType.equals("empty")) {
             return 0;
-//        }else if (mExampleList.get(position).getCreator().replace(",", "").equals(currUser.getUserId())) {
-//            return 4;
+        }else if (mExampleList.get(position).getCreator().replace(",", "").equals(currUser.getUserId())) {
+            return 4;
         } else if (this.cardType.equals("event") || this.cardType.equals("previous")) {
             return 1;
         } else if (this.cardType.equals("friendSearch")) {
             return 2;
         } else if (this.cardType.equals("RSVP")) {
             return 14;
-        }
-        if (this.cardType.equals("friend")) {
+        } else if (this.cardType.equals("friend")) {
             return 3;
         }
         return 1;

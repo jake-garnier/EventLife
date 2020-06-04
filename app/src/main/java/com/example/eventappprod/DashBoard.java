@@ -382,11 +382,15 @@ public class DashBoard<user> extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
+
+
         if(evenList.size() == 0) {
             mAdapter = new ExampleAdapter(this, exampleList, "empty");
         } else {
             mAdapter = new ExampleAdapter(this, exampleList, "event");
         }
+
+
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 //        addNotification();
