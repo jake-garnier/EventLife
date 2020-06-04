@@ -65,7 +65,6 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         public Button mUnfollowButton;
         public Button mRSVPButton;
         public Button mFollowButton;
-        public Button mEditButton;
         public RelativeLayout mRelativeLayout;
         public Button mCreatedDeleteButton;
 
@@ -92,7 +91,6 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             mUnfollowButton = itemView.findViewById(R.id.unfollowButton);
             mRSVPButton = itemView.findViewById(R.id.RSVPButton);
             mFollowButton = itemView.findViewById(R.id.acceptButton);
-            mEditButton = itemView.findViewById(R.id.EDITButton);
             mRelativeLayout = itemView.findViewById(R.id.friendsRL);
             mCreatedDeleteButton = itemView.findViewById(R.id.DELETEButton);
 
@@ -416,69 +414,6 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
 
             });
-
-            holder.mEditButton.setOnClickListener(new View.OnClickListener() {
-
-
-                @Override
-                public void onClick(View v) {
-                    eventLabel = mExampleList.get(position).getName();
-                    //event ID
-                    String eventID = mExampleList.get(position).getStartTime();
-                    /*eref.child(eventLabel).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            e = dataSnapshot.getValue(Event.class);
-                            getData();
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-                     */
-                    Event e = new Event();
-
-                    for(int i = 0; i < dEventList.size(); i++) {
-                        if(dEventList.get(i).getName().equals(eventLabel)) {
-                            e = dEventList.get(i);
-                        }
-                    }
-
-                    Intent intent = new Intent(context, CreateEventActivity.class);
-                    //Extras are what we are passing from the adapter --> EventActivity (the event page)
-                    //Inside EventActivity we will use these intents to pull information
-//                        intent.putExtra("theStartTime", mExampleList.get(position).getName());
-//                        intent.putExtra("thename", mExampleList.get(position).getName());
-
-                    intent.putExtra("theStartTime", e.getName());
-                    intent.putExtra("thename", e.getStartTime());
-
-                    context.startActivity(intent);
-                }
-
-
-                //TODO: for khanh
-                // Get the clicked item label
-
-                //currUser.removeFriend(eventID);
-
-
-                Intent intent = new Intent(context, CreateEventActivity.class);
-                //Extras are what we are passing from the adapter --> EventActivity (the event page)
-                //Inside EventActivity we will use these intents to pull information
-//                    intent.putExtra("iname",e.getName());
-//                    intent.putExtra("iimage", e.getImage());
-////
-////                    context.startActivity(intent);
-
-
-
-
-            });
-
-
 
             holder.mCreatedDeleteButton.setOnClickListener(new View.OnClickListener() {
 
