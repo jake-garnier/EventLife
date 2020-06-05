@@ -104,26 +104,26 @@ public class Register extends AppCompatActivity {
                     return;
                 }
 
-                //if the passwords do not match
+                //check if the passwords do not match
                 if (password.equals(cfmPassword) == false) {
                     confirmPassword.setError("Passwords do not match. Please confirm again");
                     confirmPassword.setText("");
                     return;
                 }
 
-                //if the email given is empty
+                //check if the email given is empty
                 if(TextUtils.isEmpty(email)){
                     mEmail.setError("Email is Required.");
                     return;
                 }
 
-                //if the password box is empty
+                //check if the password box is empty
                 if(TextUtils.isEmpty(password)){
                     mPassword.setError("Password is Required.");
                     return;
                 }
 
-                //if length of the password is less than 7 characters
+                //check if length of the password is less than 7 characters
                 if(password.length() < 8){
                     mPassword.setError("Password Must Be 8 or More Characters");
                     return;
