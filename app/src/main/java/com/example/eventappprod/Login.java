@@ -82,7 +82,7 @@ public class Login extends AppCompatActivity {
                 email = mEmail.getText().toString().trim();
                 password = mPassword.getText().toString().trim();
 
-                //get the ucsd domain and check if it is a ucsd.edu email
+                //get the ucsd domain and check if it is an ucsd.edu email
                 String domain = email.substring(email.indexOf("@") + 1);
                 if (domain.equals("ucsd.edu") == false) {
                     mEmail.setError("Email is invalid. Make Sure to Login with ucsd email");
@@ -194,7 +194,7 @@ public class Login extends AppCompatActivity {
                         fAuth.sendPasswordResetEmail(mail).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Toast.makeText(Login.this, "Reset Link Sent To Your Email.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Login.this, "Reset Link Has Been Sent To Your Email.", Toast.LENGTH_SHORT).show();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
