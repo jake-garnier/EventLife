@@ -283,6 +283,8 @@ public class CreateEventActivity extends AppCompatActivity {
             String c =curruser.getCreatedEvents();
             // also, the event will go to the user's createdEvent list
             ref.child("/USER").child(userId).child("createdEvents").setValue(EventName+ "," + c);
+            // the event will also go to rsvp'd events since the creator is going to their event
+            ref.child("/USER").child(userId).child("rsvpevents").setValue(EventName + ",");
 
             // back to Dashboard
             startActivity(new Intent(getApplicationContext(), DashBoard.class));
