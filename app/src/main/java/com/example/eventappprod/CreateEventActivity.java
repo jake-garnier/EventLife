@@ -258,6 +258,8 @@ public class CreateEventActivity extends AppCompatActivity {
         String Des = mDescription.getText().toString();
         String id = ref.push().getKey();
 
+        String rsvpevents;
+
         //
         // check if all instances filled
         //
@@ -282,8 +284,12 @@ public class CreateEventActivity extends AppCompatActivity {
             String c =curruser.getCreatedEvents();
             // also, the event will go to the user's createdEvent list
             ref.child("/USER").child(userId).child("createdEvents").setValue(EventName+ "," + c);
+
+            // Get current user's rsvp'd events
+            rsvpevents = curruser.getRSVPEvents();
+
             // the event will also go to rsvp'd events since the creator is going to their event
-            ref.child("/USER").child(userId).child("rsvpevents").setValue(EventName + ",");
+            ref.child("/USER").child(userId).child("rsvpevents").setValue(rsvpevents + EventName + ",");
 
             // back to Dashboard
             startActivity(new Intent(getApplicationContext(), DashBoard.class));
