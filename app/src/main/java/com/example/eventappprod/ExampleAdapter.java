@@ -324,19 +324,6 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             holder.name.setText(currItem.getName());
             holder.userId.setText(currItem.getStartTime());
 
-            //This is what allows each card to be clicked and load up a new activity containing the information that goes with that card
-            holder.mainLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    Intent intent = new Intent(context, FriendsListActivity.class);
-                    //Extras are what we are passing from the adapter --> EventActivity (the event page)
-                    //Inside EventActivity we will use these intents to pull information
-                    intent.putExtra("data1", mExampleList.get(position).getName());
-
-                    context.startActivity(intent);
-                }
-            });
             holder.mFollowButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
