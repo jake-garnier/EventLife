@@ -41,7 +41,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class DashBoard<user> extends AppCompatActivity {
+public class DashBoard extends AppCompatActivity {
     //https://www.youtube.com/watch?v=Nw9JF55LDzE
     //https://www.youtube.com/watch?v=18VcnYN5_LM
     //Event Feed String Arrays

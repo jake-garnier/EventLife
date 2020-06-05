@@ -40,23 +40,23 @@ import java.util.ArrayList;
 
 public class EventActivity extends AppCompatActivity {
 
+    //Variables for displaying (View)
     ImageView mainImageView;
     TextView title, description;
-
     TextView Date, StartTime, EndTime, Location, CreatedBy;
 
+    //Variables for data (Model)
     String data1;
     String desc, sTime, eTime, loca, date, image, owner;
+    Event myevent;
 
-    int myImage;
+    //Variables for database references (Model)
     DatabaseReference ref;
     DatabaseReference userRef;
     FirebaseDatabase database;
 
-    Drawable drawable;
-
     Button AttendeesButton, RSVPButton;
-    Event myevent;
+
     private ArrayList<User> userList;
     User currUser  = User.getInstance();
     private String userID;
@@ -113,7 +113,7 @@ public class EventActivity extends AppCompatActivity {
         userRef = database.getInstance().getReference("/USER");
 
 
-        //Make references that connect the XML <--> the Java variables
+        //Make references that connect the XML <--> the Java variables (View)
         mainImageView = findViewById(R.id.eventFormImageView);
         title = findViewById(R.id.eventFormName);
         description = findViewById(R.id.eventFormDescription);

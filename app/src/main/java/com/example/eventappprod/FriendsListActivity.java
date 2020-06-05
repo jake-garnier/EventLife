@@ -36,42 +36,41 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class FriendsListActivity extends AppCompatActivity {
-    //Used Alert Dialogue with this website : https://stackoverflow.com/questions/10903754/input-text-dialog-android
-    private ImageButton mButtonAdd;
+
+    //Start of Model in MVC (Variables containing the data structure used in the file)
+    //Friend List Variables
     private String friendAdd;
+    private String[] array;
+    int added = 0;
 
     //currUser Stuff
     private String userID;
 
-    //Firebase variables
+    //Firebase Variables
     private DatabaseReference ref;
 
-    //https://www.youtube.com/watch?v=Nw9JF55LDzE
-    //https://www.youtube.com/watch?v=18VcnYN5_LM
     //Event Feed String Arrays
     String[] profileImages = new String[20];
     String[] friendsList = new String[20];
     String[] userName = new String[20];
     String[] userIDArr = new String[20];
 
-
-    //private FriendsList
     private ArrayList<User> userList;
-    ArrayList<ExampleItem> exampleList;
+    //End of Model in MVC
 
-    //add context for the app
-    private Context mContext;
+    //View
     //Recycler View Needed for Event Feed
+    ArrayList<ExampleItem> exampleList;
     private RecyclerView mRecyclerView;
     private ExampleAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    User currUser  = User.getInstance();
+    User currUser = User.getInstance();
 
-    int added = 0;
-    private String[] array;
-    //todo: delete later
-    User testUser;
 
+    //Controller
+    private Context mContext;
+
+    //Initializes all variables and creates connections between front-end and back-end
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,11 +78,11 @@ public class FriendsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends_list);
 
-        //set context at very top
+        //View in MVC (updating visual aspects)
+        //Set context at very top
         mContext = getApplicationContext();
 
-        testUser = new User();
-        //create list to make the cards
+        //Create list to make the cards
         exampleList = new ArrayList<>();
 
         mRecyclerView = (RecyclerView) findViewById(R.id.friendListRecycler);
@@ -95,14 +94,11 @@ public class FriendsListActivity extends AppCompatActivity {
         mAdapter = new ExampleAdapter(mContext, exampleList, "friend");
         mRecyclerView.setAdapter(mAdapter);
 
-        //release the user info
-        //Intent ib = getIntent();
-        //currUser = (User) ib.getSerializableExtra("ProfileFriend");
-
+        //Model in MVC (data-structure to hold userID & Firebase reference to all users)
         ref = FirebaseDatabase.getInstance().getReference("/USER");
         userID = currUser.getEmail().substring(0, currUser.getEmail().indexOf("@"));
 
-        //create user list and update info inside current user from database
+        //Create user list and update info inside current user from database (Controller in MVC)
         userList = new ArrayList<>();
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -110,10 +106,12 @@ public class FriendsListActivity extends AppCompatActivity {
 
                 ArrayList<User> newUserList = new ArrayList<>();
 
+                //Iterate over database ref & pull all users to add to newUserList (Model in MVC)
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     newUserList.add(ds.getValue(User.class));
                 }
 
+                //Iterate over to find currentUser to add (Controller in MVC)
                 for (int i = 0; i < newUserList.size();i++)
                 {
                     if(newUserList.get(i).getUserId().equals(userID))
@@ -122,6 +120,7 @@ public class FriendsListActivity extends AppCompatActivity {
                     }
                 }
 
+                //Ensure that database information properly loaded (Model in MVC)
                 if (newUserList.size()!=0) {
                     userList = newUserList;
                     retrieveData();
@@ -129,71 +128,77 @@ public class FriendsListActivity extends AppCompatActivity {
             }
 
 
+            // View in MVC (show errors to user visually)
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(FriendsListActivity.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
             }
         });
 
-
-        //set the add button to the image button(code from the link above)
-        //mButtonAdd = findViewById(R.id.addFriendBtn);
-       // friendList = new ArrayList<ExampleItem>();
-
-        // Bottom code is modeled off from https://stackoverflow.com/questions/10903754/input-text-dialog-android bless this guy
-        // handle button activities
     }
 
+    //Controller in MVC (update based on user's input)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.add_friend_button) {
-            // do something here
+            // Visually display this textbox (View in MVC)
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Friend Request? Add their Username below and zoom!");
 
-            // Set up the input
+            // Set up the input (View in MVC)
             final EditText input = new EditText(this);
             // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
             input.setPaddingRelative(40,20,20,20);
             input.setInputType(InputType.TYPE_CLASS_TEXT);
             builder.setView(input);
 
-            // Set up the buttons
-            builder.setPositiveButton("ZOOM", new DialogInterface.OnClickListener() {
+            // Set up the buttons (View in MVC)
+            builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    //Update text (Controller in MVC)
                     friendAdd = input.getText().toString();
                     boolean flag = false;
+
+                    //Controller in MVC (used to process adding a friend)
+                    //First check if userList is non-populated.
                     if(userList.size()!=0)
                     {
+                        //Iterate across entire user database pulled from firebase reference
                         for (int i = 0; i < userList.size(); i++) {
                             flag = false;
+
+                            //Iterate across current user's friend list to compare
                             for (int j = 0; j < array.length;j++) {
-                                //checks if the user exists in the database or not (aka spelling errors)
+
+                                //Checks if the user exists in the database or not (aka spelling errors)
                                 if ((userList.get(i).getUserId().equals(array[j]))
                                         || userList.get(i).getUserId().equals(currUser.getUserId())) {
                                     flag = true;
                                 }
+
+                                //Ensures that correct user is being added, and is not overlap
                                 if (userList.get(i).getUserId().equals(friendAdd) && flag == false)
                                 {
                                     currUser.addFriend(friendAdd);
                                     ref.child(userID).child("friendList").setValue(currUser.getFriendList());
-                                    //ref.child(userID).child("friendList").setValue(currUser.getFriendList());
-                                    //create the ExampleItem and insert that into the friendsList
+
+                                    //Create a new row for that friend (View in MVC)
                                     exampleList.add(0, new ExampleItem(userList.get(i).getName(), userList.get(i).getUserId(), "", "", "", userList.get(i).getProfileImage()));
-                                    //create a new row for that friend
                                     mAdapter.notifyItemRangeChanged(0, exampleList.size());
                                     mAdapter.notifyItemInserted(0);
                                     mRecyclerView.scrollToPosition(0);
                                     mAdapter.resetFull();
+                                    //Set added = 1 so that correct message is displayed to user (i.e. successful add or not)
                                     added = 1;
                                     break;
                                 }
                             }
                         }
 
+                        //View in MVC (display to the user successful add or not)
                         if (added == 1) {
                             Toast.makeText(FriendsListActivity.this, "Added : " + friendAdd, Toast.LENGTH_SHORT).show();
                             added = 0;
@@ -217,6 +222,7 @@ public class FriendsListActivity extends AppCompatActivity {
     }
 
 
+    //View in MVC (display top bar w/ magnifying glass & add friend icon)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -243,30 +249,30 @@ public class FriendsListActivity extends AppCompatActivity {
         return true;
     }
 
+    //Controller in MVC (Get all necessary user fields necessary for displaying in RecyclerView)
     public void retrieveData(){
 
-        // fetching data to particular array
-
+        //Fetching data to particular array (Controller in MVC)
         for (int i=0; i<userList.size();i++) {
             userName[i] = userList.get(i).getName();
             userIDArr[i] = userList.get(i).getUserId();
             friendsList[i] = userList.get(i).getFriendList();
             profileImages[i] = userList.get(i).getProfileImage();
-            // you can get other info like date and time as well
-            //Bitmap my_image;
-            //Picasso.get().load(evenList.get(i).getImage()).into(my_image);
-
         }
-
         LoadDatatoFriendsList();
     }
-    public void LoadDatatoFriendsList(){
+    public void LoadDatatoFriendsList() {
         array = currUser.getFriendList().split(",");
         User user = new User();
-        for(int i = 0; i < array.length; i++ ) {
-            for(int j = 0; j < userList.size(); j++) {
-                if(userList.get(j).getUserId().equals(array[i])){
+        //Iterate through current user's friends list
+        for (int i = 0; i < array.length; i++) {
+
+            //Iterate through all user's in the database, and if user is part of current user's friend list, add to cardView to display in recyclerView
+            for (int j = 0; j < userList.size(); j++) {
+                if (userList.get(j).getUserId().equals(array[i])) {
                     user = userList.get(j);
+
+                    //View in MVC (display information on the card in the cardView)
                     exampleList.add(new ExampleItem(user.getName(), user.getUserId(), "", "", "", user.getProfileImage()));
                     mAdapter.notifyItemInserted(0);
                     mAdapter.resetFull();
@@ -274,9 +280,5 @@ public class FriendsListActivity extends AppCompatActivity {
                 }
             }
         }
-
-
-
-
-        }
+    }
 }

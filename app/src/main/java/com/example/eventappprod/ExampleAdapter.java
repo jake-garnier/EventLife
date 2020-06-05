@@ -48,6 +48,9 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     ArrayList<Event> dEventList = new ArrayList<>();
     String[] rsvp = new String[currUser.getRSVPEvents().length()];
 
+    String rsvpevents;
+    String[] rsvpeventssplit = new String[20];
+
     String eventLabel;
 
     Event e;
@@ -321,19 +324,6 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             holder.name.setText(currItem.getName());
             holder.userId.setText(currItem.getStartTime());
 
-            //This is what allows each card to be clicked and load up a new activity containing the information that goes with that card
-            holder.mainLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    Intent intent = new Intent(context, FriendsListActivity.class);
-                    //Extras are what we are passing from the adapter --> EventActivity (the event page)
-                    //Inside EventActivity we will use these intents to pull information
-                    intent.putExtra("data1", mExampleList.get(position).getName());
-
-                    context.startActivity(intent);
-                }
-            });
             holder.mFollowButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -444,7 +434,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         }
     }
 
-    public void removeEvent(String s){
+    public void removeEvent(final String s){
         eventRef.child(s).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -461,6 +451,29 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
             }
         });
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    rsvpevents = ds.child("rsvpevents").getValue().toString();
+                    rsvpeventssplit = rsvpevents.split(",");
+                    for(int i = 0; i < rsvpeventssplit.length; i++) {
+                        if(rsvpeventssplit[i].equals(s)) {
+                            rsvpevents = rsvpevents.replace(s + ",", "");
+                            ref.child(ds.getKey()).child("rsvpevents").setValue(rsvpevents);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     @Override
