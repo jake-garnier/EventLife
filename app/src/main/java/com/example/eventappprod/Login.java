@@ -85,7 +85,7 @@ public class Login extends AppCompatActivity {
                 //get the ucsd domain and check if it is a ucsd.edu email
                 String domain = email.substring(email.indexOf("@") + 1);
                 if (domain.equals("ucsd.edu") == false) {
-                    mEmail.setError("Email is invalid. Make Sure to Login with ucsd email");
+                    mEmail.setError("Email is invalid. Make Sure to Login with a UCSD email");
                     return;
                 }
 
@@ -103,7 +103,7 @@ public class Login extends AppCompatActivity {
 
                 //if the length of the password is less than 8 characters
                 if (password.length() < 8) {
-                    mPassword.setError("Password Must be Longer Than 8 Characters");
+                    mPassword.setError("Password Must be Longer 8 or More Characters");
                     return;
                 }
 
@@ -143,7 +143,7 @@ public class Login extends AppCompatActivity {
                                     //if error in database
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                                        Toast.makeText(Login.this,"Error on Firebase", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(Login.this,"Error logging in", Toast.LENGTH_SHORT).show();
                                     }
                                 });
 
@@ -158,7 +158,7 @@ public class Login extends AppCompatActivity {
                         }
                         //error if the task cannot be complete
                         else {
-                            Toast.makeText(Login.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Login.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
                         }
                         mPassword.setText("");
@@ -182,8 +182,8 @@ public class Login extends AppCompatActivity {
 
                 final EditText resetMail = new EditText(v.getContext());
                 final AlertDialog.Builder passwordResetDialog = new AlertDialog.Builder(v.getContext());
-                passwordResetDialog.setTitle("Reset Password ?");
-                passwordResetDialog.setMessage("Enter Your Email To Received Reset Link.");
+                passwordResetDialog.setTitle("Reset Password?");
+                passwordResetDialog.setMessage("Enter Your Email To Receive Reset Link.");
                 passwordResetDialog.setView(resetMail);
 
                 passwordResetDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {

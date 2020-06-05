@@ -131,7 +131,7 @@ public class FriendsListActivity extends AppCompatActivity {
             // View in MVC (show errors to user visually)
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(FriendsListActivity.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FriendsListActivity.this, "Error loading users", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -145,7 +145,7 @@ public class FriendsListActivity extends AppCompatActivity {
         if (id == R.id.add_friend_button) {
             // Visually display this textbox (View in MVC)
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Friend Request? Add their Username below and zoom!");
+            builder.setTitle("Friend Request? Add their Username below!");
 
             // Set up the input (View in MVC)
             final EditText input = new EditText(this);
@@ -155,7 +155,7 @@ public class FriendsListActivity extends AppCompatActivity {
             builder.setView(input);
 
             // Set up the buttons (View in MVC)
-            builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("Add Friend", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //Update text (Controller in MVC)
@@ -200,10 +200,10 @@ public class FriendsListActivity extends AppCompatActivity {
 
                         //View in MVC (display to the user successful add or not)
                         if (added == 1) {
-                            Toast.makeText(FriendsListActivity.this, "Added : " + friendAdd, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(FriendsListActivity.this, "Added " + friendAdd, Toast.LENGTH_SHORT).show();
                             added = 0;
                         } else {
-                            Toast.makeText(FriendsListActivity.this, friendAdd + " : Does not exist or Already added", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(FriendsListActivity.this, friendAdd + " Does not exist or already added", Toast.LENGTH_SHORT).show();
                         }
                     }
                     dialog.cancel();

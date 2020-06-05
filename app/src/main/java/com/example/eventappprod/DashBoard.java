@@ -57,6 +57,7 @@ public class DashBoard extends AppCompatActivity {
 
     ArrayList<String> friendList = new ArrayList<>();
     ArrayList<String> rsvpEvents = new ArrayList<>();
+    ArrayList<String> createdEvents = new ArrayList<>();
 
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
@@ -76,6 +77,7 @@ public class DashBoard extends AppCompatActivity {
 
     String[] friends = new String[currUser.getFriendList().length()];
     String[] rsvp = new String[currUser.getRSVPEvents().length()];
+    String[] created = new String[currUser.getCreatedEvents().length()];
 
     //friends stuff
     String friendAdd;
@@ -118,7 +120,7 @@ public class DashBoard extends AppCompatActivity {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(DashBoard.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DashBoard.this, "Error loading Users", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -158,9 +160,6 @@ public class DashBoard extends AppCompatActivity {
 
                 evenList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    if (ds.child("owner").getValue().equals(currUser.getUserId() + ",")) {
-                        evenList.add(ds.getValue(Event.class));
-                    }
 
                     for (String friend : friendList) {
                         if (ds.child("owner").getValue().equals(friend + ",")) {
@@ -179,6 +178,10 @@ public class DashBoard extends AppCompatActivity {
                             }
                         }
                     }
+
+                    if (ds.child("owner").getValue().equals(currUser.getUserId() + ",")) {
+                        evenList.add(ds.getValue(Event.class));
+                    }
                 }
 
                 retrieveData();
@@ -187,7 +190,7 @@ public class DashBoard extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(DashBoard.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DashBoard.this, "Error loading events", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -243,7 +246,7 @@ public class DashBoard extends AppCompatActivity {
         if (id == R.id.add_friend_button) {
             // do something here
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Friend Request? Add their Username below and zoom!");
+            builder.setTitle("Friend Request? Add their Username below!");
 
             // Set up the input
             final EditText input = new EditText(this);
@@ -253,7 +256,7 @@ public class DashBoard extends AppCompatActivity {
             builder.setView(input);
 
             // Set up the buttons
-            builder.setPositiveButton("ZOOM", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("Add Friend", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     friendAdd = input.getText().toString();
@@ -282,10 +285,10 @@ public class DashBoard extends AppCompatActivity {
                         }
 
                         if (added == 1) {
-                            Toast.makeText(DashBoard.this, "Added : " + friendAdd, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DashBoard.this, "Added " + friendAdd, Toast.LENGTH_SHORT).show();
                             added = 0;
                         } else {
-                            Toast.makeText(DashBoard.this, friendAdd + " : Does not exist or Already added", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DashBoard.this, friendAdd + " Does not exist or already added", Toast.LENGTH_SHORT).show();
                         }
                     }
                     dialog.cancel();
@@ -389,25 +392,6 @@ public class DashBoard extends AppCompatActivity {
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-//        addNotification();
     }
-
-//    private void addNotification() {
-//        Intent intent = new Intent(this, EventActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-//        for(int i=0; i<evenList.size(); i++) {
-//            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-//                    .setSmallIcon(R.drawable.notification_icon)
-//                    .setContentTitle(evenList.get(i).getName())
-//                    .setContentText(evenList.get(i).getStartTime())
-//                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-//                    // Set the intent that will fire when the user taps the notification
-//                    .setContentIntent(pendingIntent)
-//                    .setAutoCancel(true);
-//            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-//            notificationManager.notify(i, builder.build());
-//        }
-//    }
 
 }

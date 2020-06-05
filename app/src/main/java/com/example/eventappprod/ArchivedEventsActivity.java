@@ -1,9 +1,3 @@
-/*
-    RSVP EVENTS THAT SHOW UP FOR THE USER
- */
-
-
-
 package com.example.eventappprod;
 
 import androidx.annotation.NonNull;
@@ -28,7 +22,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class ArchivedEventsActivity extends AppCompatActivity {
-    //https://www.youtube.com/watch?v=18VcnYN5_LM
     //Event Feed String Arrays
     String[] eventNames;
     String[] eventDescriptions;
@@ -71,7 +64,6 @@ public class ArchivedEventsActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        //mAdapter = new ExampleAdapter(mContext, evenList, "rsvpevent");
         mRecyclerView.setAdapter(mAdapter);
 
         ref = FirebaseDatabase.getInstance().getReference("/EVENT");
@@ -95,20 +87,13 @@ public class ArchivedEventsActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(ArchivedEventsActivity.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ArchivedEventsActivity.this, "Error loading RSVP list", Toast.LENGTH_SHORT).show();
             }
         });
 
 
         //Logic for displaying the event-feed
         //Thus, somehow inject database information into these arrays?
-//        eventNames = getResources().getStringArray(R.array.eventNames_feed);
-//        eventDescriptions = getResources().getStringArray(R.array.eventNames_description);
-//        ArrayList<ExampleItem> exampleList = new ArrayList<>();
-//        for (int i = 0; i < eventNames.length; i++) {
-//            exampleList.add(new ExampleItem(images[i], eventNames[i], eventDescriptions[i],""));
-//        }
-//
         mRecyclerView = findViewById(R.id.recyclerViewArchive);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);

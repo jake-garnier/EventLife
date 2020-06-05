@@ -90,7 +90,7 @@ public class FindEventsFrag extends Fragment {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(FindEventsFrag.super.getContext(), "Error on Firebase", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FindEventsFrag.super.getContext(), "Error loading users", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -128,7 +128,7 @@ public class FindEventsFrag extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(FindEventsFrag.super.getContext(), "Error on Firebase", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FindEventsFrag.super.getContext(), "Error loading events", Toast.LENGTH_SHORT).show();
             }
         });
         return view;
@@ -177,7 +177,7 @@ public class FindEventsFrag extends Fragment {
         if (id == R.id.add_friend_button) {
             //create the alert box
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Friend Request? Add their Username below and zoom!");
+            builder.setTitle("Friend Request? Add their Username below!");
 
             // Set up the input
             final EditText input = new EditText(getActivity());
@@ -187,7 +187,7 @@ public class FindEventsFrag extends Fragment {
             builder.setView(input);
 
             // Used when current user presses the add button in the alert box
-            builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("Add Friend", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     friendAdd = input.getText().toString();
@@ -215,10 +215,10 @@ public class FindEventsFrag extends Fragment {
                         }
                         //displays the correct toast message depending on if the person was added or not
                         if (added == 1) {
-                            Toast.makeText(getActivity(), "Added : " + friendAdd, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Added " + friendAdd, Toast.LENGTH_SHORT).show();
                             added = 0;
                         } else {
-                            Toast.makeText(getActivity(), friendAdd + " : Does not exist or Already added", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), friendAdd + " Does not exist or already added", Toast.LENGTH_SHORT).show();
                         }
                     }
                     dialog.cancel();

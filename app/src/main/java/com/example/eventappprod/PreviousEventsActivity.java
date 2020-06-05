@@ -87,7 +87,7 @@ public class PreviousEventsActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(PreviousEventsActivity.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PreviousEventsActivity.this, "Error loading events", Toast.LENGTH_SHORT).show();
             }
         });
 

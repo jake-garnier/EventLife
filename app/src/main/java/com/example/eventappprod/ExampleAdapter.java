@@ -252,7 +252,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     mExampleList.remove(position);
                     notifyItemRemoved(position);
                     notifyItemRangeChanged(position, mExampleList.size());
-                    Toast.makeText(context, "Saved in RSVP : " + itemLabel, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "RSVP'd to " + itemLabel, Toast.LENGTH_SHORT).show();
                 }
             });
         } else if (viewType == 14) { // Event list
@@ -311,7 +311,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     mExampleList.remove(position);
                     notifyItemRemoved(position);
                     notifyItemRangeChanged(position, mExampleList.size());
-                    Toast.makeText(context, "Declined : " + itemLabel, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "UNRSVP'd to " + itemLabel, Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -339,7 +339,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     notifyItemRemoved(position);
                     notifyItemRangeChanged(position, mExampleList.size());
                     exampleListFull = mExampleList;
-                    Toast.makeText(context, "Followed : " + itemLabel, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Followed " + itemLabel, Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -373,7 +373,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     mExampleList.remove(position);
                     notifyItemRemoved(position);
                     notifyItemRangeChanged(position, mExampleList.size());
-                    Toast.makeText(context, "Unfollowed : " + itemLabel, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Unfollowed " + itemLabel, Toast.LENGTH_SHORT).show();
 
                     //Todo: add the part where they wont see that person anymore.
                 }
@@ -431,7 +431,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     ref.child(currUser.getUserId()).child("createdEvents").setValue(delete);
 
                     notifyItemRangeChanged(position, mExampleList.size());
-                    Toast.makeText(context, "Removed the event on Display: " + eventLabel, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Removed " + eventLabel, Toast.LENGTH_SHORT).show();
 
                     removeEvent(eventLabel);
 

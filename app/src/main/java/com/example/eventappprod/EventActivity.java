@@ -103,7 +103,7 @@ public class EventActivity extends AppCompatActivity {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(EventActivity.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EventActivity.this, "Error updating users", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -213,7 +213,7 @@ public class EventActivity extends AppCompatActivity {
                     System.out.println("blah " + myevent.getName());
                     ref.child(myevent.getName()).child("userGoing").setValue(usersGoing);
                     userRef.child(currUser.getUserId()).child("rsvpevents").setValue(rsvp);
-                    Toast.makeText(EventActivity.this, "Saved in RSVP: " + myevent.getName(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EventActivity.this, "RSVP'd to " + myevent.getName(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -260,7 +260,7 @@ public class EventActivity extends AppCompatActivity {
             //myImage = getIntent().getIntExtra("images", 1);
         }
         else{
-            Toast.makeText(this, "No data.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
         }
 
     }

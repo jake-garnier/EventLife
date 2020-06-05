@@ -98,7 +98,7 @@ public class Register extends AppCompatActivity {
                 //check if valid ucsd email
                 String domain = email .substring(email .indexOf("@") + 1);
                 if (domain.equals("ucsd.edu") == false) {
-                    mEmail.setError("Email is invalid. Using ucsd email");
+                    mEmail.setError("Email is invalid. Please use a UCSD email");
                     mPassword.setText("");
                     confirmPassword.setText("");
                     return;
@@ -125,7 +125,7 @@ public class Register extends AppCompatActivity {
 
                 //if length of the password is less than 7 characters
                 if(password.length() < 8){
-                    mPassword.setError("Password Must Be Longer than 7 Characters");
+                    mPassword.setError("Password Must Be 8 or More Characters");
                     return;
                 }
 
@@ -161,14 +161,14 @@ public class Register extends AppCompatActivity {
                                     }
                                     //if there is an error
                                     else {
-                                        Log.e(TAG, "Email hasn't been verified. EmailVerification", task.getException());
+                                        Log.e(TAG, "Email hasn't been verified.", task.getException());
                                     }
                                     //if there is a crash
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Log.d(TAG, "onFailure: Email not sent " + e.getMessage());
+                                    Log.d(TAG, "Email not sent " + e.getMessage());
                                 }
                             });
 

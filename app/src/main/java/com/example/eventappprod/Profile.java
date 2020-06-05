@@ -132,7 +132,7 @@ public class Profile extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(Profile.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Profile.this, "Error loading users", Toast.LENGTH_SHORT).show();
             }
         });
 
