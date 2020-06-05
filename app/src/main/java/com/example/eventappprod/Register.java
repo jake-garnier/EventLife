@@ -106,7 +106,7 @@ public class Register extends AppCompatActivity {
 
                 //if the passwords do not match
                 if (password.equals(cfmPassword) == false) {
-                    confirmPassword.setError("Passwords do not match. Please type again");
+                    confirmPassword.setError("Passwords do not match. Please confirm again");
                     confirmPassword.setText("");
                     return;
                 }

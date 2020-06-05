@@ -118,22 +118,7 @@ public class DashBoardFrag extends Fragment {
             }
         });
 
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            CharSequence name = "EventLife";
-//            String description = "EventLife";
-//            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-//            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-//            channel.setDescription(description);
-//            // Register the channel with the system; you can't change the importance
-//            // or other notification behaviors after this
-//            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-//            notificationManager.createNotificationChannel(channel);
-//        }
-
-
         ref = FirebaseDatabase.getInstance().getReference("/EVENT");
-        //eventNames_Screenshow = getResources().getStringArray(R.array.eventNames_feed);
-
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -149,9 +134,6 @@ public class DashBoardFrag extends Fragment {
 
                 evenList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    if (ds.child("owner").getValue().equals(currUser.getUserId() + ",")) {
-                        evenList.add(ds.getValue(Event.class));
-                    }
 
                     for (String friend : friendList) {
                         if (ds.child("owner").getValue().equals(friend + ",")) {
@@ -170,6 +152,10 @@ public class DashBoardFrag extends Fragment {
                             }
                         }
                     }
+
+                    if (ds.child("owner").getValue().equals(currUser.getUserId() + ",")) {
+                        evenList.add(ds.getValue(Event.class));
+                    }
                 }
 
                 retrieveData(view);
@@ -178,7 +164,7 @@ public class DashBoardFrag extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(DashBoardFrag.super.getContext(), "Error on Firebase", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DashBoardFrag.super.getContext(), "Error loading events", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -192,7 +178,7 @@ public class DashBoardFrag extends Fragment {
         if (id == R.id.add_friend_button) {
             // do something here
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Friend Request? Add their Username below and zoom!");
+            builder.setTitle("Friend Request? Add their Username below!");
 
             // Set up the input
             final EditText input = new EditText(getActivity());
@@ -202,7 +188,7 @@ public class DashBoardFrag extends Fragment {
             builder.setView(input);
 
             // Set up the buttons
-            builder.setPositiveButton("ZOOM", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("Add Friend", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     friendAdd = input.getText().toString();
@@ -231,10 +217,10 @@ public class DashBoardFrag extends Fragment {
                         }
 
                         if (added == 1) {
-                            Toast.makeText(DashBoardFrag.super.getContext(), "Added : " + friendAdd, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DashBoardFrag.super.getContext(), "Added friend" + friendAdd, Toast.LENGTH_SHORT).show();
                             added = 0;
                         } else {
-                            Toast.makeText(DashBoardFrag.super.getContext(), friendAdd + " : Does not exist or Already added", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DashBoardFrag.super.getContext(), friendAdd + " does not exist or already added", Toast.LENGTH_SHORT).show();
                         }
                     }
                     dialog.cancel();

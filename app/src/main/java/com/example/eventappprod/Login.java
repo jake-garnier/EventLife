@@ -85,7 +85,7 @@ public class Login extends AppCompatActivity {
                 //get the ucsd domain and check if it is a ucsd.edu email
                 String domain = email.substring(email.indexOf("@") + 1);
                 if (domain.equals("ucsd.edu") == false) {
-                    mEmail.setError("Email is invalid. Make Sure to Login with a UCSD email");
+                    mEmail.setError("Email is invalid. Please Login with a UCSD email");
                     return;
                 }
 
@@ -103,7 +103,7 @@ public class Login extends AppCompatActivity {
 
                 //if the length of the password is less than 8 characters
                 if (password.length() < 8) {
-                    mPassword.setError("Password Must be Longer 8 or More Characters");
+                    mPassword.setError("Password Must be 8 or More Characters");
                     return;
                 }
 
