@@ -25,48 +25,74 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Register extends AppCompatActivity {
+    //get the tag
     public static final String TAG = "TAG";
+    //fields to get the name, email, and password
     EditText mFullName,mEmail,mPassword, confirmPassword;
+    //register button
     Button mRegisterBtn;
+    //take user to log in after
     TextView mLoginBtn;
+    //get the authentification of the user
     FirebaseAuth fAuth;
+    //variable to check the cycle rotation
     ProgressBar progressBar;
+    //call to store the info in the firebase
     FirebaseFirestore fStore;
-    String userID;
+    //creating a user
     User u;
+    //profile user name id
     private TextView profileName;
 
-
+    //reference to the database
     FirebaseDatabase database;
+    //get the ref
     DatabaseReference ref;
-    static int usercount = 0;
+
+    //creating the page
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //set the view of the page
         setContentView(R.layout.activity_register);
+        //get  the reference to the database
         ref =FirebaseDatabase.getInstance().getReference();
 
+        //full name box
         mFullName   = findViewById(R.id.fullName);
+        //email box
         mEmail      = findViewById(R.id.Email);
+        //password box
         mPassword   = findViewById(R.id.password);
+        //confirm password box
         confirmPassword   = findViewById(R.id.cfmPassword);
 
+        //register button
         mRegisterBtn= findViewById(R.id.registerBtn);
+        //login button
         mLoginBtn   = findViewById(R.id.createText);
 
+        //get instance of the authentification
         fAuth = FirebaseAuth.getInstance();
+        //get the firebase storage
         fStore = FirebaseFirestore.getInstance();
+        //get the recycle view
         progressBar = findViewById(R.id.progressBar);
 
+        //profile name button
         profileName = findViewById(R.id.profileName);
 
-
+        //Create action of the register button
         mRegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //get the email
                 final String email = mEmail.getText().toString().trim();
+                //get password
                 final String password = mPassword.getText().toString().trim();
+                //get confirmation password
                 String cfmPassword = confirmPassword.getText().toString().trim();
+                //full name
                 final String fullName = mFullName.getText().toString();
 
                 //check if valid ucsd email
@@ -78,29 +104,32 @@ public class Register extends AppCompatActivity {
                     return;
                 }
 
+                //if the passwords do not match
                 if (password.equals(cfmPassword) == false) {
                     confirmPassword.setError("Passwords do not match. Please type again");
                     confirmPassword.setText("");
                     return;
                 }
 
+                //if the email given is empty
                 if(TextUtils.isEmpty(email)){
                     mEmail.setError("Email is Required.");
                     return;
                 }
 
+                //if the password box is empty
                 if(TextUtils.isEmpty(password)){
                     mPassword.setError("Password is Required.");
                     return;
                 }
 
+                //if length of the password is less than 7 characters
                 if(password.length() < 8){
                     mPassword.setError("Password Must Be Longer than 7 Characters");
                     return;
                 }
 
-
-
+                //set the recycle view to visible
                 progressBar.setVisibility(View.VISIBLE);
 
                 // register the user in firebase
@@ -108,6 +137,7 @@ public class Register extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
+                            //send authentifcation password to user email
                             fAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
@@ -115,18 +145,25 @@ public class Register extends AppCompatActivity {
                                         Toast.makeText(Register.this, "Verification Email Has been Sent.", Toast.LENGTH_SHORT).show();
                                         mEmail.setText("");
                                         mPassword.setText("");
+                                        //create the new user with default background and proile images
                                         u  = new User(fullName, email, "",password, "", "https://firebasestorage.googleapis.com/v0/b/event-b161b.appspot.com/o/EVENT%2Fraw%253A%252Fstorage%252Femulated%252F0%252FDownload%252Fdownload.png?alt=media&token=06256f12-4b6f-4099-84f0-8aa4a90f0159",
                                                 "https://firebasestorage.googleapis.com/v0/b/event-b161b.appspot.com/o/EVENT%2F285871589?alt=media&token=0a2f3f7e-e6f8-4b44-ac9b-b15d0669ecd1","", "", "", "", "", "");
-                                        usercount++;
-                                        String userRef = Integer.toString(usercount);
+
+                                        //grab the userID that will define the user
                                         String userID = email.substring(0, email.indexOf("@"));
+                                        //set the userID
                                         u.setUserId(userID);
+                                        //set the value
                                         ref.child("/USER").child(userID).setValue(u);
+                                        //go to the login page
                                         startActivity(new Intent(getApplicationContext(),Login.class));
 
-                                    } else {
+                                    }
+                                    //if there is an error
+                                    else {
                                         Log.e(TAG, "Email hasn't been verified. EmailVerification", task.getException());
                                     }
+                                    //if there is a crash
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -135,7 +172,9 @@ public class Register extends AppCompatActivity {
                                 }
                             });
 
-                        }else {
+                        }
+                        //if the recycle view crashes
+                        else {
                             Toast.makeText(Register.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
                         }
@@ -146,6 +185,7 @@ public class Register extends AppCompatActivity {
 
 
 
+        //go to login
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
