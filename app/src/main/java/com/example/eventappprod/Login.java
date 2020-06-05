@@ -156,7 +156,7 @@ public class Login extends AppCompatActivity {
 
 
                         }
-                        //error if the task cannot be complete
+                        //show error if the task cannot be complete
                         else {
                             Toast.makeText(Login.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
@@ -199,7 +199,7 @@ public class Login extends AppCompatActivity {
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(Login.this, "Error ! Reset Link is Not Sent" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Login.this, "Error ! Reset Link Was Not Sent" + e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
 
