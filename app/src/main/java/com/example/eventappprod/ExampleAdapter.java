@@ -48,6 +48,9 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     ArrayList<Event> dEventList = new ArrayList<>();
     String[] rsvp = new String[currUser.getRSVPEvents().length()];
 
+    String rsvpevents;
+    String[] rsvpeventssplit = new String[20];
+
     String eventLabel;
 
     Event e;
@@ -450,7 +453,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         }
     }
 
-    public void removeEvent(String s){
+    public void removeEvent(final String s){
         eventRef.child(s).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -467,8 +470,57 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
             }
         });
-    }
 
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    rsvpevents = ds.child("rsvpevents").getValue().toString();
+                    rsvpeventssplit = rsvpevents.split(",");
+                    for(int i = 0; i < rsvpeventssplit.length; i++) {
+                        if(rsvpeventssplit[i].equals(s)) {
+                            rsvpevents = rsvpevents.replace(s + ",", "");
+                            ref.child(ds.getKey()).child("rsvpevents").setValue(rsvpevents);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+/*
+    public void removersvplists(String s) {
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Event e = dataSnapshot.getValue(Event.class);
+
+                System.out.println("event " + e.getName());
+
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    rsvpevents = ds.child("rsvpevents").getValue().toString().split(",");
+                    for(int i = 0; i < rsvpevents.length; i++) {
+                        System.out.println("rsvp event " + rsvpevents[i]);
+                        if(rsvpevents[i].equals(e)) {
+                            System.out.println("they equal");
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+*/
     @Override
     public int getItemViewType(int position) {
         // The first card is always the
