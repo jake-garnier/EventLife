@@ -421,17 +421,12 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
                 @Override
                 public void onClick(View v) {
-                    //TODO: for DELETE
-                    // Get the clicked item label
 
                     String eventLabel = mExampleList.get(position).getName();
                     //event ID
                     String eventID = mExampleList.get(position).getStartTime();
                     DatabaseReference ere = FirebaseDatabase.getInstance().getReference("/EVENT");
 
-
-                    // Remove the item on remove/button click
-                    //nextstep = false;
                     mExampleList.remove(position);
                     notifyItemRemoved(position);
 
@@ -442,7 +437,6 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
                     notifyItemRangeChanged(position, mExampleList.size());
                     Toast.makeText(context, "Removed the event on Display: " + eventLabel, Toast.LENGTH_SHORT).show();
-
                     removeEvent(eventLabel);
 
                 }
