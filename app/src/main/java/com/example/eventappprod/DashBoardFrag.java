@@ -217,10 +217,10 @@ public class DashBoardFrag extends Fragment {
                         }
 
                         if (added == 1) {
-                            Toast.makeText(DashBoardFrag.super.getContext(), "Added friend" + friendAdd, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DashBoardFrag.super.getContext(), "Added friend " + friendAdd, Toast.LENGTH_SHORT).show();
                             added = 0;
                         } else {
-                            Toast.makeText(DashBoardFrag.super.getContext(), friendAdd + " does not exist or already added", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DashBoardFrag.super.getContext(), friendAdd + " does not exist or is already added", Toast.LENGTH_SHORT).show();
                         }
                     }
                     dialog.cancel();

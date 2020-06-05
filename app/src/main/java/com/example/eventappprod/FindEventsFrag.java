@@ -218,7 +218,7 @@ public class FindEventsFrag extends Fragment {
                             Toast.makeText(getActivity(), "Added " + friendAdd, Toast.LENGTH_SHORT).show();
                             added = 0;
                         } else {
-                            Toast.makeText(getActivity(), friendAdd + " Does not exist or already added", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), friendAdd + " Does not exist or is already added", Toast.LENGTH_SHORT).show();
                         }
                     }
                     dialog.cancel();

@@ -203,7 +203,7 @@ public class FriendsListActivity extends AppCompatActivity {
                             Toast.makeText(FriendsListActivity.this, "Added " + friendAdd, Toast.LENGTH_SHORT).show();
                             added = 0;
                         } else {
-                            Toast.makeText(FriendsListActivity.this, friendAdd + " Does not exist or already added", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(FriendsListActivity.this, friendAdd + " Does not exist or is already added", Toast.LENGTH_SHORT).show();
                         }
                     }
                     dialog.cancel();
