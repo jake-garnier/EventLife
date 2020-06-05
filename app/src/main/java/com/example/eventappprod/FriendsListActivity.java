@@ -37,7 +37,7 @@ import java.util.ArrayList;
 
 public class FriendsListActivity extends AppCompatActivity {
 
-    //Model
+    //Start of Model in MVC (Variables containing the data structure used in the file)
     //Friend List Variables
     private String friendAdd;
     private String[] array;
@@ -56,14 +56,15 @@ public class FriendsListActivity extends AppCompatActivity {
     String[] userIDArr = new String[20];
 
     private ArrayList<User> userList;
-    ArrayList<ExampleItem> exampleList;
+    //End of Model in MVC
 
     //View
     //Recycler View Needed for Event Feed
+    ArrayList<ExampleItem> exampleList;
     private RecyclerView mRecyclerView;
     private ExampleAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    User currUser  = User.getInstance();
+    User currUser = User.getInstance();
 
 
     //Controller
@@ -154,7 +155,7 @@ public class FriendsListActivity extends AppCompatActivity {
             builder.setView(input);
 
             // Set up the buttons (View in MVC)
-            builder.setPositiveButton("ZOOM", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //Update text (Controller in MVC)
