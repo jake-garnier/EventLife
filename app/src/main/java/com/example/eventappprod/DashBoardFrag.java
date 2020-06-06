@@ -69,7 +69,7 @@ public class DashBoardFrag extends Fragment {
 
     //Recycler View Needed for Event Feed (View, Model)
     private RecyclerView mRecyclerView;
-    private ExampleAdapter mAdapter;
+    private CardAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     @Nullable
@@ -306,9 +306,9 @@ public class DashBoardFrag extends Fragment {
     public void LoadDatatoDashBoard(View view){
 
         //Takes info from events which creates the card for the user to see
-        ArrayList<ExampleItem> exampleList = new ArrayList<>();
+        ArrayList<Card> exampleList = new ArrayList<>();
         for (int i = 0; i < evenList.size() + 1; i++) {
-            exampleList.add(new ExampleItem(eventNames_Screenshow.get(i), eventStartTime_Screenshow.get(i), eventEndTime_Screenshow.get(i), eventDate_Screenshow.get(i), creator.get(i), images_Firestore.get(i)));
+            exampleList.add(new Card(eventNames_Screenshow.get(i), eventStartTime_Screenshow.get(i), eventEndTime_Screenshow.get(i), eventDate_Screenshow.get(i), creator.get(i), images_Firestore.get(i)));
         }
 
         //Set recycler view
@@ -318,9 +318,9 @@ public class DashBoardFrag extends Fragment {
 
         //Adjust mAdapter depending on eventlist size
         if(evenList.size() == 0) {
-            mAdapter = new ExampleAdapter(this.getContext(), exampleList, "empty");
+            mAdapter = new CardAdapter(this.getContext(), exampleList, "empty");
         } else {
-            mAdapter = new ExampleAdapter(this.getContext(), exampleList, "event");
+            mAdapter = new CardAdapter(this.getContext(), exampleList, "event");
         }
 
         //Updates recycler view
