@@ -21,6 +21,7 @@ public class Search extends AppCompatActivity {
 
     private ViewPager mViewPager;
 
+    //Initialize and properly set the contentView (View)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,13 +42,14 @@ public class Search extends AppCompatActivity {
                 new int[] {android.R.attr.state_enabled, android.R.attr.state_checked}
         };
 
+        //Visually update to color states as specified (View)
         bottomNavigationView.setItemTextColor(new ColorStateList(states, colors));
         bottomNavigationView.setItemIconTintList(new ColorStateList(states, colors));
 
         //Set search as selected
         bottomNavigationView.setSelectedItemId(R.id.search);
 
-        //Perform ItemSelectedListener
+        //Perform ItemSelectedListener (Controller)
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -74,6 +76,7 @@ public class Search extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         setupViewPager(mViewPager);
 
+        //Set the visual variables (View)
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
@@ -81,6 +84,7 @@ public class Search extends AppCompatActivity {
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_dashboard);
     }
 
+    //Initalize the view pager (Controller)
     private void setupViewPager(ViewPager viewPager) {
         SectionPagerAdapter adapter = new SectionPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new FindFriendsFrag());
