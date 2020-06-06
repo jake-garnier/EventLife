@@ -296,17 +296,19 @@ public class DashBoardFrag extends Fragment {
             //Picasso.get().load(evenList.get(i).getImage()).into(my_image);
 
         }
-        array = currUser.getFriendList().split(",");
+
         LoadDatatoDashBoard(view);
 
     }
 
     public void LoadDatatoDashBoard(View view){
+
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
         for (int i = 0; i < evenList.size() + 1; i++) {
             exampleList.add(new ExampleItem(eventNames_Screenshow.get(i), eventStartTime_Screenshow.get(i), eventEndTime_Screenshow.get(i), eventDate_Screenshow.get(i), creator.get(i), images_Firestore.get(i)));
         }
 
+        array = currUser.getFriendList().split(",");
 
         mRecyclerView = view.findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
