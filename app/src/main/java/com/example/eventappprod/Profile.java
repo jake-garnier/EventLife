@@ -257,7 +257,7 @@ public class Profile extends AppCompatActivity {
                         return true;
                     case R.id.profile:
                         return true;
-                    case R.id.search:
+                    case R.id.explore:
                         startActivity(new Intent(getApplicationContext()
                                 ,Search.class));
                         overridePendingTransition(0,0);

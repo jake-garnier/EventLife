@@ -1,16 +1,12 @@
 package com.example.eventappprod;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -23,8 +19,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,46 +34,43 @@ import javax.annotation.Nullable;
 
 public class DashBoardFrag extends Fragment {
 
-    //https://www.youtube.com/watch?v=Nw9JF55LDzE
-    //https://www.youtube.com/watch?v=18VcnYN5_LM
     //Event Feed String Arrays
     private static final String TAG = "PostDetailActivity";
     private static final String CHANNEL_ID = "Channel1";
 
+    //ArrayLists to retrieve and display data from database (view)
     ArrayList<String> images_Firestore = new ArrayList<>();
     ArrayList<String> eventNames_Screenshow = new ArrayList<>();
     ArrayList<String> eventStartTime_Screenshow = new ArrayList<>();
     ArrayList<String> eventEndTime_Screenshow = new ArrayList<>();
     ArrayList<String> eventDate_Screenshow = new ArrayList<>();
     ArrayList<String> creator = new ArrayList<>();
-
     ArrayList<String> friendList = new ArrayList<>();
     ArrayList<String> rsvpEvents = new ArrayList<>();
+    ArrayList<User> userList = new ArrayList<>();
+    ArrayList<User> newUserList = new ArrayList<>();
+    ArrayList<Event> evenList = new ArrayList<>();  //List of events to be displayed on dashboard
 
-    //Recycler View Needed for Event Feed
-    private RecyclerView mRecyclerView;
-    private ExampleAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-    DatabaseReference ref;
-    DatabaseReference userref;
+    //Get current user
+    User currUser = User.getInstance();
 
-    ArrayList<Event> evenList = new ArrayList<>();
-    User currUser  = User.getInstance();
-    private ArrayList<User> userList;
-    ArrayList<User> newUserList;
-
+    //Arrays to store current user's friend list and RSVP'd events from database
     String[] friends = new String[currUser.getFriendList().length()];
     String[] rsvp = new String[currUser.getRSVPEvents().length()];
 
-    //friends stuff
+    //Database references of events and users
+    DatabaseReference eventref;
+    DatabaseReference userref;
+
+    //Variables used for following users
     String friendAdd;
     int added = 0;
-    private String[] array;
     String userID = currUser.getUserId();
-    String[] userName = new String[20];
-    String[] userIDArr = new String[20];
-    String[] friendsList = new String[20];
-    String[] profileImages = new String[20];
+
+    //Recycler View Needed for Event Feed (View, Model)
+    private RecyclerView mRecyclerView;
+    private ExampleAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @Nullable
     @Override
@@ -87,23 +78,25 @@ public class DashBoardFrag extends Fragment {
         final View view = inflater.inflate(R.layout.activity_dash_board_frag, container, false);
         setHasOptionsMenu(true);
 
+        //Get reference to database users
         userref = FirebaseDatabase.getInstance().getReference("/USER");
-        newUserList = new ArrayList<>();
 
         userref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                //Fetches user data from database
                 newUserList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     newUserList.add(ds.getValue(User.class));
                 }
 
+                //Makes sure that user arraylist is populated
                 if (newUserList.size() != 0) {
                     userList = newUserList;
                     retrieveData(view);
                 }
 
+                //Updates correct current user data
                 for (int i = 0; i < newUserList.size(); i++) {
                     if (newUserList.get(i).getUserId().equals(userID)) {
                         currUser = newUserList.get(i);
@@ -112,37 +105,46 @@ public class DashBoardFrag extends Fragment {
 
             }
 
+            //Called when data is not retrieved properly
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(DashBoardFrag.super.getContext(), "Error on Firebase", Toast.LENGTH_SHORT).show();
             }
         });
 
-        array = currUser.getFriendList().split(",");
+        //Gets current user's friend list
+        friends = currUser.getFriendList().split(",");
 
-        ref = FirebaseDatabase.getInstance().getReference("/EVENT");
+        //Gets database reference to events
+        eventref = FirebaseDatabase.getInstance().getReference("/EVENT");
 
-        ref.addValueEventListener(new ValueEventListener() {
+        eventref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                //Populate friend list from database
                 friendList.clear();
                 friends = currUser.getFriendList().split(",");
                 friendList.addAll(Arrays.asList(friends));
 
+                //Populate rsvp'd events from database
                 rsvpEvents.clear();
                 rsvp = currUser.getRSVPEvents().split(",");
                 Collections.addAll(rsvpEvents, rsvp);
 
                 evenList.clear();
+
+                //Loop through each event in database
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
+                    //Adds every event a friend has created
                     for (String friend : friendList) {
                         if (ds.child("owner").getValue().equals(friend + ",")) {
                             evenList.add(ds.getValue(Event.class));
                         }
                     }
 
+                    //Removes events that have been rsvp'd
                     for (String event : rsvpEvents) {
                         if (ds.child("name").getValue().equals(event)) {
                             Iterator<Event> it = evenList.iterator();
@@ -155,6 +157,7 @@ public class DashBoardFrag extends Fragment {
                         }
                     }
 
+                    //Adds events the user creates
                     if (ds.child("owner").getValue().equals(currUser.getUserId() + ",")) {
                         evenList.add(ds.getValue(Event.class));
                     }
@@ -164,6 +167,7 @@ public class DashBoardFrag extends Fragment {
 
             }
 
+            //Called when data is not retrieved properly
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(DashBoardFrag.super.getContext(), "Error loading events", Toast.LENGTH_SHORT).show();
@@ -178,31 +182,32 @@ public class DashBoardFrag extends Fragment {
         int id = item.getItemId();
 
         if (id == R.id.add_friend_button) {
-            // do something here
+            //Create alert box
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Friend Request? Add their Username below!");
+            builder.setTitle("Want to follow a user? Add their username below!");
 
-            // Set up the input
+            //Set up the input
             final EditText input = new EditText(getActivity());
-            // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+            //Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
             input.setPaddingRelative(40,20,20,20);
             input.setInputType(InputType.TYPE_CLASS_TEXT);
             builder.setView(input);
 
-            // Set up the buttons
+            //Checking username
             builder.setPositiveButton("Add Friend", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    //Convert input to string
                     friendAdd = input.getText().toString();
                     boolean flag = false;
-                    array = currUser.getFriendList().split(",");
+                    friends = currUser.getFriendList().split(",");
                     if(userList.size()!=0)
                     {
                         for (int i = 0; i < userList.size(); i++) {
                             //flag = false;
-                            for (int j = 0; j < array.length;j++) {
+                            for (int j = 0; j < friends.length;j++) {
                                 //checks if the user exists in the database or not (aka spelling errors)
-                                if ((userList.get(i).getUserId().equals(array[j]))
+                                if ((userList.get(i).getUserId().equals(friends[j]))
                                         || userList.get(i).getUserId().equals(currUser.getUserId())) {
                                     flag = true;
                                 }
@@ -229,6 +234,8 @@ public class DashBoardFrag extends Fragment {
                     dialog.cancel();
                 }
             });
+
+            //Called when data is not retrieved properly
             builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -264,6 +271,7 @@ public class DashBoardFrag extends Fragment {
         });
     }
 
+    //Makes sure that data is retrieved from database
     public void retrieveData(View view){
         eventNames_Screenshow.clear();
         eventStartTime_Screenshow.clear();
@@ -272,7 +280,7 @@ public class DashBoardFrag extends Fragment {
         images_Firestore.clear();
         creator.clear();
 
-        // Blank event for the button
+        //Blank event for the button
         eventNames_Screenshow.add("");
         eventStartTime_Screenshow.add("");
         eventEndTime_Screenshow.add("");
@@ -280,6 +288,7 @@ public class DashBoardFrag extends Fragment {
         images_Firestore.add("");
         creator.add("");
 
+        //Retrieves data from event list in database
         for (int i=1; i<evenList.size()+1;i++) {
             eventNames_Screenshow.add(i, evenList.get(i-1).getName());
             eventStartTime_Screenshow.add(i, evenList.get(i-1).getStartTime());
@@ -289,42 +298,33 @@ public class DashBoardFrag extends Fragment {
             creator.add(i,evenList.get(i-1).getOwner());
         }
 
-        for (int i=0; i<userList.size();i++) {
-            userName[i] = userList.get(i).getName();
-            userIDArr[i] = userList.get(i).getUserId();
-            friendsList[i] = userList.get(i).getFriendList();
-            profileImages[i] = userList.get(i).getProfileImage();
-            // you can get other info like date and time as well
-            //Bitmap my_image;
-            //Picasso.get().load(evenList.get(i).getImage()).into(my_image);
-
-        }
-
         LoadDatatoDashBoard(view);
 
     }
 
+    //Populates display with events for current user to view
     public void LoadDatatoDashBoard(View view){
 
+        //Takes info from events which creates the card for the user to see
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
         for (int i = 0; i < evenList.size() + 1; i++) {
             exampleList.add(new ExampleItem(eventNames_Screenshow.get(i), eventStartTime_Screenshow.get(i), eventEndTime_Screenshow.get(i), eventDate_Screenshow.get(i), creator.get(i), images_Firestore.get(i)));
         }
 
+        //Set recycler view
         mRecyclerView = view.findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
 
-
+        //Adjust mAdapter depending on eventlist size
         if(evenList.size() == 0) {
             mAdapter = new ExampleAdapter(this.getContext(), exampleList, "empty");
         } else {
             mAdapter = new ExampleAdapter(this.getContext(), exampleList, "event");
         }
 
-
+        //Updates recycler view
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-//        addNotification();
     }
 }
