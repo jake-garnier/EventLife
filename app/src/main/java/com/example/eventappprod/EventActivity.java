@@ -61,6 +61,7 @@ public class EventActivity extends AppCompatActivity {
     User currUser  = User.getInstance();
     private String userID;
 
+    //Variables to be used for displaying (Model)
     String[] profileImages = new String[20];
     String[] friendsList = new String[20];
     String[] userName = new String[20];
@@ -68,6 +69,7 @@ public class EventActivity extends AppCompatActivity {
 
 
 
+    //Create database reference, create link between database ref & current user (Model, Controller)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +80,7 @@ public class EventActivity extends AppCompatActivity {
 
         userID = currUser.getEmail().substring(0, currUser.getEmail().indexOf("@"));
 
-        //create user list and update info inside current user from database
+        //Create user list and update info inside current user from database
         userList = new ArrayList<>();
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -86,10 +88,12 @@ public class EventActivity extends AppCompatActivity {
 
                 ArrayList<User> newUserList = new ArrayList<>();
 
+                //Iterate across database to grab users (Model)
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     newUserList.add(ds.getValue(User.class));
                 }
 
+                //Check against list of users to locate current user (Controller)
                 for (int i = 0; i < newUserList.size(); i++) {
                     if (newUserList.get(i).getUserId().equals(userID)) {
                         currUser = newUserList.get(i);
@@ -97,7 +101,6 @@ public class EventActivity extends AppCompatActivity {
                 }
 
                 if (newUserList.size() != 0) {
-                    //userList = newUserList;
                     retrieveData();
                 }
             }
@@ -128,28 +131,27 @@ public class EventActivity extends AppCompatActivity {
         AttendeesButton = findViewById(R.id.eventFormGuests);
         RSVPButton = findViewById(R.id.eventFormRSVP);
 
-        //Initialize these methods
+        //Call to method that pulls information (Controller)
         getData();
-        //setData();
         AttendeesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
                 AlertDialog.Builder builder = new AlertDialog.Builder(EventActivity.this);
                 String peopleGoing = myevent.getUserGoing();
-                //people going to the event
+                //People going to the event
                 String array[] = peopleGoing.split(",");
 
-                //friends going to the event
+                //Friends going to the event
                 String friends_going = currUser.getFriendList();
                 String userFriends[] = friends_going.split(",");
                 String friends = "";
 
-                //user object
+                //User object (Controller)
                 User user = new User();
                 for(int i = 0; i < userFriends.length; i++ ) {
                     for(int j = 0; j < array.length; j++) {
-                        //if the user is the same as the array
+                        //If the user is the same as the array
                         if(userFriends[i].equals(array[j])){
                             friends = userFriends[i] + "," + friends;
                         }
@@ -158,7 +160,6 @@ public class EventActivity extends AppCompatActivity {
 
                 String final_array[] = friends.split(",");
 
-                //String person = "";
                 builder.setTitle("Attendees:");
                 builder.setItems(array, new DialogInterface.OnClickListener() {
                     @Override
@@ -166,7 +167,6 @@ public class EventActivity extends AppCompatActivity {
 
                     }
                 });
-                //builder.setTitle("Friends Going: \n" + person);
                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -183,9 +183,9 @@ public class EventActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                //people going to the event
+                //People going to the event
                 String peopleGoing = myevent.getUserGoing();
-                //store in array since database only stores strings
+                //Store in array since database only stores strings
                 String array[] = peopleGoing.split(",");
                 boolean alreadyGoing = false;
                 for (int i = 0; i < array.length; i++) {
@@ -197,19 +197,19 @@ public class EventActivity extends AppCompatActivity {
                     Toast.makeText(EventActivity.this, "You have already RSVP'd for this event!", Toast.LENGTH_SHORT).show();
                 }
                 else if (alreadyGoing == false) {
-                    //grab currentr user name
+                    //Grab current user name
                     String personGoing = currUser.getUserId();
-                    // grab all their list of RSVP events
+                    // Grab all their list of RSVP events
                     String userRSVP = currUser.getRSVPEvents();
-                    // add new event onto list
+                    // Add new event onto list
                     String rsvp = myevent.getName() + "," + currUser.getRSVPEvents();
 
-                    // add new user onto event's going list
+                    // Add new user onto event's going list
                     String usersGoing = personGoing + "," + peopleGoing;
                     currUser.addRSVPEvent(rsvp + myevent.getName());
-                    // update info in database
+                    // Update info in database
 
-                    //ref is event path and eventRef is also event path omg im dumb
+                    //Ref is event path and eventRef is also event path
                     System.out.println("blah " + myevent.getName());
                     ref.child(myevent.getName()).child("userGoing").setValue(usersGoing);
                     userRef.child(currUser.getUserId()).child("rsvpevents").setValue(rsvp);
@@ -220,20 +220,17 @@ public class EventActivity extends AppCompatActivity {
 
     }
 
-    //This is what will check and grab the information and load it in
+    //This is what will check and grab the information and load it in (Controller)
     private void getData(){
         if(getIntent().hasExtra("data1")){
-            //&& getIntent().hasExtra("data2")
-            //getIntent().hasExtra("images") &&
             data1 = getIntent().getStringExtra("data1");
 
-            // make sure event name is not null
+            // Make sure event name is not null
             if (data1=="" ) return;
 
             ref.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    // Toast.makeText(EventActivity.this, "Debug purpose", Toast.LENGTH_SHORT).show();
 
                     myevent = (Event) dataSnapshot.child(data1).getValue(Event.class);
                     if (myevent!=null) {
@@ -246,7 +243,7 @@ public class EventActivity extends AppCompatActivity {
                         owner = myevent.getOwner().replace(",","") ;
                     }
 
-                    // after retrieving all data, then set data to the TextViews
+                    // After retrieving all data, then set data to the TextViews
                     setData();
                 }
 
@@ -256,8 +253,6 @@ public class EventActivity extends AppCompatActivity {
                 }
             });
 
-//            data2 = getIntent().getStringExtra("data2");
-            //myImage = getIntent().getIntExtra("images", 1);
         }
         else{
             Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
@@ -269,9 +264,6 @@ public class EventActivity extends AppCompatActivity {
     private void setData(){
         title.setText(data1);
         description.setText(desc);
-        //mainImageView.setImageResource(myImage);
-        //mainImageView.setImageURI(Uri.parse(image));
-        //Picasso.get().load(image).into(mainImageView);
         Glide.with(EventActivity.this).load(image).into(mainImageView);
 
 
@@ -283,16 +275,14 @@ public class EventActivity extends AppCompatActivity {
     }
     public void retrieveData(){
 
-        // fetching data to particular array
+        // Fetching data to particular array (Controller)
 
+        //Actually iterating into the display fields (View)
         for (int i=0; i<userList.size();i++) {
             userName[i] = userList.get(i).getName();
             userIDArr[i] = userList.get(i).getUserId();
             friendsList[i] = userList.get(i).getFriendList();
             profileImages[i] = userList.get(i).getProfileImage();
-            // you can get other info like date and time as well
-            //Bitmap my_image;
-            //Picasso.get().load(evenList.get(i).getImage()).into(my_image);
             LoadDatatoFriendsList();
         }
     }
@@ -303,20 +293,9 @@ public class EventActivity extends AppCompatActivity {
             for (int j = 0; j < userList.size(); j++) {
                 if (userList.get(j).getUserId().equals(array[i])) {
                     user = userList.get(j);
-                    //exampleList.add(new ExampleItem(user.getName(), user.getUserId(), "", "", "", user.getProfileImage()));
-                    //mAdapter.notifyItemInserted(0);
-                    //mAdapter.resetFull();
-                    //mRecyclerView.scrollToPosition(0);
                 }
             }
         }
-//
-//    @Override
-//    public void onMapReady(GoogleMap googleMap) {
-//        map = googleMap;
-//        map.getUiSettings().setMyLocationButtonEnabled(false);
-//        map.setMyLocationEnabled(true);
-//    }
 
     }
 }
