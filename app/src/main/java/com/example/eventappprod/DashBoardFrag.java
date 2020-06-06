@@ -1,16 +1,12 @@
 package com.example.eventappprod;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -23,8 +19,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -58,7 +52,7 @@ public class DashBoardFrag extends Fragment {
 
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
-    private ExampleAdapter mAdapter;
+    private CardAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     DatabaseReference ref;
     DatabaseReference userref;
@@ -306,9 +300,9 @@ public class DashBoardFrag extends Fragment {
 
     public void LoadDatatoDashBoard(View view){
 
-        ArrayList<ExampleItem> exampleList = new ArrayList<>();
+        ArrayList<Card> exampleList = new ArrayList<>();
         for (int i = 0; i < evenList.size() + 1; i++) {
-            exampleList.add(new ExampleItem(eventNames_Screenshow.get(i), eventStartTime_Screenshow.get(i), eventEndTime_Screenshow.get(i), eventDate_Screenshow.get(i), creator.get(i), images_Firestore.get(i)));
+            exampleList.add(new Card(eventNames_Screenshow.get(i), eventStartTime_Screenshow.get(i), eventEndTime_Screenshow.get(i), eventDate_Screenshow.get(i), creator.get(i), images_Firestore.get(i)));
         }
 
         mRecyclerView = view.findViewById(R.id.recyclerView);
@@ -317,9 +311,9 @@ public class DashBoardFrag extends Fragment {
 
 
         if(evenList.size() == 0) {
-            mAdapter = new ExampleAdapter(this.getContext(), exampleList, "empty");
+            mAdapter = new CardAdapter(this.getContext(), exampleList, "empty");
         } else {
-            mAdapter = new ExampleAdapter(this.getContext(), exampleList, "event");
+            mAdapter = new CardAdapter(this.getContext(), exampleList, "event");
         }
 
 

@@ -39,7 +39,7 @@ public class FindEventsFrag extends Fragment {
 
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
-    private ExampleAdapter mAdapter;
+    private CardAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     DatabaseReference ref;
     DatabaseReference userRef;
@@ -154,9 +154,9 @@ public class FindEventsFrag extends Fragment {
     }
 
     public void LoadDatatoDashBoard(View view){
-        ArrayList<ExampleItem> exampleList = new ArrayList<>();
+        ArrayList<Card> exampleList = new ArrayList<>();
         for (int i = 0; i < evenList.size(); i++) {
-            exampleList.add(new ExampleItem(eventNames_Screenshow[i], eventStartTime_Screenshow[i],
+            exampleList.add(new Card(eventNames_Screenshow[i], eventStartTime_Screenshow[i],
                     eventEndTime_Screenshow[i], eventDate_Screenshow[i], "", images_Firestore[i]));
         }
 
@@ -165,7 +165,7 @@ public class FindEventsFrag extends Fragment {
         mRecyclerView = view.findViewById(R.id.recyclerViewFindEvents);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this.getContext());
-        mAdapter = new ExampleAdapter(this.getContext(), exampleList, "");
+        mAdapter = new CardAdapter(this.getContext(), exampleList, "");
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
     }

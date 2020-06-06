@@ -21,7 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class ArchivedEventsActivity extends AppCompatActivity {
+public class RSVPEventsActivity extends AppCompatActivity {
     //Event Feed String Arrays
     String[] eventNames;
     String[] eventDescriptions;
@@ -29,12 +29,12 @@ public class ArchivedEventsActivity extends AppCompatActivity {
     private Context mContext;
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
-    private ExampleAdapter mAdapter;
+    private CardAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     FirebaseDatabase database;
     DatabaseReference ref;
     ArrayList<Event> evenList;
-    ArrayList<ExampleItem> exampleList;
+    ArrayList<Card> exampleList;
     //get the current user
     User currUser  = User.getInstance();
     String[] array;
@@ -87,7 +87,7 @@ public class ArchivedEventsActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(ArchivedEventsActivity.this, "Error loading RSVP list", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RSVPEventsActivity.this, "Error loading RSVP list", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -97,7 +97,7 @@ public class ArchivedEventsActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recyclerViewArchive);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new ExampleAdapter(this, exampleList, "RSVP");
+        mAdapter = new CardAdapter(this, exampleList, "RSVP");
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -148,10 +148,10 @@ public class ArchivedEventsActivity extends AppCompatActivity {
     }
 
     public void LoadDatatoRSVPEvents(){
-        ArrayList<ExampleItem> exampleList = new ArrayList<>();
+        ArrayList<Card> exampleList = new ArrayList<>();
         for (int i = 0; i < evenList.size(); i++) {
 
-            exampleList.add(new ExampleItem(eventNames_Screenshow.get(i), eventStartTime_Screenshow.get(i), eventEndTime_Screenshow.get(i), eventDate_Screenshow.get(i), creator.get(i), images_Firestore.get(i)));
+            exampleList.add(new Card(eventNames_Screenshow.get(i), eventStartTime_Screenshow.get(i), eventEndTime_Screenshow.get(i), eventDate_Screenshow.get(i), creator.get(i), images_Firestore.get(i)));
 
 
         }
@@ -160,7 +160,7 @@ public class ArchivedEventsActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recyclerViewArchive);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new ExampleAdapter(this, exampleList, "RSVP");
+        mAdapter = new CardAdapter(this, exampleList, "RSVP");
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
     }

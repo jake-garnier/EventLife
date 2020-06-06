@@ -1,7 +1,6 @@
 package com.example.eventappprod;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,20 +9,14 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.DashPathEffect;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
@@ -60,9 +53,9 @@ public class FriendsListActivity extends AppCompatActivity {
 
     //View
     //Recycler View Needed for Event Feed
-    ArrayList<ExampleItem> exampleList;
+    ArrayList<Card> exampleList;
     private RecyclerView mRecyclerView;
-    private ExampleAdapter mAdapter;
+    private CardAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     User currUser = User.getInstance();
 
@@ -91,7 +84,7 @@ public class FriendsListActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new ExampleAdapter(mContext, exampleList, "friend");
+        mAdapter = new CardAdapter(mContext, exampleList, "friend");
         mRecyclerView.setAdapter(mAdapter);
 
         //Model in MVC (data-structure to hold userID & Firebase reference to all users)
@@ -186,7 +179,7 @@ public class FriendsListActivity extends AppCompatActivity {
                                     ref.child(userID).child("friendList").setValue(currUser.getFriendList());
 
                                     //Create a new row for that friend (View in MVC)
-                                    exampleList.add(0, new ExampleItem(userList.get(i).getName(), userList.get(i).getUserId(), "", "", "", userList.get(i).getProfileImage()));
+                                    exampleList.add(0, new Card(userList.get(i).getName(), userList.get(i).getUserId(), "", "", "", userList.get(i).getProfileImage()));
                                     mAdapter.notifyItemRangeChanged(0, exampleList.size());
                                     mAdapter.notifyItemInserted(0);
                                     mRecyclerView.scrollToPosition(0);
@@ -273,7 +266,7 @@ public class FriendsListActivity extends AppCompatActivity {
                     user = userList.get(j);
 
                     //View in MVC (display information on the card in the cardView)
-                    exampleList.add(new ExampleItem(user.getName(), user.getUserId(), "", "", "", user.getProfileImage()));
+                    exampleList.add(new Card(user.getName(), user.getUserId(), "", "", "", user.getProfileImage()));
                     mAdapter.notifyItemInserted(0);
                     mAdapter.resetFull();
                     mRecyclerView.scrollToPosition(0);

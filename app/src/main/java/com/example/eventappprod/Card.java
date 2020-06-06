@@ -1,6 +1,6 @@
 package com.example.eventappprod;
 
-public class ExampleItem {
+public class Card {
     private String mName;
     private String mStartTime;
     private String mEndTime;
@@ -9,7 +9,7 @@ public class ExampleItem {
     private String mCreator;
 
     // Contains the information of each card in the recycler views
-    public ExampleItem(String cardName, String cardStartTime, String cardEndTime, String cardDate, String cardCreator, String imgfirestore){
+    public Card(String cardName, String cardStartTime, String cardEndTime, String cardDate, String cardCreator, String imgfirestore){
         mName = cardName;
         mStartTime = cardStartTime;
         mEndTime = cardEndTime;

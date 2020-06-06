@@ -19,7 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class PreviousEventsActivity extends AppCompatActivity {
+public class CreatedEventsActivity extends AppCompatActivity {
     //Event Feed String Arrays
     String eventNames[];
     String eventDescriptions[];
@@ -27,7 +27,7 @@ public class PreviousEventsActivity extends AppCompatActivity {
     //Recycler View Needed for Event Feed (View, Model)
     RecyclerView recyclerView;
     private RecyclerView mRecyclerView;
-    private ExampleAdapter mAdapter;
+    private CardAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private DatabaseReference ref;
     ArrayList<Event> evenList;
@@ -42,7 +42,7 @@ public class PreviousEventsActivity extends AppCompatActivity {
     String[] eventStartTime_Screenshow=new String[20];
     String[] eventEndTime_Screenshow=new String[20];
     String[] eventDate_Screenshow=new String[20];
-    ArrayList<ExampleItem> exampleList = new ArrayList<>();
+    ArrayList<Card> exampleList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +54,7 @@ public class PreviousEventsActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new ExampleAdapter(this, exampleList, "previous");
+        mAdapter = new CardAdapter(this, exampleList, "previous");
         mRecyclerView.setAdapter(mAdapter);
 
 
@@ -74,7 +74,7 @@ public class PreviousEventsActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(PreviousEventsActivity.this, "Error loading events", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreatedEventsActivity.this, "Error loading events", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -103,7 +103,7 @@ public class PreviousEventsActivity extends AppCompatActivity {
             for (int j = 0; j < evenList.size(); j++) {
                 if (evenList.get(j).getName().equals(array[i])) {
                     event = evenList.get(j);
-                    exampleList.add(0,new ExampleItem(event.getName(), event.getStartTime(), event.getEndTime(),
+                    exampleList.add(0,new Card(event.getName(), event.getStartTime(), event.getEndTime(),
                             event.getDate(), event.getOwner() ,event.getImage()));
                 }
             }

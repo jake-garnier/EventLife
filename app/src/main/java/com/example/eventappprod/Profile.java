@@ -3,12 +3,10 @@ package com.example.eventappprod;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -193,7 +191,7 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext()
-                        ,PreviousEventsActivity.class));
+                        , CreatedEventsActivity.class));
 
             }
 
@@ -204,7 +202,7 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext()
-                        ,ArchivedEventsActivity.class));
+                        , RSVPEventsActivity.class));
 
             }
 

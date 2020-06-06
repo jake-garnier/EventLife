@@ -22,12 +22,12 @@
             android:parentActivityName=".DashBoard" />
         <activity android:name=".Register" />
         <activity
-            android:name=".ArchivedEventsActivity"
+            android:name=".RSVPEventsActivity"
             android:label="Return to Profile"
             android:parentActivityName=".Profile"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".PreviousEventsActivity"
+            android:name=".CreatedEventsActivity"
             android:label="Return to Profile"
             android:parentActivityName=".Profile"
             android:windowSoftInputMode="adjustPan" />

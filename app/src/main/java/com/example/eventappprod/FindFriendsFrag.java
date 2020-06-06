@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -25,8 +24,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -36,13 +33,13 @@ public class FindFriendsFrag extends Fragment {
 
     //Recycler View Needed for Event Feed
     private RecyclerView mRecyclerView;
-    private ExampleAdapter mAdapter;
+    private CardAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     //Database variables and lists needed to pull data from firebase
     DatabaseReference ref;
     ArrayList<User> userList;
-    ArrayList<ExampleItem> exampleList = new ArrayList<>();;
+    ArrayList<Card> exampleList = new ArrayList<>();;
     ArrayList<User> newUserList;
 
     //arrays used to make sure database populates the arrays
@@ -69,7 +66,7 @@ public class FindFriendsFrag extends Fragment {
         mRecyclerView = view.findViewById(R.id.recyclerViewFindFriends);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this.getContext());
-        mAdapter = new ExampleAdapter(this.getContext(), exampleList, "friendSearch");
+        mAdapter = new CardAdapter(this.getContext(), exampleList, "friendSearch");
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -141,7 +138,7 @@ public class FindFriendsFrag extends Fragment {
             if (flag == false) {
                 userCompare = userList.get(i);
                 //populate the card and add it in the fragment
-                exampleList.add(new ExampleItem(userCompare.getName(), userCompare.getUserId(),
+                exampleList.add(new Card(userCompare.getName(), userCompare.getUserId(),
                         "", "", "", userCompare.getProfileImage()));
                 mAdapter.notifyItemInserted(0);
                 mAdapter.resetFull();

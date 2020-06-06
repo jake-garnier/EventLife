@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/darkrose"
-    tools:context=".ArchivedEventsActivity">
+    tools:context=".RSVPEventsActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewArchive"

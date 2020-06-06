@@ -27,7 +27,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleViewHolder> implements Filterable {
+public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder> implements Filterable {
 
     // Constants for the different card view types
     public static int BUTTON_VIEW = 0;
@@ -39,8 +39,8 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     private String cardType;
 
     // Used for controlling the events that show in the view
-    private ArrayList<ExampleItem> mExampleList;
-    private ArrayList<ExampleItem> exampleListFull;
+    private ArrayList<Card> mCardList;
+    private ArrayList<Card> cardListFull;
     User currUser = User.getInstance();
     Context context;
 
@@ -61,7 +61,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     String rsvpevents;
     String peopleGoing;
 
-    public static class ExampleViewHolder extends RecyclerView.ViewHolder {
+    public static class CardViewHolder extends RecyclerView.ViewHolder {
 
         public RelativeLayout mRelativeLayout;
         public ConstraintLayout mainLayout;
@@ -73,7 +73,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         public Button mUnfollowButton, mRSVPButton, mFollowButton, mCreatedDeleteButton, createEvent,
                     mDeleteButton;
 
-        public ExampleViewHolder(@NonNull View itemView) {
+        public CardViewHolder(@NonNull View itemView) {
             super(itemView);
             //Get references from events and friends
             mImageView = itemView.findViewById(R.id.myImageView);
@@ -95,48 +95,47 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     }
 
 
-    public ExampleAdapter(Context ct, ArrayList<ExampleItem> exampleList, String type) {
+    public CardAdapter(Context ct, ArrayList<Card> cardList, String type) {
         context = ct;
-        mExampleList = exampleList;
-        //Deep copy of mExampleList;
-        exampleListFull = new ArrayList<>(exampleList);
+        mCardList = cardList;
+        cardListFull = new ArrayList<>(cardList);
         cardType = type;
     }
 
     @NonNull
     @Override
     //Creates the View holder from our my_row layout
-    public ExampleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         if (viewType == BUTTON_VIEW) { // The create event button view
             View v = LayoutInflater.from(context).inflate(R.layout.my_button_row, parent, false);
-            ExampleViewHolder evh = new ExampleViewHolder(v);
+            CardViewHolder evh = new CardViewHolder(v);
             return evh;
         } else if (viewType == EVENT_VIEW) { // The regular event view
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_row, parent, false);
-            ExampleViewHolder evh = new ExampleViewHolder(v);
+            CardViewHolder evh = new CardViewHolder(v);
             return evh;
         } else if (viewType == FRIEND_SEARCH_VIEW) { // The friend card view in the explore page
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_friend_search_row, parent, false);
-            ExampleViewHolder evh = new ExampleViewHolder(v);
+            CardViewHolder evh = new CardViewHolder(v);
             return evh;
         } else if (viewType == FRIEND_VIEW) { // The friend card view in the friend list
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_friend_row, parent, false);
-            ExampleViewHolder evh = new ExampleViewHolder(v);
+            CardViewHolder evh = new CardViewHolder(v);
             return evh;
         } else if (viewType == RSVP_VIEW) { // The rsvp'd event card view
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rsvp_event_row, parent, false);
-            ExampleViewHolder evh = new ExampleViewHolder(v);
+            CardViewHolder evh = new CardViewHolder(v);
             return evh;
         } else { // The created event card view
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_row_i_created, parent, false);
-            ExampleViewHolder evh = new ExampleViewHolder(v);
+            CardViewHolder evh = new CardViewHolder(v);
             return evh;
         }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ExampleViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull CardViewHolder holder, final int position) {
 
         eventRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -174,7 +173,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             });
         } else if (viewType == EVENT_VIEW) { // Event list
 
-            final ExampleItem currItem = mExampleList.get(position);
+            final Card currItem = mCardList.get(position);
 
             Picasso.get().load(currItem.getImg_firestore()).into(holder.mImageView);
 
@@ -191,7 +190,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     Intent intent = new Intent(context, EventActivity.class);
                     //Extras are what we are passing from the adapter --> EventActivity (the event page)
                     //Inside EventActivity we will use these intents to pull information
-                    intent.putExtra("data1", mExampleList.get(position).getName());
+                    intent.putExtra("data1", mCardList.get(position).getName());
 
                     context.startActivity(intent);
                 }
@@ -203,7 +202,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     // Get the clicked item label
                     String personGoing = currUser.getUserId();
 
-                    String itemLabel = mExampleList.get(position).getName();
+                    String itemLabel = mCardList.get(position).getName();
                     Event event = new Event();
 
                     for(int i = 0; i < dEventList.size(); i++) {
@@ -224,15 +223,15 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     eventRef.child(itemLabel).child("userGoing").setValue(usersGoing);
 
                     // Remove the item on remove/button click
-                    mExampleList.remove(position);
+                    mCardList.remove(position);
                     notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, mExampleList.size());
+                    notifyItemRangeChanged(position, mCardList.size());
                     Toast.makeText(context, "RSVP'd to " + itemLabel, Toast.LENGTH_SHORT).show();
                 }
             });
         } else if (viewType == RSVP_VIEW) { // Event list
 
-            final ExampleItem currItem = mExampleList.get(position);
+            final Card currItem = mCardList.get(position);
 
             Picasso.get().load(currItem.getImg_firestore()).into(holder.mImageView);
 
@@ -249,7 +248,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     Intent intent = new Intent(context, EventActivity.class);
                     //Extras are what we are passing from the adapter --> EventActivity (the event page)
                     //Inside EventActivity we will use these intents to pull information
-                    intent.putExtra("data1", mExampleList.get(position).getName());
+                    intent.putExtra("data1", mCardList.get(position).getName());
 
                     context.startActivity(intent);
                 }
@@ -260,7 +259,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
                     // Get the clicked item label
                     String personGoing = currUser.getUserId();
-                    String itemLabel = mExampleList.get(position).getName();
+                    String itemLabel = mCardList.get(position).getName();
                     Event event = new Event();
 
                     for(int i = 0; i < eventList.size(); i++) {
@@ -283,15 +282,15 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     eventRef.child(itemLabel).child("userGoing").setValue(removedPerson);
 
                     // Remove the item on remove/button click
-                    mExampleList.remove(position);
+                    mCardList.remove(position);
                     notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, mExampleList.size());
+                    notifyItemRangeChanged(position, mCardList.size());
                     Toast.makeText(context, "UNRSVP'd to " + itemLabel, Toast.LENGTH_SHORT).show();
 
                 }
             });
         } else if (viewType == FRIEND_SEARCH_VIEW) { // Friend Search
-            ExampleItem currItem = mExampleList.get(position);
+            Card currItem = mCardList.get(position);
 
             Picasso.get().load(currItem.getImg_firestore()).into(holder.mImageView);
 
@@ -302,23 +301,23 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                 @Override
                 public void onClick(View view) {
                     // Get the clicked item label
-                    String itemLabel = mExampleList.get(position).getName();
-                    String userID = mExampleList.get(position).getStartTime();
+                    String itemLabel = mCardList.get(position).getName();
+                    String userID = mCardList.get(position).getStartTime();
 
                     String friend_list = userID + "," + currUser.getFriendList();
                     userRef.child(currUser.getUserId()).child("friendList").setValue(friend_list);
 
                     // Add the item on accept/button click
-                    mExampleList.remove(position);
+                    mCardList.remove(position);
                     notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, mExampleList.size());
-                    exampleListFull = mExampleList;
+                    notifyItemRangeChanged(position, mCardList.size());
+                    cardListFull = mCardList;
                     Toast.makeText(context, "Followed " + itemLabel, Toast.LENGTH_SHORT).show();
                 }
             });
 
         } else if (viewType == FRIEND_VIEW) { // Friends List
-            ExampleItem currItem = mExampleList.get(position);
+            Card currItem = mCardList.get(position);
 
             Picasso.get().load(currItem.getImg_firestore()).into(holder.mImageView);
 
@@ -330,9 +329,9 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                 @Override
                 public void onClick(View view) {
                     // Get the clicked item label
-                    String itemLabel = mExampleList.get(position).getName();
+                    String itemLabel = mCardList.get(position).getName();
                     //User ID
-                    String userID = mExampleList.get(position).getStartTime();
+                    String userID = mCardList.get(position).getStartTime();
 
 
                     currUser.removeFriend(userID);
@@ -340,14 +339,14 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     userRef.child(currUser.getUserId()).child("friendList").setValue(userFriendlist);
 
                     // Remove the item on remove/button click
-                    mExampleList.remove(position);
+                    mCardList.remove(position);
                     notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, mExampleList.size());
+                    notifyItemRangeChanged(position, mCardList.size());
                     Toast.makeText(context, "Unfollowed " + itemLabel, Toast.LENGTH_SHORT).show();
                 }
             });
         } else if(viewType == YOUR_EVENT_VIEW) {
-            ExampleItem currItem = mExampleList.get(position);
+            Card currItem = mCardList.get(position);
 
             Picasso.get().load(currItem.getImg_firestore()).into(holder.mImageView);
 
@@ -364,7 +363,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     Intent intent = new Intent(context, EventActivity.class);
                     //Extras are what we are passing from the adapter --> EventActivity (the event page)
                     //Inside EventActivity we will use these intents to pull information
-                    intent.putExtra("data1", mExampleList.get(position).getName());
+                    intent.putExtra("data1", mCardList.get(position).getName());
 
                     context.startActivity(intent);
                 }
@@ -380,9 +379,9 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                 @Override
                 public void onClick(View v) {
 
-                    String eventLabel = mExampleList.get(position).getName();
+                    String eventLabel = mCardList.get(position).getName();
 
-                    mExampleList.remove(position);
+                    mCardList.remove(position);
                     notifyItemRemoved(position);
 
                     String events = currUser.getCreatedEvents();
@@ -390,7 +389,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
                     userRef.child(currUser.getUserId()).child("createdEvents").setValue(delete);
 
-                    notifyItemRangeChanged(position, mExampleList.size());
+                    notifyItemRangeChanged(position, mCardList.size());
                     Toast.makeText(context, "Removed " + eventLabel, Toast.LENGTH_SHORT).show();
 
                     removeEvent(eventLabel);
@@ -445,7 +444,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             return BUTTON_VIEW;
         } else if(this.cardType.equals("empty")) {
             return BUTTON_VIEW;
-        }else if (mExampleList.get(position).getCreator().replace(",", "").equals(currUser.getUserId())) {
+        }else if (mCardList.get(position).getCreator().replace(",", "").equals(currUser.getUserId())) {
             return YOUR_EVENT_VIEW;
         } else if (this.cardType.equals("event") || this.cardType.equals("previous")) {
             return EVENT_VIEW;
@@ -461,28 +460,28 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
     @Override
     public int getItemCount() {
-        return mExampleList.size();
+        return mCardList.size();
     }
 
     @Override
     public Filter getFilter() {
-        return exampleFilter;
+        return cardFilter;
     }
 
-    private Filter exampleFilter = new Filter() {
+    private Filter cardFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
-            ArrayList<ExampleItem> filteredList = new ArrayList<>();
+            ArrayList<Card> filteredList = new ArrayList<>();
 
             //Show all results bc we aren't filtering anything
             if (charSequence == null || charSequence.length() == 0) {
-                filteredList.addAll(exampleListFull);
+                filteredList.addAll(cardListFull);
             } else {
                 String filterPattern = charSequence.toString().toLowerCase().trim();
 
                 //Searches for query in text1 and text2
                 int i = 0;
-                for (ExampleItem item : exampleListFull) {
+                for (Card item : cardListFull) {
                     if (i == 0 && cardType.equals("event")) { // The item is the button and always should be added
                         filteredList.add(item);
                     } else {
@@ -502,15 +501,15 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            mExampleList.clear();
-            mExampleList.addAll((List) filterResults.values);
+            mCardList.clear();
+            mCardList.addAll((List) filterResults.values);
             notifyDataSetChanged();
         }
     };
 
     // Resets the events shown in the recycler view
     public void resetFull() {
-        exampleListFull = new ArrayList<>(mExampleList);
+        cardListFull = new ArrayList<>(mCardList);
     }
 
     // Records all the events that will be shown in the dashboard
