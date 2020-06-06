@@ -1,13 +1,16 @@
+/*
+    PERSONALIZED DASHBOARD OF EVENTS
+ */
+
 package com.example.eventappprod;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
-import android.content.Intent;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -24,21 +27,23 @@ public class DashBoard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
 
-        //Initialize and assign variable
+        //Navigation Bar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        // The navigation text/symbols will change color when you are on that page
+        //The navigation text/symbols will change color when the user is on that page
         bottomNavigationView.setSelectedItemId(R.id.dashboard);
         int[] colors = new int[]{
                 Color.LTGRAY,
                 Color.WHITE,
         };
 
+        //Indicates which page the user is currently on
         int[][] states = new int[][]{
                 new int[]{android.R.attr.state_enabled, -android.R.attr.state_checked},
                 new int[]{android.R.attr.state_enabled, android.R.attr.state_checked}
         };
 
+        //Creates the navigation bar
         bottomNavigationView.setItemTextColor(new ColorStateList(states, colors));
         bottomNavigationView.setItemIconTintList(new ColorStateList(states, colors));
 
@@ -50,17 +55,19 @@ public class DashBoard extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
+                    //If dashboard button clicked, stay on dashboard
                     case R.id.dashboard:
                         return true;
-                    case R.id.profile:
 
-                        Intent intent = new Intent(getApplicationContext(), Profile.class);
-                        startActivity(intent);
+                    //If profile button clicked, go to profile
+                    case R.id.profile:
+                        startActivity(new Intent(getApplicationContext(), Profile.class));
                         overridePendingTransition(0, 0);
                         return true;
-                    case R.id.search:
-                        startActivity(new Intent(getApplicationContext()
-                                , Search.class));
+
+                    //If explore button clicked, go to explore
+                    case R.id.explore:
+                        startActivity(new Intent(getApplicationContext(), Search.class));
                         overridePendingTransition(0, 0);
                         return true;
                 }
@@ -68,13 +75,14 @@ public class DashBoard extends AppCompatActivity {
             }
         });
 
+        //Starts the dashboard fragment
         mViewPager = (ViewPager) findViewById(R.id.container);
         setupViewPager(mViewPager);
-
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
     }
 
+    //Sets up dashboard page
     private void setupViewPager(ViewPager viewPager) {
         SectionPagerAdapter adapter = new SectionPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new DashBoardFrag());

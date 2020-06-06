@@ -154,7 +154,7 @@ public class FindFriendsFrag extends Fragment {
         if (id == R.id.add_friend_button) {
             //create the alert box
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Friend Request? Add their Username below!");
+            builder.setTitle("Want to follow a user? Add their username below!");
 
             // Set up the input
             final EditText input = new EditText(getActivity());

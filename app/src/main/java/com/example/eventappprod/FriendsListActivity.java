@@ -138,7 +138,7 @@ public class FriendsListActivity extends AppCompatActivity {
         if (id == R.id.add_friend_button) {
             // Visually display this textbox (View in MVC)
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Friend Request? Add their Username below!");
+            builder.setTitle("Want to follow a user? Add their username below!");
 
             // Set up the input (View in MVC)
             final EditText input = new EditText(this);

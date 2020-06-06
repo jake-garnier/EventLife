@@ -47,7 +47,7 @@ public class Search extends AppCompatActivity {
         bottomNavigationView.setItemIconTintList(new ColorStateList(states, colors));
 
         //Set search as selected
-        bottomNavigationView.setSelectedItemId(R.id.search);
+        bottomNavigationView.setSelectedItemId(R.id.explore);
 
         //Perform ItemSelectedListener (Controller)
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -64,7 +64,7 @@ public class Search extends AppCompatActivity {
                                 ,Profile.class));
                         overridePendingTransition(0,0);
                         return true;
-                    case R.id.search:
+                    case R.id.explore:
                         return true;
                 }
                 return false;
