@@ -40,7 +40,7 @@ import java.util.ArrayList;
 
 public class Profile extends AppCompatActivity {
 
-    //Buttons
+    // Buttons
     private Button friendsListButton;
     private Button prevEventButton;
     private Button archivedEventButton;
@@ -50,10 +50,13 @@ public class Profile extends AppCompatActivity {
 
     String RealTimeImagePath;
 
+    // ImageView and TextView objects to interact with
     private ImageView profilePic;
     private ImageView backgroundPic;
     private TextView profileName;
     private TextView profileUsername;
+
+    // variables pertaining to users
     private String userID;
     private int update = 0;
     User currUser  = User.getInstance();
@@ -62,30 +65,25 @@ public class Profile extends AppCompatActivity {
 
     // authorization
     private FirebaseAuth firebaseAuth;
-    //DatabaseReference ref;
+
+    // event, image, and Firebase variables
     Event event;
     Uri uri;
     StorageReference imagePath;
     FirebaseStorage  storage;
     private DatabaseReference ref;
 
+    // arrays of user profile images, friend lists, usernames, and user IDs
     String[] profileImages = new String[20];
     String[] friendsList = new String[20];
     String[] userName = new String[20];
     String[] userIDArr = new String[20];
 
 
-    //all the intents
+    // all the intents
     Intent friendIntent = getIntent();
 
-
-
-
-
-
-
-
-    //make phone select an image from their gallery
+    // make phone select an image from their gallery
     public void openFilechooser(int i){
         // create an intent so user can jump to his phone's folder to select photo
         Intent intent = new Intent(Intent.ACTION_PICK);
@@ -97,39 +95,47 @@ public class Profile extends AppCompatActivity {
         startActivityForResult(intent, 1);
     }
 
+    // method will create a profile page for all users in the database
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        // grab the reference to the USER section in the database
         ref = FirebaseDatabase.getInstance().getReference("/USER");
 
-
-
+        // initialize array list to hold our users
         userList = new ArrayList<>();
         ref.addValueEventListener(new ValueEventListener() {
             @Override
+            // when users are added or removed update the profiles of all users
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // initialize array list to hold new users
                 ArrayList<User> newUserList = new ArrayList<>();
 
+                // add all current (and new) users to the array list
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     newUserList.add(ds.getValue(User.class));
                 }
 
+                // grab the instance of the user currently viewing the profile page
                 for (int i = 0; i < newUserList.size();i++)
                 {
+                    // ID check to ensure they are the correct user
                     if(newUserList.get(i).getUserId().equals(userID))
                     {
                         currUser = newUserList.get(i);
                     }
                 }
+                // clear the old user list
                 userList.clear();
+                // if we even one user we must retrieve their data
                 if (newUserList.size()!=0) {
                     userList = newUserList;
                     retrieveData();
                 }
             }
 
-
+            // error message to throw when error occurs
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(Profile.this, "Error loading users", Toast.LENGTH_SHORT).show();
@@ -137,7 +143,8 @@ public class Profile extends AppCompatActivity {
         });
 
 
-        //user's profile
+        // user's profile
+        // attach the corresponding views to the declared variables
         profilePic = findViewById(R.id.profilePicture);
         backgroundPic = findViewById(R.id.background);
         profileName = findViewById(R.id.profileName);
@@ -152,7 +159,8 @@ public class Profile extends AppCompatActivity {
         //create reference to the user
         //ref = FirebaseDatabase.getInstance().getReference("/USER");
 
-        //Button Stuff
+        // Create the update profile picture button, open the corresponding file chooser, and update
+        // the user profile picture
         updatePicButton = findViewById(R.id.updatePicBtn);
         updatePicButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -162,7 +170,8 @@ public class Profile extends AppCompatActivity {
             }
         });
 
-        //Backgroundupdate
+        // Create the update background button, open the corresponding file chooser, and update
+        // the background image
         updateBackgroundButton = findViewById(R.id.updateBackground);
         updateBackgroundButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -172,7 +181,7 @@ public class Profile extends AppCompatActivity {
             }
         });
 
-
+        // display the Friends List button and open the corresponding screen
         friendsListButton = findViewById(R.id.viewFriendsButton);
         friendsListButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -182,12 +191,11 @@ public class Profile extends AppCompatActivity {
 
                 startActivity(intent);
 
-                /*startActivity(new Intent(getApplicationContext()
-                        ,FriendsListActivity.class));*/
             }
 
         });
 
+        // display the Created Events button and open the corresponding screen
         prevEventButton = findViewById(R.id.viewHistoryButton);
         prevEventButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -199,6 +207,7 @@ public class Profile extends AppCompatActivity {
 
         });
 
+        // display the RSVP Events button and open the corresponding screen
         archivedEventButton = findViewById(R.id.viewArchiveButton);
         archivedEventButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -210,6 +219,7 @@ public class Profile extends AppCompatActivity {
 
         });
 
+        // display the logout button and open the corresponding screen
         firebaseAuth = FirebaseAuth.getInstance();
         LogoutButton = findViewById(R.id.btnLogout);
         LogoutButton.setOnClickListener(new View.OnClickListener(){
@@ -268,6 +278,8 @@ public class Profile extends AppCompatActivity {
         });
     }
 
+    // method will update image fields and inform the user after they've clicked the image view
+    // icons for the profile image and background image
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -297,24 +309,27 @@ public class Profile extends AppCompatActivity {
                 // if upload success, print message
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // inform user their profile picture has been uploaded
                     Toast.makeText(Profile.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                    // maintainence details to grab image as a string
                     StorageMetadata snapshotMetadata = taskSnapshot.getMetadata();
                     Task<Uri> downloadUrl = imagePath.getDownloadUrl();
                     downloadUrl.addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
                             RealTimeImagePath = uri.toString();
-                            //save url into ref
+                            //save url into ref and upload to profile image if that is what user selected
                             if(update == 0) {
                                 ref.child(userID).child("profileImage").setValue(RealTimeImagePath);
                             }
+                            //otherwise make it the background picture
                             else {
                                 ref.child(userID).child("backgroundImage").setValue(RealTimeImagePath);
                             }
 
                         }
                     });
-
+            // message to warn user about an image not be uploaded
                 }
                 // if upload fails, print message
             }).addOnFailureListener(new OnFailureListener() {
@@ -332,19 +347,16 @@ public class Profile extends AppCompatActivity {
 
         }
     }
+    // method to populate our arrays with the necessary user information
     public void retrieveData(){
 
-        // fetching data to particular array
-
+        // fetching data to particular arrays
+        // essentially a mass getter call
         for (int i=0; i<userList.size();i++) {
             userName[i] = userList.get(i).getName();
             userIDArr[i] = userList.get(i).getUserId();
             friendsList[i] = userList.get(i).getFriendList();
             profileImages[i] = userList.get(i).getProfileImage();
-            // you can get other info like date and time as well
-            //Bitmap my_image;
-            //Picasso.get().load(evenList.get(i).getImage()).into(my_image);
-
         }
     }
 }
