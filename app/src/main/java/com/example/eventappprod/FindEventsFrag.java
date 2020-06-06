@@ -195,7 +195,7 @@ public class FindEventsFrag extends Fragment {
                     if(userList.size()!=0)
                     {
                         for (int i = 0; i < userList.size(); i++) {
-                            flag = false;
+                            //flag = false;
                             for (int j = 0; j < friendArr.length;j++) {
                                 //checks if the user exists in the database or not (aka spelling errors)
                                 if ((userList.get(i).getUserId().equals(friendArr[j]))

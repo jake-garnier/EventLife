@@ -161,6 +161,7 @@ public class FriendsListActivity extends AppCompatActivity {
                     //Update text (Controller in MVC)
                     friendAdd = input.getText().toString();
                     boolean flag = false;
+                    array = currUser.getFriendList().split(",");
 
                     //Controller in MVC (used to process adding a friend)
                     //First check if userList is non-populated.
@@ -168,7 +169,6 @@ public class FriendsListActivity extends AppCompatActivity {
                     {
                         //Iterate across entire user database pulled from firebase reference
                         for (int i = 0; i < userList.size(); i++) {
-                            flag = false;
 
                             //Iterate across current user's friend list to compare
                             for (int j = 0; j < array.length;j++) {

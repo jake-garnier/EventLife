@@ -195,10 +195,11 @@ public class DashBoardFrag extends Fragment {
                 public void onClick(DialogInterface dialog, int which) {
                     friendAdd = input.getText().toString();
                     boolean flag = false;
+                    array = currUser.getFriendList().split(",");
                     if(userList.size()!=0)
                     {
                         for (int i = 0; i < userList.size(); i++) {
-                            flag = false;
+                            //flag = false;
                             for (int j = 0; j < array.length;j++) {
                                 //checks if the user exists in the database or not (aka spelling errors)
                                 if ((userList.get(i).getUserId().equals(array[j]))
