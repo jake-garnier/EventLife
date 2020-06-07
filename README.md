@@ -22,7 +22,7 @@ On-campus events make up campus culture and can heavily impact a student's colle
 **Password:** qwer1234
 
 **Pre-populated Account:**\
-**Username:** a1chen@ucsd.edu\j2chong@ucsd.edu\
+**Username:** a1chen@ucsd.edu\
 **Password:** test1234
 
 ## Requirements
