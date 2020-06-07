@@ -67,7 +67,7 @@ public class DashBoard extends AppCompatActivity {
 
                     //If explore button clicked, go to explore
                     case R.id.explore:
-                        startActivity(new Intent(getApplicationContext(), Search.class));
+                        startActivity(new Intent(getApplicationContext(), Explore.class));
                         overridePendingTransition(0, 0);
                         return true;
                 }

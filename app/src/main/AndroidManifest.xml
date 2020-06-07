@@ -40,7 +40,7 @@
             android:name=".EventActivity"
             android:label="Return to Dashboard"
             android:parentActivityName=".DashBoard" />
-        <activity android:name=".Search" />
+        <activity android:name=".Explore" />
         <activity android:name=".DashBoard" />
         <activity android:name=".Profile" />
         <activity android:name=".Login">

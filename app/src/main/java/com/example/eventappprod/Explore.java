@@ -15,7 +15,7 @@ import android.widget.TableLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 
-public class Search extends AppCompatActivity {
+public class Explore extends AppCompatActivity {
 
     private SectionPagerAdapter mSectionPagerAdapter;
 
