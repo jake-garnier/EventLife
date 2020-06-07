@@ -26,7 +26,7 @@ On-campus events make up campus culture and can heavily impact a student's colle
 **Password:** Wmswms1!
 
 ## Requirements
-This minimum requirements for this app is an Android 9.0 or API level of 28 with a screen size of 4.7". If the Android device has a screen size smaller than 4.7", then some of the layout may be cut off from the screen.
+The minimum requirements for this app is an Android 9.0 or API level of 28 with a screen size of 4.7". If the Android device has a screen size smaller than 4.7", then some of the layout may be cut off from the screen.
 
 ## Installation Instructions
 Please make sure “Install unknown apps” is allowed on your Android device. Permissions can be changed by going to the Setting app > Apps & Notifications > Advanced < Special app access > Install Unknown Apps. Then, use the link below to find the apk file under the name “app-debug.apk”. Finally, open the APK file with Package Installer.\ 
