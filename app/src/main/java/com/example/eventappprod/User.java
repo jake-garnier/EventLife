@@ -109,30 +109,26 @@ public class User implements Serializable{
 
 
     public String getCreatedEvents(){ return createdEvents; }
-    public void addCreatedEvents(String favo){ createdEvents = createdEvents.concat(favo+ "$"); // use '$' to parse the event since
-        // Real-time Firebase database can store data under String objects only
+    public void addCreatedEvents(String favo){ createdEvents = createdEvents.concat(favo+ "$");
     }
     
     public String getRSVPEvents(){ return rsvpevents; }
     
     // adds an event to the list of RSVPd events
     public void addRSVPEvent(String past){
-        rsvpevents = past + "," + rsvpevents; // use '$' to parse the event since
-        // Real-time Firebase database can store data under String objects only
+        rsvpevents = past + "," + rsvpevents;
     }
     
     // removes an RSVPd event from the RSVP list
     public void removeRSVPEvent(String past){
-        rsvpevents = rsvpevents.replace(past+",", ""); // use '$' to parse the event since
-        // Real-time Firebase database can store data under String objects only
+        rsvpevents = rsvpevents.replace(past+",", "");
     }
 
     public String getFriendList(){ return friendList; }
     
     // adds a friend to the friends list
     public void addFriend(String f){
-       friendList = f + "," + friendList;// use '$' to parse the friends since
-        // Real-time Firebase database can store data under String objects only
+       friendList = f + "," + friendList;
     }
 
     // removes a friend from the friends list
