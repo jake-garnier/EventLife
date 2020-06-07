@@ -203,25 +203,25 @@ public class DashBoardFrag extends Fragment {
                     friends = currUser.getFriendList().split(",");
                     if(userList.size()!=0)
                     {
-                        for (int i = 0; i < userList.size(); i++) {
-                            //flag = false;
-                            for (int j = 0; j < friends.length;j++) {
-                                //checks if the user exists in the database or not (aka spelling errors)
-                                if ((userList.get(i).getUserId().equals(friends[j]))
-                                        || userList.get(i).getUserId().equals(currUser.getUserId())) {
-                                    flag = true;
-                                }
-                                if (userList.get(i).getUserId().equals(friendAdd) && flag == false)
-                                {
-                                    currUser.addFriend(friendAdd);
-                                    userref.child(currUser.getUserId()).child("friendList").setValue(currUser.getFriendList());
-                                    //ref.child(userID).child("friendList").setValue(currUser.getFriendList());
-                                    //create the ExampleItem and insert that into the friendsList
-                                    //create a new row for that friend
-                                    added = 1;
-                                    break;
-                                }
+                        for (int i = 0; i < friends.length; i++)
+                        {
+                            if (friends[i].equals(friendAdd) || friends[i].equals(currUser.getUserId()) || currUser.getUserId().equals(friendAdd))
+                            {
+                                flag = true;
                             }
+                        }
+                        for (int i = 0; i < userList.size();i++)
+                        {
+                            if ((userList.get(i).getUserId().equals(friendAdd) && flag == false))
+                            {
+                                currUser.addFriend(friendAdd);
+                                userref.child(userID).child("friendList").setValue(currUser.getFriendList());
+
+                                //Set added = 1 so that correct message is displayed to user (i.e. successful add or not)
+                                added = 1;
+                                break;
+                            }
+
                         }
 
                         if (added == 1) {

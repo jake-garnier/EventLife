@@ -161,33 +161,32 @@ public class FriendsListActivity extends AppCompatActivity {
                     if(userList.size()!=0)
                     {
                         //Iterate across entire user database pulled from firebase reference
-                        for (int i = 0; i < userList.size(); i++) {
+                        for (int i = 0; i < array.length; i++)
+                        {
+                            //checks if the potential friend is the user or already in the friendslist.
+                            if (array[i].equals(friendAdd) || array[i].equals(currUser.getUserId()) || currUser.getUserId().equals(friendAdd))
+                            {
+                                flag = true;
+                            }
+                        }
+                        //Iterate across userList to compare
+                        for (int i = 0; i < userList.size();i++)
+                        {
+                            //check if the user is in the userlist, and is correct based off of the flag
+                            if ((userList.get(i).getUserId().equals(friendAdd) && flag == false))
+                            {
+                                currUser.addFriend(friendAdd);
+                                ref.child(userID).child("friendList").setValue(currUser.getFriendList());
 
-                            //Iterate across current user's friend list to compare
-                            for (int j = 0; j < array.length;j++) {
-
-                                //Checks if the user exists in the database or not (aka spelling errors)
-                                if ((userList.get(i).getUserId().equals(array[j]))
-                                        || userList.get(i).getUserId().equals(currUser.getUserId())) {
-                                    flag = true;
-                                }
-
-                                //Ensures that correct user is being added, and is not overlap
-                                if (userList.get(i).getUserId().equals(friendAdd) && flag == false)
-                                {
-                                    currUser.addFriend(friendAdd);
-                                    ref.child(userID).child("friendList").setValue(currUser.getFriendList());
-
-                                    //Create a new row for that friend (View in MVC)
-                                    exampleList.add(0, new Card(userList.get(i).getName(), userList.get(i).getUserId(), "", "", "", userList.get(i).getProfileImage()));
-                                    mAdapter.notifyItemRangeChanged(0, exampleList.size());
-                                    mAdapter.notifyItemInserted(0);
-                                    mRecyclerView.scrollToPosition(0);
-                                    mAdapter.resetFull();
-                                    //Set added = 1 so that correct message is displayed to user (i.e. successful add or not)
-                                    added = 1;
-                                    break;
-                                }
+                                //Create a new row for that friend (View in MVC)
+                                exampleList.add(0, new Card(userList.get(i).getName(), userList.get(i).getUserId(), "", "", "", userList.get(i).getProfileImage()));
+                                mAdapter.notifyItemRangeChanged(0, exampleList.size());
+                                mAdapter.notifyItemInserted(0);
+                                mRecyclerView.scrollToPosition(0);
+                                mAdapter.resetFull();
+                                //Set added = 1 so that correct message is displayed to user (i.e. successful add or not)
+                                added = 1;
+                                break;
                             }
                         }
 

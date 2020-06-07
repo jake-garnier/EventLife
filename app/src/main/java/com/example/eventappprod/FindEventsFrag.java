@@ -194,23 +194,23 @@ public class FindEventsFrag extends Fragment {
                     boolean flag = false;
                     if(userList.size()!=0)
                     {
-                        for (int i = 0; i < userList.size(); i++) {
-                            //flag = false;
-                            for (int j = 0; j < friendArr.length;j++) {
-                                //checks if the user exists in the database or not (aka spelling errors)
-                                if ((userList.get(i).getUserId().equals(friendArr[j]))
-                                        || userList.get(i).getUserId().equals(currUser.getUserId())) {
-                                    flag = true;
-                                }
-                                //checks if the friend can be added to the friend list
-                                if (userList.get(i).getUserId().equals(friendAdd) && flag == false)
-                                {
-                                    currUser.addFriend(friendAdd);
-                                    //sets new friends list into the database
-                                    userRef.child(currUser.getUserId()).child("friendList").setValue(currUser.getFriendList());
-                                    added = 1;
-                                    break;
-                                }
+                        for (int i = 0; i < friendArr.length; i++)
+                        {
+                            if (friendArr[i].equals(friendAdd) || friendArr[i].equals(currUser.getUserId()) || currUser.getUserId().equals(friendAdd))
+                            {
+                                flag = true;
+                            }
+                        }
+                        for (int i = 0; i < userList.size();i++)
+                        {
+                            if ((userList.get(i).getUserId().equals(friendAdd) && flag == false))
+                            {
+                                currUser.addFriend(friendAdd);
+                                userRef.child(userID).child("friendList").setValue(currUser.getFriendList());
+
+                                //Set added = 1 so that correct message is displayed to user (i.e. successful add or not)
+                                added = 1;
+                                break;
                             }
                         }
                         //displays the correct toast message depending on if the person was added or not
