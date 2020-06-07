@@ -19,65 +19,53 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class PreviousEventsActivity extends AppCompatActivity {
-    //https://www.youtube.com/watch?v=18VcnYN5_LM
+public class CreatedEventsActivity extends AppCompatActivity {
     //Event Feed String Arrays
     String eventNames[];
     String eventDescriptions[];
-    int images[] = {R.drawable.revelle, R.drawable.muir, R.drawable.tmc, R.drawable.warren, R.drawable.erc, R.drawable.sixth, R.drawable.samoyed, R.drawable.khosla};
 
-    //Recycler View Needed for Event Feed
+    //Recycler View Needed for Event Feed (View, Model)
     RecyclerView recyclerView;
     private RecyclerView mRecyclerView;
-    private ExampleAdapter mAdapter;
+    private CardAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private DatabaseReference ref;
     ArrayList<Event> evenList;
-    //get the current user
+
+    //Get the current user
     User currUser  = User.getInstance();
     String[] array = new String[20];
 
+    //Variables used for displaying information from database (View)
     String[] images_Firestore = new String[20];
     String[] eventNames_Screenshow = new String[20];
     String[] eventStartTime_Screenshow=new String[20];
     String[] eventEndTime_Screenshow=new String[20];
     String[] eventDate_Screenshow=new String[20];
-    ArrayList<ExampleItem> exampleList = new ArrayList<>();
+    ArrayList<Card> exampleList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_previous_events);
 
-//        mRecyclerView = findViewById(R.id.recyclerView);
-//        mRecyclerView.setHasFixedSize(true);
-//        mLayoutManager = new LinearLayoutManager(this);
-//        mAdapter = new ExampleAdapter(this, exampleList, "event");
-//        mRecyclerView.setLayoutManager(mLayoutManager);
-//        mRecyclerView.setAdapter(mAdapter);
-
-
-        //set context at very top
-        //mContext = getApplicationContext();
-
-        //testUser = new User();
-        //create list to make the cards
-        //exampleList = new ArrayList<>();
-
+        //Set recycler view (Model)
         mRecyclerView = (RecyclerView) findViewById(R.id.prevEventRecycler);
-
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new ExampleAdapter(this, exampleList, "previous");
+        mAdapter = new CardAdapter(this, exampleList, "previous");
         mRecyclerView.setAdapter(mAdapter);
 
 
         evenList= new ArrayList<Event>();
         ref = FirebaseDatabase.getInstance().getReference("/EVENT");
         ref.addValueEventListener(new ValueEventListener() {
+
+            //Updating values (Controller)
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                evenList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()){
                     evenList.add(ds.getValue(Event.class));
                 }
@@ -86,7 +74,7 @@ public class PreviousEventsActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(PreviousEventsActivity.this, "Error on Firebase", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreatedEventsActivity.this, "Error loading events", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -94,7 +82,7 @@ public class PreviousEventsActivity extends AppCompatActivity {
 
     public void retrieveData(){
 
-        // fetching data to particular array
+        // Fetching data to particular array (Controller)
         for (int i=0; i<evenList.size();i++) {
             eventNames_Screenshow[i] = evenList.get(i).getName();
             eventStartTime_Screenshow[i] = evenList.get(i).getStartTime();
@@ -107,29 +95,20 @@ public class PreviousEventsActivity extends AppCompatActivity {
 
 
 
+    //Pushing information into view variables (View)
     public void LoadDatatoCreatedEvents(){
-        //ArrayList<ExampleItem> exampleList = new ArrayList<>();
         Event event = new Event();
         array = currUser.getCreatedEvents().split(",");
         for (int i = 0; i<array.length; i++) {
             for (int j = 0; j < evenList.size(); j++) {
                 if (evenList.get(j).getName().equals(array[i])) {
                     event = evenList.get(j);
-                    exampleList.add(0,new ExampleItem(event.getName(), event.getStartTime(), event.getEndTime(),
+                    exampleList.add(0,new Card(event.getName(), event.getStartTime(), event.getEndTime(),
                             event.getDate(), event.getOwner() ,event.getImage()));
                 }
             }
         }
-          //  mAdapter.notifyItemInserted(1);
-          //  mRecyclerView.scrollToPosition(0);
-//        mRecyclerView = findViewById(R.id.recyclerView);
-//        mRecyclerView.setHasFixedSize(true);
-//        mLayoutManager = new LinearLayoutManager(this);
-//        mAdapter = new ExampleAdapter(this, exampleList, "event");
-//     mRecyclerView.setLayoutManager(mLayoutManager);
-//        mRecyclerView.setAdapter(mAdapter);
         mAdapter.notifyItemRangeChanged(0,exampleList.size());
-     //   mAdapter = new ExampleAdapter(this, exampleList, "friend");
         mRecyclerView.setAdapter(mAdapter);
 
     }

@@ -1,9 +1,6 @@
 package com.example.eventappprod;
 
-public class ExampleItem {
-//    private int mImageResource;
-    //private Uri mImageResource;
-    //private Image mImageResource;
+public class Card {
     private String mName;
     private String mStartTime;
     private String mEndTime;
@@ -11,8 +8,8 @@ public class ExampleItem {
     private String img_firestore;
     private String mCreator;
 
-
-    public ExampleItem(String cardName, String cardStartTime, String cardEndTime, String cardDate, String cardCreator, String imgfirestore){
+    // Contains the information of each card in the recycler views
+    public Card(String cardName, String cardStartTime, String cardEndTime, String cardDate, String cardCreator, String imgfirestore){
         mName = cardName;
         mStartTime = cardStartTime;
         mEndTime = cardEndTime;
@@ -20,10 +17,6 @@ public class ExampleItem {
         img_firestore=imgfirestore;
         mCreator = cardCreator;
     }
-
-//    public int getImageResource(){
-//        return mImageResource;
-//    }
 
     public String getName(){
         return mName;

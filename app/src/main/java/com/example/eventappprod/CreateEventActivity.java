@@ -206,38 +206,37 @@ public class CreateEventActivity extends AppCompatActivity {
                 Boolean create = true;
 
                 if (TextUtils.isEmpty(name)) {
-                    mName.setError("Name is Required.");
+                    mName.setError("Name Required.");
                     create = false;
                 }
 
                 if (TextUtils.isEmpty(description)) {
-                    mDescription.setError("Description is Required.");
+                    mDescription.setError("Description Required.");
                     create = false;
                 }
 
                 if (TextUtils.isEmpty(startTime)) {
-                    mStartTime.setError("Start Time is Required.");
+                    mStartTime.setError("Start Time Required.");
                     create = false;
                 }
 
                 if (TextUtils.isEmpty(endTime)) {
-                    mEndTime.setError("End Time is Required.");
+                    mEndTime.setError("End Time Required.");
                     create = false;
                 }
 
                 if (TextUtils.isEmpty(location)) {
-                    mLocation.setError("Location is Required.");
+                    mLocation.setError("Location Required.");
                     create = false;
                 }
 
                 if (TextUtils.isEmpty(date)) {
-                    mDate.setError("Date is Required.");
+                    mDate.setError("Date Required.");
                     create = false;
                 }
 
                 if(!RealTimeImagePath.isEmpty() && create)
                 {
-                    Toast.makeText(CreateEventActivity.this, "Debug adding purpose", Toast.LENGTH_LONG).show();
                     addEvent();
                     Toast.makeText(CreateEventActivity.this, "Event created", Toast.LENGTH_LONG).show();
                     startActivity(new Intent(getApplicationContext(), DashBoard.class));
@@ -258,6 +257,8 @@ public class CreateEventActivity extends AppCompatActivity {
         String EndTime = mEndTime.getText().toString();
         String Des = mDescription.getText().toString();
         String id = ref.push().getKey();
+
+        String rsvpevents;
 
         //
         // check if all instances filled
@@ -284,13 +285,19 @@ public class CreateEventActivity extends AppCompatActivity {
             // also, the event will go to the user's createdEvent list
             ref.child("/USER").child(userId).child("createdEvents").setValue(EventName+ "," + c);
 
+            // Get current user's rsvp'd events
+            rsvpevents = curruser.getRSVPEvents();
+
+            // the event will also go to rsvp'd events since the creator is going to their event
+            ref.child("/USER").child(userId).child("rsvpevents").setValue(rsvpevents + EventName + ",");
+
             // back to Dashboard
             startActivity(new Intent(getApplicationContext(), DashBoard.class));
         }
 
         // if one of the field is empty, prompt the user to input data again
         else {
-            Toast.makeText(CreateEventActivity.this, "Please fill all the necessary info ", Toast.LENGTH_LONG).show();
+            Toast.makeText(CreateEventActivity.this, "All fields must be entered", Toast.LENGTH_LONG).show();
         }
 
     }

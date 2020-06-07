@@ -12,8 +12,8 @@
         android:icon="@drawable/ic_dashboard"/>
 
     <item
-        android:id="@+id/search"
-        android:title="Search"
-        android:icon="@drawable/ic_search"/>
+        android:id="@+id/explore"
+        android:title="Explore"
+        android:icon="@drawable/ic_baseline_explore_24"/>
 
 </menu>

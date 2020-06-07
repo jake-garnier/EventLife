@@ -16,36 +16,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FindEventsFrag"></activity>
-        <activity android:name=".FindFriendsFrag" />
-        <!--
-             The API key for Google Maps-based APIs is defined as a string resource.
-             (See the file "res/values/google_maps_api.xml").
-             Note that the API key is linked to the encryption key used to sign the APK.
-             You need a different API key for each encryption key, including the release key that is used to
-             sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/.
-        -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyApDfnKRfjrJk76MuxOdernXqq1KVhzAA4" />
-
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
-        <activity android:name=".CreateEventPage2" />
         <activity
             android:name=".CreateEventActivity"
             android:label="Return to Dashboard"
             android:parentActivityName=".DashBoard" />
         <activity android:name=".Register" />
         <activity
-            android:name=".ArchivedEventsActivity"
+            android:name=".RSVPEventsActivity"
             android:label="Return to Profile"
             android:parentActivityName=".Profile"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".PreviousEventsActivity"
+            android:name=".CreatedEventsActivity"
             android:label="Return to Profile"
             android:parentActivityName=".Profile"
             android:windowSoftInputMode="adjustPan" />
@@ -58,7 +40,7 @@
             android:name=".EventActivity"
             android:label="Return to Dashboard"
             android:parentActivityName=".DashBoard" />
-        <activity android:name=".Search" />
+        <activity android:name=".Explore" />
         <activity android:name=".DashBoard" />
         <activity android:name=".Profile" />
         <activity android:name=".Login">

@@ -5,7 +5,8 @@
     android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PreviousEventsActivity">
+    android:background="@color/darkrose"
+    tools:context=".CreatedEventsActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/prevEventRecycler"

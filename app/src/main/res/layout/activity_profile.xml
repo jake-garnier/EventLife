@@ -50,7 +50,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
             android:backgroundTint="@color/white"
-            android:text="RSVP Events"
+            android:text="RSVP'd Events"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/viewHistoryButton" />
 
@@ -91,6 +91,7 @@
             android:id="@+id/background"
             android:layout_width="410dp"
             android:layout_height="207dp"
+            android:scaleType="fitXY"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
