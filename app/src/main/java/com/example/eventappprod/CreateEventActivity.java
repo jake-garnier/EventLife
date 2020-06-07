@@ -45,7 +45,6 @@ public class CreateEventActivity extends AppCompatActivity {
     EditText mName, mLocation, mStartTime, mEndTime, mDate, mDescription;
     Button Create;
     String RealTimeImagePath = "";
-
     ImageButton chooseImage;
     Event event;
     Uri uri;
@@ -53,15 +52,13 @@ public class CreateEventActivity extends AppCompatActivity {
     FirebaseStorage storage;
     private DatabaseReference ref;
     User curruser = User.getInstance();
-    //FirebaseUser curruser = FirebaseAuth.getInstance().getCurrentUser();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
 
-        //
-        // create instance variable from front-end objects
-        //
+        // Input texts for create an event.
         chooseImage = (ImageButton) findViewById(R.id.btnImage);
         mName = (EditText) findViewById(R.id.createEventTvName);
         mLocation = (EditText) findViewById(R.id.createEventTvLocation);
@@ -72,8 +69,10 @@ public class CreateEventActivity extends AppCompatActivity {
         Create.setEnabled(false);
         mDescription =(EditText) findViewById(R.id.createEventTvDescription);
 
+        // reference realtime Firebase
         ref =FirebaseDatabase.getInstance().getReference();
 
+        // Select the Startime for an event
         mStartTime.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -114,6 +113,7 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         });
 
+        // Select the Endtime for an event
         mEndTime.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -154,14 +154,13 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         });
 
+        // Select the Date-Month-year for an event
         mDate.setOnClickListener(new View.OnClickListener() {
             Calendar myCalendar = Calendar.getInstance();
-
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 new DatePickerDialog(CreateEventActivity.this, android.R.style.Theme_Holo_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
-
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear,
                                           int dayOfMonth) {
@@ -171,7 +170,6 @@ public class CreateEventActivity extends AppCompatActivity {
                         myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                         String myFormat = "MM/dd/yy"; //In which you need put here
                         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-
                         mDate.setText(sdf.format(myCalendar.getTime()));
                     }
 
@@ -184,15 +182,14 @@ public class CreateEventActivity extends AppCompatActivity {
                 }.show();
             }
         });
-
-
+        // Select an image from local memory
         chooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openFilechooser();
             }
         });
-
+        // Check the valid Event data
         Create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -204,37 +201,30 @@ public class CreateEventActivity extends AppCompatActivity {
                 String location = mLocation.getText().toString().trim();
                 String date = mDate.getText().toString().trim();
                 Boolean create = true;
-
                 if (TextUtils.isEmpty(name)) {
                     mName.setError("Name Required.");
                     create = false;
                 }
-
                 if (TextUtils.isEmpty(description)) {
                     mDescription.setError("Description Required.");
                     create = false;
                 }
-
                 if (TextUtils.isEmpty(startTime)) {
                     mStartTime.setError("Start Time Required.");
                     create = false;
                 }
-
                 if (TextUtils.isEmpty(endTime)) {
                     mEndTime.setError("End Time Required.");
                     create = false;
                 }
-
                 if (TextUtils.isEmpty(location)) {
                     mLocation.setError("Location Required.");
                     create = false;
                 }
-
                 if (TextUtils.isEmpty(date)) {
                     mDate.setError("Date Required.");
                     create = false;
                 }
-
                 if(!RealTimeImagePath.isEmpty() && create)
                 {
                     addEvent();
@@ -245,11 +235,8 @@ public class CreateEventActivity extends AppCompatActivity {
         });
     }
 
+    // Write the Event data from local memory to realtime Firestore
     public void addEvent(){
-
-        //
-        // This block is to grab all the data from CreateEventActivity page
-        //
         String EventName = mName.getText().toString();
         String Location = mLocation.getText().toString();
         String Day = mDate.getText().toString();
@@ -257,18 +244,12 @@ public class CreateEventActivity extends AppCompatActivity {
         String EndTime = mEndTime.getText().toString();
         String Des = mDescription.getText().toString();
         String id = ref.push().getKey();
-
         String rsvpevents;
-
-        //
         // check if all instances filled
-        //
         if (!TextUtils.isEmpty(EventName) && !TextUtils.isEmpty(Day) && !TextUtils.isEmpty(Location) &&
                 !TextUtils.isEmpty(StartTime) && !TextUtils.isEmpty(EndTime) && !TextUtils.isEmpty(Des)) {
             // make an event object with designated contructor
             event = new Event(id, EventName,"", Day, Location, StartTime, EndTime, EventName, Des, "", "", "");
-
-
             // store image uploaded to the event object
             event.setImage(RealTimeImagePath);
             User curruser = User.getInstance();
@@ -277,20 +258,16 @@ public class CreateEventActivity extends AppCompatActivity {
             event.setOwner(userId+",");
             // make an event with the event's name
             ref.child("/EVENT").child(event.getName()).setValue(event);
-
             // creator must go to the event UserGoing list since he is the host
             ref.child("/EVENT").child(EventName).child("userGoing").setValue(userId+ ",");
             //User curruser = User.getInstance();
             String c =curruser.getCreatedEvents();
             // also, the event will go to the user's createdEvent list
             ref.child("/USER").child(userId).child("createdEvents").setValue(EventName+ "," + c);
-
             // Get current user's rsvp'd events
             rsvpevents = curruser.getRSVPEvents();
-
             // the event will also go to rsvp'd events since the creator is going to their event
             ref.child("/USER").child(userId).child("rsvpevents").setValue(rsvpevents + EventName + ",");
-
             // back to Dashboard
             startActivity(new Intent(getApplicationContext(), DashBoard.class));
         }
@@ -302,9 +279,8 @@ public class CreateEventActivity extends AppCompatActivity {
 
     }
 
-    //
+
     // select an image in the user phone's Gallery
-    //
     public void openFilechooser(){
         // create an intent so user can jump to his phone's folder to select photo
         Intent intent = new Intent(Intent.ACTION_PICK);
@@ -314,15 +290,11 @@ public class CreateEventActivity extends AppCompatActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent, 1);
     }
-
-
-    //
     // get the result of choosing picture in Gallery
-    //
+    // write image to the FireStore
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
 
         if (requestCode==1 && resultCode == RESULT_OK && data!=null && data.getData()!=null)
         {
@@ -331,15 +303,12 @@ public class CreateEventActivity extends AppCompatActivity {
             // set the chooseImage by the picture chosen
             chooseImage.setImageURI(uri);
             // assign the imagePath by using uri
-
             String url = uri.toString();
             String filename = url.substring(url.lastIndexOf("/")+1);
             Date currentime= Calendar.getInstance().getTime();
             String unique_time = currentime.toString();
-
             imagePath = FirebaseStorage.getInstance().getReference().child("/EVENT").child(unique_time + filename);
             //  put the picture to put in Image box
-
             imagePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 // if upload success, print message
                 @Override
@@ -354,7 +323,6 @@ public class CreateEventActivity extends AppCompatActivity {
                             Create.setEnabled(true);
                         }
                     });
-
                 }
                 // if upload fails, print message
             }).addOnFailureListener(new OnFailureListener() {
@@ -369,7 +337,6 @@ public class CreateEventActivity extends AppCompatActivity {
                     double process = (120.0*taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
                 }
             });
-
         }
     }
 
