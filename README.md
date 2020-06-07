@@ -1,6 +1,6 @@
-# CSE110-Project-EventLife
+# README
+# EventLife
 
-WILL FINISH LATER. Dw about it.
 
 ## Members
 **Elise Kim** - *Project Manager*\
