@@ -1,5 +1,5 @@
 # README - EventLife
-![](CSE110EventLife/blob/master/app/src/main/res/drawable/CalendarLogo.png)
+![](app/src/main/res/drawable/CalendarLogo.png)
 
 ## Members
 **Elise Kim** - *Project Manager*\
