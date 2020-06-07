@@ -271,7 +271,7 @@ public class DashBoardFrag extends Fragment {
         });
     }
 
-    //Makes sure that data is retrieved from database
+    //Adds fields of each event into respective arrays
     public void retrieveData(View view){
         eventNames_Screenshow.clear();
         eventStartTime_Screenshow.clear();
