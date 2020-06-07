@@ -12,7 +12,7 @@ public class User implements Serializable{
     private String biointro;
     private String userId;
 
-    // optinal field, user will go to profile to edit
+    // optional field, user will go to profile to edit
     private String profileImage;
     private String backgroundImage;
 
@@ -22,6 +22,7 @@ public class User implements Serializable{
     private String createdEvents;
     private String friendList;
 
+    // Initializes a User object
     public User() {
         name = "";
         email =  "";
@@ -36,7 +37,7 @@ public class User implements Serializable{
 
     }
 
-
+    // Initializes a User object with certain properties
     public User(String aname, String aemail, String userID, String apass, String abio,
                 String aima, String back, String acol, String agroup,
                 String arsvp, String acreated, String anotified, String afriendlist) {
@@ -52,6 +53,7 @@ public class User implements Serializable{
         friendList  = afriendlist;
     }
 
+    // Returns user or creates a new user object if it does not exist
     public static synchronized User getInstance(){
         if(instance==null){
             instance=new User();
@@ -59,6 +61,7 @@ public class User implements Serializable{
         return instance;
     }
 
+    // copy constructor for User object
     public User copy(User another){
         name = another.name;
         email = another.email;
@@ -74,7 +77,7 @@ public class User implements Serializable{
     }
 
 
-
+    // getters and setters
     public String getName(){
         return name;
     }
@@ -109,30 +112,31 @@ public class User implements Serializable{
     public void addCreatedEvents(String favo){ createdEvents = createdEvents.concat(favo+ "$"); // use '$' to parse the event since
         // Real-time Firebase database can store data under String objects only
     }
-
-    /*public void removeEvent(String e){
-        FavoriteEvent = FavoriteEvent.replace(e, "");
-    }*/
-
+    
     public String getRSVPEvents(){ return rsvpevents; }
+    
+    // adds an event to the list of RSVPd events
     public void addRSVPEvent(String past){
         rsvpevents = past + "," + rsvpevents; // use '$' to parse the event since
         // Real-time Firebase database can store data under String objects only
     }
+    
+    // removes an RSVPd event from the RSVP list
     public void removeRSVPEvent(String past){
         rsvpevents = rsvpevents.replace(past+",", ""); // use '$' to parse the event since
         // Real-time Firebase database can store data under String objects only
     }
 
     public String getFriendList(){ return friendList; }
+    
+    // adds a friend to the friends list
     public void addFriend(String f){
        friendList = f + "," + friendList;// use '$' to parse the friends since
         // Real-time Firebase database can store data under String objects only
-        //numberofFriend++;
     }
 
+    // removes a friend from the friends list
     public void removeFriend(String f){
        friendList = friendList.replace(f+",", "");
-        // numberofFriend--;
     }
 }
